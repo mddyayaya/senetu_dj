@@ -1,5 +1,5 @@
 {
-  "name": "dj2.0web",
+  "name": "dj3.0web",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -7,7 +7,15 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
+    "axios": "^0.21.1",
     "core-js": "^2.6.5",
+    "echarts": "^4.9.0",
+    "echarts-for-react": "^3.0.2",
+    "echarts-gl": "^1.1.0",
+    "echarts-liquidfill": "^2.0.6",
+    "node-sass": "^5.0.0",
+    "sass-loader": "^10.1.1",
+    "swiper": "^6.6.2",
     "vue": "^2.6.10",
     "vue-router": "^3.0.3",
     "vuex": "^3.0.1"
