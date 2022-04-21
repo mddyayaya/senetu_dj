@@ -1,0 +1,32 @@
+export const biaozhun = [
+	{
+		title:"党员学习",
+		content:"集中学习：（按照活动发布时的课时设置）<strong>5分/课时</strong><br/>个人学习：（按照个人学习任务发布时的课时设置）<strong>3分/课时</strong><br/>在线学习：有效观看（3分钟以上）学习资源<strong>1分/个</strong>",
+		score:0
+	},
+	{
+		title:"岗位履职",
+		content:"优秀积<strong>5分</strong>；良好积<strong>3分</strong>；合格积<strong>1分</strong>；较差积<strong>0分</strong>",
+		score:0
+	},
+	{
+		title:"支部活动",
+		content:"活动当日首次签到积<strong>5分/次</strong>；迟到积<strong>2分/次</strong>；请假/旷会不积分",
+		score:0
+	},
+	{
+		title:"党费缴纳",
+		content:"每月按时缴纳党费积<strong>10分</strong>；逾期补缴积<strong>3分/次</strong>",
+		score:0
+	},
+	{
+		title:"作用发挥",
+		content:"志愿服务：<strong>3分/次</strong><br/>技术攻关：<strong>5分/次</strong><br/>创新创效：<strong>5分/次</strong><br/>帮扶济贫：<strong>3分/次</strong>",
+		score:0
+	},
+	{
+		title:"先进典型",
+		content:"荣誉表彰：每个积<strong>5分</strong><br/>示范岗位：每个积<strong>10分</strong>",
+		score:0
+	},
+]

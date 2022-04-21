@@ -1,0 +1,43 @@
+{
+  "name": "dj2.0admin1",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build"
+  },
+  "dependencies": {
+    "axios": "^0.21.1",
+    "babel-polyfill": "^6.26.0",
+    "core-js": "^2.6.5",
+    "echarts": "^4.2.1",
+    "echarts-for-react": "^3.0.1",
+    "echarts-liquidfill": "^3.0.0",
+    "element-ui": "^2.15.6",
+    "font-awesome": "^4.7.0",
+    "jquery": "^3.6.0",
+    "node-sass": "^5.0.0",
+    "path": "^0.12.7",
+    "qrcodejs2": "^0.0.2",
+    "qs": "^6.10.1",
+    "sass-loader": "^10.1.1",
+    "vue": "^2.6.14",
+    "vue-quill-editor": "^3.0.6",
+    "vue-router": "^3.0.3",
+    "vuex": "^3.0.1"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "^3.0.3",
+    "@vue/cli-service": "^3.0.3",
+    "vue-template-compiler": "^2.6.10"
+  },
+  "postcss": {
+    "plugins": {
+      "autoprefixer": {}
+    }
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions"
+  ]
+}

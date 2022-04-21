@@ -1,0 +1,126 @@
+*{
+	padding: 0;
+	margin: 0;
+}
+html,body {
+	height:100%;
+	width:100%;
+	font-size: 16px;
+	overflow: hidden;
+	background: #E5E9EF;
+}
+#app{
+	height:100%;
+	width:100%;
+	overflow: hidden;
+}
+input,select,textarea,button,div{
+	outline: none;
+}
+.title{
+	width: 100%;
+	border-left: 3px solid #BB0000;
+	color: #1E2129;
+	font-size: 16px;
+	font-weight: bold;
+	padding-left: 8px;
+	box-sizing: border-box;
+	letter-spacing: 1px;
+}
+.input_label{
+	font-size: 14px;
+	margin-right: 10px;
+}
+.el-calendar__title{
+	font-size: 14px;
+	font-weight: bold;
+	color: 000;
+}
+.el-calendar__header{
+	padding:  5px 0px !important;
+}
+.el-calendar-table td{
+	border: none !important;
+}
+.el-calendar-table .el-calendar-day {
+	height: 40px !important;
+	line-height: 40px !important;
+	text-align: center;
+	padding: 0 !important;
+	font-size: 14px !important;
+}
+.el-calendar__body{
+	padding: 0 0 !important;
+}
+.el-calendar-table thead th {
+	padding: 12px 0;
+	color: #606266;
+	font-weight: bold !important;
+	font-size: 16px;
+}
+.el-calendar-table .el-calendar-day:hover {
+	cursor: pointer;
+	background-color: #BB0000 !important;
+	color: #fff !important;
+}
+.el-backtop, .el-calendar-table td.is-today {
+	color: #fff !important;
+	background-color: #BB0000 !important;
+}
+.adddzz{
+	display: inline-block;
+	height: 24px;
+	width: 24px;
+	background: url(~@/assets/images/danghui.png) no-repeat;
+	background-size: 100% 100%;
+	margin-right: 15px;
+}
+.addtitle{
+	text-align: center;
+	display: flex;
+	justify-content: center;
+	color: #BB0000;
+	font-size: 20px;
+	font-weight: bold;
+}
+.el-dialog__wrapper{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.el-dialog{
+	margin-top: 0 !important;
+}
+.addline{
+	margin:20px auto 15px auto;
+	width: 360px;
+	height: 1px;
+	background: #E5E9EF;
+}
+.el-dialog__footer{
+	text-align: center !important;
+}
+.el-input{
+	width: 220px 
+}
+.wrap .addWrap .el-form-item__content{
+	display: flex;
+}
+.el-input-number{
+	width: 220px !important;
+}
+.adddzz {
+	display: inline-block;
+	background: url(~@/assets/images/danghui.png) no-repeat;
+	background-size: 100% 100%;
+	margin-right: 15px;
+	margin-left: 10px;
+}
+.icon {
+	height: 24px;
+	width: 24px;
+	margin-right: 8px;
+}
+.add_form{
+	width: 100%;
+}
