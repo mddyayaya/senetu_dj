@@ -1,0 +1,79 @@
+/* pages/user/uselog/uselog.wxss */
+.uselist{
+  background-color: #ffffff;
+  padding: 15px;
+  border-radius: 4px;
+  margin-bottom: 15px;
+}
+.usenames{
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+.status{
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+}
+.has{
+  color: #45C08C;
+}
+.playing{
+  color: #38A0FE;
+}
+.finish{
+  color: #FEB749;
+}
+.cancel{
+	color: #666;
+}
+.mastname{
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+.mastname>text:nth-child(1){
+  margin-right: 5px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #333333;
+}
+.mastname>text:nth-child(2){
+  font-size: 14px;
+  color: #999;
+}
+.other{
+  display: flex;
+  align-items: center;
+  color: #999;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+.btnlist{
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-top: 10px;
+  padding-top: 10px;
+  font-size: 14px;
+  border-top: 1px solid #DEDEDE;
+}
+.cancel{
+  width: 80px;
+  line-height: 30px;
+  color: #45C08C;
+  border: 1px solid #45C08C;
+  text-align: center;
+  margin-right: 10px;
+  border-radius: 2px;
+}
+.over{
+  width: 80px;
+  line-height: 30px;
+  color: #fff;
+  background: #FB6A6A;
+  text-align: center;
+  margin-right: 10px;
+  border-radius: 2px;
+
+}

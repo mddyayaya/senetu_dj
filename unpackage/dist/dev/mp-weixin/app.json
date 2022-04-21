@@ -1,0 +1,54 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/myinfo/myinfo",
+    "pages/user/appoint/appoint",
+    "pages/user/uselog/uselog",
+    "pages/user/uselogdetail/uselogdetail",
+    "pages/admin/addmst/addmst",
+    "pages/admin/index/index",
+    "pages/admin/mstdetail/mstdetail",
+    "pages/admin/school/school",
+    "pages/admin/search/search",
+    "pages/getPermission/getPermission",
+    "pages/infomession/infomession"
+  ],
+  "subPackages": [],
+  "window": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "uni-app",
+    "navigationBarBackgroundColor": "#fff",
+    "backgroundColor": "#fff"
+  },
+  "tabBar": {
+    "color": "#666666",
+    "backgroundColor": "#fff",
+    "selectedColor": "#007AFF",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "iconPath": "/static/stag_select.png",
+        "selectedIconPath": "/static/stag_selected.png",
+        "text": "预约"
+      },
+      {
+        "pagePath": "pages/myinfo/myinfo",
+        "iconPath": "/static/mine_select.png",
+        "selectedIconPath": "/static/mine_selected.png",
+        "text": "我的"
+      }
+    ]
+  },
+  "optimizaztion": {
+    "subPackages": true
+  },
+  "plugins": {
+    "tuya-ap-plugin": {
+      "version": "4.1.6",
+      "provider": "wxd2aa51ffacc3ff86"
+    }
+  },
+  "lazyCodeLoading": "requiredComponents",
+  "usingComponents": {},
+  "sitemapLocation": "sitemap.json"
+}

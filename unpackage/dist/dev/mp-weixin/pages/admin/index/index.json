@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "学校列表",
+  "usingComponents": {
+    "u-icon": "/uni_modules/uview-ui/components/u-icon/u-icon",
+    "my-loading": "/components/my-loading/index"
+  }
+}

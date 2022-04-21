@@ -1,0 +1,1 @@
+<view class="container"><my-appointlist vue-id="52d2e07c-1" lists="{{lists}}" data-event-opts="{{[['^appointList',[['appointList']]]]}}" bind:appointList="__e" bind:__l="__l"></my-appointlist><my-loading vue-id="52d2e07c-2" status="{{loadingStatus}}" bind:__l="__l"></my-loading></view>

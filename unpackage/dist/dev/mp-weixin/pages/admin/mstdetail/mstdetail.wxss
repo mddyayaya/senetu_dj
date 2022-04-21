@@ -1,0 +1,177 @@
+@charset "UTF-8";
+/**
+ * 这里是uni-app内置的常用样式变量
+ *
+ * uni-app 官方扩展插件及插件市场（https://ext.dcloud.net.cn）上很多三方插件均使用了这些样式变量
+ * 如果你是插件开发者，建议你使用scss预处理，并在插件代码中直接使用这些变量（无需 import 这个文件），方便用户通过搭积木的方式开发整体风格一致的App
+ *
+ */
+/**
+ * 如果你是App开发者（插件使用者），你可以通过修改这些变量来定制自己的插件主题，实现自定义主题功能
+ *
+ * 如果你的项目同样使用了scss预处理，你也可以直接在你的 scss 代码中使用如下变量，同时无需 import 这个文件
+ */
+/* uni.scss */
+/* 颜色变量 */
+/* 行为相关颜色 */
+/* 文字基本颜色 */
+/* 背景颜色 */
+/* 边框颜色 */
+/* 尺寸变量 */
+/* 文字尺寸 */
+/* 图片尺寸 */
+/* Border Radius */
+/* 水平间距 */
+/* 垂直间距 */
+/* 透明度 */
+/* 文章场景相关 */
+/* pages/admin/mstdetail/mstdetail.wxss */
+.mstinfo {
+  background-color: #ffffff;
+  margin-top: 60px;
+  box-shadow: 0px 2px 8px 0px rgba(0, 0, 0, 0.16);
+  padding: 20px;
+  font-size: 14px;
+  border-radius: 8px;
+}
+.mstinfoitem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  line-height: 26px;
+  color: #333333;
+  font-size: 14px;
+}
+.userwrap {
+  padding-top: 70px;
+  padding-bottom: 20px;
+}
+.users {
+  background-color: #ffffff;
+  margin-top: 10px;
+  box-shadow: 0px 2px 8px 0px rgba(0, 0, 0, 0.16);
+  padding: 20px;
+  font-size: 14px;
+  border-radius: 8px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+.userpic {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+.usersinfo {
+  flex: 1;
+  font-size: 14px;
+  color: #333333;
+  line-height: 28px;
+}
+.userother {
+  display: flex;
+  align-items: center;
+}
+.userother > text {
+  margin-left: 5px;
+}
+.tabswrap {
+  z-index: 10;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: #ffffff;
+}
+.tabs {
+  margin: 25rpx 30rpx;
+  border: 1px solid #38A0FE;
+  display: flex;
+  justify-content: space-between;
+  background-color: #ffffff;
+}
+.tabs_item {
+  height: 30px;
+  line-height: 30px;
+  font-size: 14px;
+  width: 100%;
+  text-align: center;
+  color: #333333;
+}
+.selectBar {
+  background-color: #38A0FE !important;
+  color: #ffffff;
+}
+.controls {
+  padding: 20px 0;
+}
+.controls {
+  padding: 70rpx 30rpx 0 30rpx;
+}
+.controls > input {
+  border: 1px solid #ededed;
+  padding: 0 10px;
+  height: 30px;
+  line-height: 30px;
+  font-size: 14px;
+  color: #333333;
+}
+.submit {
+  color: #ffffff;
+  font-size: 14px;
+  background-color: #38A0FE;
+  text-align: center;
+  height: 30px;
+  line-height: 30px;
+  width: 100px;
+  margin: 20px auto 0 auto;
+  border-radius: 8px;
+}
+.cont {
+  display: flex;
+  justify-content: space-between;
+}
+.cont > view {
+  width: 48%;
+  text-align: center;
+  font-size: 14px;
+  color: #333333;
+}
+.cont input {
+  margin-top: 10px;
+  border: 1px solid #ededed;
+  font-size: 14px;
+  padding: 0 10px;
+  line-height: 30px;
+  height: 30px;
+  text-align: left;
+}
+.yuyueinfo {
+  position: fixed;
+  left: 0;
+  right: 0;
+  padding: 0 30px;
+  height: 30px;
+  background-color: #f6f6f6 !important;
+  z-index: 10;
+  top: 55px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #333333;
+  font-size: 14px;
+}
+.selectDay {
+  background-color: none;
+}
+.van-dropdown-menu {
+  background-color: #f6f6f6 !important;
+  box-shadow: none !important;
+  height: 30px !important;
+}
+.righsicon {
+  display: flex;
+  align-items: center;
+}
+

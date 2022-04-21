@@ -1,0 +1,97 @@
+/* pages/admin/school/school.wxss */
+.card_title{
+  color: #666666;
+  font-size: 14px;
+  line-height: 20px;
+  margin: 10px 0;
+}
+.card_content{
+  background-color: #ffffff;
+  box-shadow: 0px 2px 8px 0px rgba(0, 0, 0, 0.16);
+  padding: 20px;
+  font-size: 14px;
+  border-radius: 8px;
+}
+.cards_item{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  line-height: 30px;
+}
+.cards_item>view:nth-child(2){
+  color: #666666;
+}
+.cardwrap{
+  padding-bottom:90px;
+}
+.mstlist{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 20px;
+  margin-top: 12px;
+  box-shadow: 0px 2px 8px 0px rgba(0, 0, 0, 0.16);
+}
+.mst_title{
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  color: #333333;
+  margin-bottom: 10px;
+}
+.status{
+  color: #666666;
+  margin-left: 10px;
+  font-size: 12px;
+}
+.normal{
+  color: rgb(7,193,96) !important;
+}
+.perpare{
+  color: rgb(255,151,106) !important;
+}
+.forbide{
+  color: #bb0000 !important;
+}
+.mst_address{
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  color: #999999;
+}
+.createview>text{
+  margin-left: 10px;
+}
+.mstright{
+  font-size: 14px;
+  padding: 0 10px;
+  text-align: center;
+  line-height: 22px;
+  border: 1px solid #999;
+  color: #999;
+}
+.createviewWrap{
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 20px 20px;
+  background-color: #ffffff;
+}
+
+.createview{
+  height: 45px;
+  border-radius: 8px;
+  background: #38A0FE;
+  color: #ffffff;
+  font-size: 14px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.createview text{
+  margin-left: 5px;
+}

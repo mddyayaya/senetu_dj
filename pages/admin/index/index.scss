@@ -1,0 +1,81 @@
+/* pages/admin/index/index.wxss */
+.containers{
+  background-color: #ffffff;
+  width: 100%;
+  padding: 25rpx 30rpx;
+}
+.searcherbar{
+	padding: 0 20rpx;
+	height: 30px;
+	background: #ededed;
+	border-radius: 50px;
+	width: 100%;
+	display: flex;
+	box-sizing: border-box;
+	align-items: center;
+}
+.search_box{
+  flex: 1;
+  display: flex;
+  padding: 5px 10px;
+  margin-left: 10px;
+  background-color: #ededed;
+}
+.counts{
+  width: 100%;
+  border-radius:100rpx;
+  background-color: #fff;
+  box-shadow: 0px 2px 8px 0px rgba(0, 0, 0, 0.16);
+  padding: 10px 50px;
+  max-height: 200rpx;
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+}
+.icons{
+  position: relative;
+}
+.icons>image{
+  width: 100px;
+  height: 80px;
+}
+.datas{
+  margin-left: 20px;
+  display: flex;
+  flex: 1;
+  justify-content: space-between;
+  align-items: center;
+  color: #333333;
+  font-size: 14px;
+  text-align: center;
+}
+.datas>view>view:nth-child(2){
+  margin-top: 20px;
+}
+.datas>view>view:nth-child(2)>text{
+  font-size: 16px;
+  font-weight: bold;
+}
+.school_list{
+  width: 100%;
+  box-shadow: 0px 2px 8px 0px rgba(0, 0, 0, 0.16);
+  padding: 25rpx 30rpx;
+  border-radius: 4px;
+  margin-top: 10px;
+}
+.school_item{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  line-height: 60px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+.school_item>image:nth-child(1){
+  width: 30px;
+  height: 40px;
+  margin-right: 10px;
+}
+.school_item>view:nth-child(2){
+  flex: 1;
+}

@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "学校详情",
+  "usingComponents": {
+    "my-loading": "/components/my-loading/index"
+  }
+}

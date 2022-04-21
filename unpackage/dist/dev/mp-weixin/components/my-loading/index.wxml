@@ -1,0 +1,1 @@
+<view class="loading"><block wx:if="{{statuss=='loading'}}"><view>努力加载中</view></block><block wx:if="{{statuss=='finish'}}"><view>已加载全部</view></block><block wx:if="{{statuss=='null'}}"><view class="finish"><image src="{{nullImage}}" mode="widthFix"></image><view>暂无数据</view></view></block></view>

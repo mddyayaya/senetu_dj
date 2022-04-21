@@ -1,0 +1,10 @@
+{
+  "navigationBarTitleText": "详情",
+  "usingComponents": {
+    "u-icon": "/uni_modules/uview-ui/components/u-icon/u-icon",
+    "my-control-box": "/components/my-controlBox/index",
+    "u-action-sheet": "/uni_modules/uview-ui/components/u-action-sheet/u-action-sheet",
+    "my-loading": "/components/my-loading/index",
+    "u-popup": "/uni_modules/uview-ui/components/u-popup/u-popup"
+  }
+}

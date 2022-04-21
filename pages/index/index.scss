@@ -1,0 +1,115 @@
+.lists{
+  width: 100%;
+}
+.lists .lists_item{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex: 1;
+  box-sizing: border-box;
+  padding: 16rpx 22rpx;
+  height: 170rpx;
+  border-radius: 8rpx;
+  margin-bottom: 25rpx;
+  background-color: #ffffff;
+}
+.item_title{
+  margin-bottom: 26rpx;
+  display: flex;
+  align-items: center;
+}
+.title_status{
+  font-size: 24rpx;
+  margin-left: 9rpx;
+}
+.status_1{
+  color: #38A0FE;
+}
+.status_2{
+  color: #FB6A6A;
+}
+.forbiden{
+  background: #C7CDD2 !important;
+}
+.title_name{
+  font-size: 16px;
+  color: #333333;
+  font-weight: bold;
+}
+.item_adress{
+  display: flex;
+  color: #666666;
+  align-items: center;
+}
+.icon{
+  width: 16px;
+  height: 20px;
+  margin-right: 9rpx;
+}
+.adress{
+  font-size: 12px;
+}
+.select_item{
+  box-shadow: 0px 2px 8px 0px rgba(0, 0, 0, 0.16);
+}
+.cont_btn{
+  width: 160rpx;
+  height: 60rpx;
+  line-height: 60rpx;
+  color: #fff;
+  text-align: center;
+  font-size: 24rpx;
+  background: #38A0FE;
+  border-radius: 4px;
+}
+.shoquan{
+  padding: 20px;
+  color: #333;
+}
+.sq_title{
+  font-size: 16px;
+  font-weight: bold;
+}
+.sq_rules{
+  margin: 10px 0;
+  font-size: 14px;
+  color: #000 ！important;
+  font-weight: bold;
+}
+.sq_list{
+  display: flex;
+  align-items: center;
+  padding: 10px 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+.userpic{
+  background-color: #000000;
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 8rpx;
+  margin-right: 10px;
+}
+.others{
+  font-size: 14px;
+  color: #999;
+  margin-top: 8px;
+}
+.btnlist{
+  width: 70%;
+  margin:10px auto;
+  display: flex;
+  align-items: center;
+}
+
+	.sure{
+	  height: 40px;
+	  line-height: 40px;
+	  margin:20px auto;
+	  width: 200px;
+	  background: #38A0FE;
+	  border-radius: 4px;
+	  text-align: center;
+	  color: #fff;
+	  font-size: 14px;
+	}
