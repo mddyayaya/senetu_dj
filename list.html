@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+        <meta http-equiv="page-Enter" content="revealTrans(Duration=3.0,Transition=23)">
+		<link rel="stylesheet" type="text/css" href="css/hsqj.css"/>
+		<link rel="stylesheet" type="text/css" href="lib/swiper/css/swiper.min.css"/>
+		<link rel="stylesheet" type="text/css" href="lib/font-awesome/css/font-awesome.css"/>
+		<title>红色全景</title>
+	</head>
+	<body>
+		<!-- 进入页面 -->
+		<div class="nav-top" style="margin-top: 2vh;">
+			<div class="control1">
+				<a href="app.html">返回</a>
+			</div>
+		</div>
+		<div class="exit"></div>
+		<!-- 列表页面 -->
+		<div class="list">
+			<!-- 返回 -->
+			<div class="animate"></div>
+			<div class="animate1"></div>
+			<!-- 标题 -->
+			<div class="title">追寻红色足迹&nbsp;&nbsp;牢记初心使命</div>
+			<!-- 轮播 -->
+			<div class="lunbo swiper-containter ">
+				<div class="swiper-wrapper clearfix">
+					<!-- <div class="swiper-slide clearfix">
+						<div class="item" value="1"></div>
+						<div class="item" value="2"></div>
+						<div class="item" value="3"></div>
+						<div class="item" value="4"></div>
+					</div>
+					<div class="swiper-slide clearfix">
+						<div class="item" value="5"><img src="" ></div>
+						<div class="item" value="6"></div>
+						<div class="item" value="7"></div>
+						<div class="item" value="8"></div>
+					</div> -->
+				</div>
+				<div class="swiper-button-next swiper-button-next3" style="height: 3vw; width: 3vw;"></div>
+				<div class="swiper-button-prev swiper-button-prev3" style="height: 3vw; width: 3vw;"></div>
+			</div>
+			<!-- 背景音乐 -->
+			<div class="bgM anim22"></div>
+			<audio src="statics/images/redMap.mp3" hidden="hidden" autoplay="autoplay" ></audio>
+		</div>
+		<script src="lib/jquery/jquery-3.5.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="lib/swiper/js/swiper.min.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			$(function(){
+				// 轮播
+				var http = 'https://dj.gxsentu.net/';
+				$.ajax({
+					type:'GET',
+					dataType:'JSON',
+					url:http+'?c=d_sjs&m=ar_list&sign=',
+					success:function(res){
+						var html="";
+						for(var i=0;i<res.length;i++){
+							if(i%4 == 0){
+								if(i+4 < res.length){
+									html += '<div class="swiper-slide">';
+									for(var j=i; j<i+4;j++){
+										html += '<div class="item" value="'+res[j].ar_url+'"><img src="'+http+'ar_img/ars'+res[j].ar_id+'.jpg"/></div>'
+									}
+									html += '</div>';
+								}else{
+									html += '<div class="swiper-slide">';
+									for(var j=i; j<res.length;j++){
+										html += '<div class="item" value="'+res[j].ar_url+'"><img src="'+http+'ar_img/ars'+res[j].ar_id+'.jpg"/></div>'
+									}
+									html += '</div>';
+								}
+							}
+						}
+						$('.lunbo .swiper-wrapper').html(html);
+						$('.item').click(function(){
+							var url = $(this).attr('value');
+							window.location.href=url
+						})
+						var swiper = new Swiper('.lunbo',{
+							loop: true,
+							autoplay: {
+								delay: 5000,
+								stopOnLastSlide: false,
+								disableOnInteraction: false,
+							},
+							navigation: {
+								nextEl: '.swiper-button-next',
+								prevEl: '.swiper-button-prev',
+							}
+						});
+					}
+				})
+				$('.back').click(function(){
+					window.location.href="hsqj.html"
+				});
+				$('.item').click(function(){
+					var id = $(this).attr('value');
+					window.location.href=""
+				})
+				// 控制背景音乐
+				$('audio')[0].play();
+				$('.bgM').click(function(){
+					if($(this).hasClass('anim22')){
+						$('audio')[0].pause();
+						$(this).removeClass('anim22')
+					}else{
+						$('audio')[0].play();
+						$(this).addClass('anim22')
+					}
+				})
+			})
+		</script>
+	</body>
+</html>

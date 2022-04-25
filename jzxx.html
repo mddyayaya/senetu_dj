@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+        <meta http-equiv="page-Enter" content="revealTrans(Duration=3.0,Transition=23)">
+		<link rel="stylesheet" type="text/css" href="lib/layui/css/layui.css"/>
+		<link rel="stylesheet" type="text/css" href="css/index.css"/>
+		<link rel="stylesheet" type="text/css" href="lib/font-awesome/css/font-awesome.css"/>
+		<script src="lib/jquery/jquery-3.5.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="lib/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/setCookie.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/ajax.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/vue.min.js" type="text/javascript" charset="utf-8"></script>
+		<title>集中学习</title>
+	</head>
+	<body>
+		<script src="js/nav.js" type="text/javascript" charset="utf-8"></script>
+		<div class="mainBody" id="app" v-cloak>
+			<!-- 标题 -->
+			<div class="flagTit">
+				<div class="flagTitIcon">集中学习</div>
+				<div class="backBtn" onclick="window.history.back(-1)">
+					<img src="statics/images/back_btn.png" >
+					<span>返回</span>
+				</div>
+			</div>
+			<div class="searchBox">
+				<div>
+					<div>活动名称：</div>
+					<div class="search">
+						<input type="text" v-model="searchbox" name="" id="search" value=""  placeholder="输入查询"/>
+						<i @click="search" class="fa fa-search" aria-hidden="true"></i>
+					</div>
+				</div>
+				<div class="layui-form">
+					<div>年份：</div>
+					<div class="search">
+						<div class="layui-form-item">
+						    <div class="layui-input-block">
+						      <select name="city" lay-verify="required" lay-filter="year">
+						        <option value=""></option>
+						        <option :value="item" v-for="item in yearWrap">{{item}}</option>
+						      </select>
+						    </div>
+						  </div>
+					</div>
+				</div>
+				<div class="layui-form">
+					<div>月份：</div>
+					<div class="search">
+						<div class="layui-form-item">
+						    <div class="layui-input-block">
+						      <select name="city" lay-verify="required" lay-filter="month">
+						        <option value=""></option>
+						        <option value="1">1月</option>
+						        <option value="2">2月</option>
+						        <option value="3">3月</option>
+						        <option value="4">4月</option>
+						        <option value="5">5月</option>
+						        <option value="6">6月</option>
+						        <option value="7">7月</option>
+						        <option value="8">8月</option>
+						        <option value="9">9月</option>
+						        <option value="10">10月</option>
+						        <option value="11">11月</option>
+						        <option value="12">12月</option>
+						      </select>
+						    </div>
+						  </div>
+					</div>
+				</div>
+				<div class="layui-form">
+					<div>活动类型：</div>
+					<div class="search">
+						<div class="layui-form-item">
+						    <div class="layui-input-block">
+						      <select name="city" lay-verify="required"  lay-filter="acttype">
+						        <option value=""></option>
+						        <option value="1">支部委员大会</option>
+						        <option value="2">支部党员大会</option>
+						        <option value="3">支部党小组会</option>
+						        <option value="4">党课</option>
+						        <option value="5">主题党日</option>
+						        <option value="6">组织生活会</option>
+						        <option value="8">民主生活会</option>
+						        <option value="9">谈心谈话</option>
+						        <option value="10">民主评议党员会</option>
+						        <option value="7">其他</option>
+						      </select>
+						    </div>
+						  </div>
+					</div>
+				</div>
+				<div class="layui-form" v-if="dwid=='699'">
+					<div>活动状态：</div>
+					<div class="search">
+						<div class="layui-form-item">
+						    <div class="layui-input-block">
+						      <select name="city" lay-verify="required" lay-filter="istart">
+						        <option value=""></option>
+						        <option value="1">未开始</option>
+						        <option value="2">已完成</option>
+						      </select>
+						    </div>
+						  </div>
+					</div>
+				</div>
+				<div class="layui-form" v-else>
+					<div>活动状态：</div>
+					<div class="search">
+						<div class="layui-form-item">
+						    <div class="layui-input-block">
+						      <select name="city" lay-verify="required" lay-filter="speed">
+						        <option value=""></option>
+						        <option value="1">未开始</option>
+						        <option value="2">进行中</option>
+						        <option value="3">已完成</option>
+						      </select>
+						    </div>
+						  </div>
+					</div>
+				</div>
+			</div>
+			<!-- 内容列表 -->
+			<div class="contList" id="appWrap">
+				<div>
+					<!-- 此处循环 -->
+					<div class="contListItem" v-for="item in dataList">
+						<div class="topImg">
+							<img :src="item.img" >
+						</div>
+						<div class="bottomWords" style="height: 19.5vh;">
+							<div class="bbTit">{{item.title}}</div>
+							<div class="bbTime bbTime1">
+								<div class="bbtime1">时间：{{item.k_time}}</div>
+								<div class="bbtime1">{{item.hour}}课时</div>
+							</div>
+							<div class="bbTime bbTime1">{{item.type}}</div>
+							
+							<div class="bbbtn1" v-if="dwid=='699'">
+								<div></div>
+								<div @click="goStudy(item.id,item.hy_flag,item.count,index)">查看详情</div>
+							</div>
+							<div class="bbbtn1" v-else>
+								<div>
+									<span v-if="item.speed == 1">未开始</span>
+									<span v-if="item.speed == 2">已学{{parseInt(((item.complete_hour / item.hour).toFixed(2))*100)}}%</span>
+									<span class="finshed" v-if="item.istart == 3">已学完</span>
+								</div>
+								<div v-if="item.speed==1" @click="startActive(item.id)">开始学习</div>
+								<div v-if="item.speed==2" @click="startActive(item.id)">继续学习</div>
+								<div v-if="item.speed==3" @click="startActive(item.id)">查看</div>
+							</div>
+						</div>
+					</div>
+					<div class="null" v-show="dataList.length == 0">暂无数据</div>
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript">
+			window.onload = function(){
+				var app = new Vue({
+					el:"#app",
+					data:{
+						// 个体数据传参
+						get:{
+							page:1,
+							user_id: user.id,
+							flag:user.flag,
+							title:"", 
+							year:"",
+							month:"",
+							type:"",
+							speed:"",
+							istart:"",
+							focus:1
+						},
+						dwid:user.dwid,
+						page:1,
+						total:1,
+						// 数据循环
+						dataList:[],
+						// 文字搜索
+						searchbox:"",
+						yearWrap:[],
+						// 滚动加载
+						onFetching:false
+					},
+					methods:{
+						// 开始学习
+						startActive(id){
+							var that = this;
+							window.location.href = 'zzhd_detail.html?id='+id;
+						},
+						importClass(){
+							var that = this;
+							// 集中学习列表
+							postData("activity",that.get,function(res){
+								if(res.code == 200){
+									if(res.data.pagedata != null){
+										if(res.data.pagedata.length > 0){
+											for(var i=0;i<res.data.pagedata.length;i++){
+												res.data.pagedata[i].h_stime = toNumber(res.data.pagedata[i].h_stime);
+												if(res.data.pagedata[i].img != null && res.data.pagedata[i].img != ""){
+													if(res.data.pagedata[i].img.search("http") == -1){
+														res.data.pagedata[i].img = 'http://'+res.data.pagedata[i].ym+'/'+res.data.pagedata[i].img;
+													}
+												}else{
+													res.data.pagedata[i].img = 'statics/images/djstudy.png'
+												}
+											}
+											that.dataList = res.data.pagedata;
+											that.total = res.data.count;
+										}
+									}
+								}
+							})
+						},
+						scroll(){
+							var that = this;
+							var scroll = document.getElementById('appWrap');
+							scroll.onscroll = function(){
+							    var t = scroll.scrollTop;  //离上方du的距zhi离
+							    var h =scroll.innerHeight || scroll.clientHeight || scroll.clientHeight; //可见dao宽度
+							    if( t >= scroll.scrollHeight -h ) {
+									that.page++;
+									if(that.page == that.total+1){
+										that.page = that.total
+									}else{
+										if(that.page <= that.total){
+											that.get.page = that.page
+											that.importClass()
+										}
+									}
+							    }
+							}
+						},
+						// 搜索
+						search(){
+							var that = this;
+							that.dataList = [];
+							that.get.title = that.searchbox;
+							that.importClass();
+						},
+						// 年份列表
+						yearList(){
+							var that = this;
+							var year = new Date().getFullYear();
+							for(var i=0;i<5;i++){
+								that.yearWrap.push(year--);
+							}
+						}
+					},
+					mounted() {
+						var that = this;
+						// 初始化layui框架
+						layui.use(['layer','form'],function(){
+							var layer = layui.layer;
+							var form = layui.form;
+							// 状态筛选
+							form.on('select(speed)', function (data) {
+								that.get.speed = data.value;
+								that.dataList = [];
+								that.importClass();
+							});
+							// 年份筛选
+							form.on('select(year)', function (data) {
+								that.get.year = data.value;
+								that.dataList = [];
+								that.importClass();
+							});
+							// 月份筛选
+							form.on('select(month)', function (data) {
+								that.get.month = data.value;
+								that.dataList = [];
+								that.importClass();
+							});
+							// 活动类型筛选
+							form.on('select(acttype)', function (data) {
+								that.get.type = data.value;
+								that.dataList = [];
+								that.importClass();
+							});
+							// 活动类型筛选2
+							form.on('select(istart)', function (data) {
+								that.get.istart = data.value;
+								that.dataList = [];
+								that.importClass();
+							});
+						})
+					},
+					created() {
+						var that = this;
+						that.importClass();
+						that.yearList();
+						// 回车键搜索
+						$(document).keydown(function(event){
+							if(event.keyCode == 13){
+								that.dataList = [];
+								that.get.title = that.searchbox;
+								that.importClass();
+							}
+						})
+					}
+				})
+			}
+		</script>
+	</body>
+</html>

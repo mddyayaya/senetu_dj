@@ -1,0 +1,328 @@
+*{
+	margin:0;
+	padding: 0;
+	list-style: none;
+}
+a{
+	text-decoration: none;
+}
+a:hover{
+	opacity: 0.8;
+}
+body{
+	height: 100%;
+	width: 100%;
+	background: rgb(200,41,35);
+	overflow: hidden;
+	user-select: none;
+}
+input[type=text]:focus, select:focus{
+	border:0.1vh solid rgb(192,33,27);
+	outline:none;
+}
+input:focus, select:focus{
+	outline:none;
+}
+
+::-webkit-scrollbar  
+{  
+    width: 1vw;    
+    background-color: none;  
+}
+::-webkit-scrollbar-track  
+{  
+    border-radius: 0.2vw;  
+    background-color: none;
+}
+::-webkit-scrollbar-thumb  
+{  
+    border-radius: 0.2vw;  
+    background-color: rgba(255,255,255,0.8);
+}
+body,html{
+	height: 100%;
+	width: 100%;
+	background: url(../statics/images//historyBg.png) no-repeat !important;
+	background-size:100% 100%;
+	overflow: hidden;
+}
+.top-nav{
+	height: 3vh;
+	width: 100%;
+	padding: 2vh 1vw;
+}
+.top-nav a{
+	color: #fff;
+	font-size: 2vh;
+}
+.top-nav i{
+	margin-right: 0.3vw;
+}
+.wrapper1{
+	position: relative;
+	height: 85vh;
+	width: 90vw;
+	margin: auto;
+	margin-top: 3vh;
+}
+.left{
+	position: absolute;
+	height: 48.5vh;
+	width: 16vw;
+}
+.leftbg{
+	position: absolute;
+	height: 45vh;
+	justify-content: center;
+	width: inherit;
+	background: rgb(190,151,112);
+	margin-top: 1vh;
+}
+.list{
+	position: absolute;
+	height: inherit;
+	width: 14.5vw;
+	right: 0vw;
+	background: url(../statics/images//leftnavBg.png) no-repeat;
+	background-size:100% 100%;
+}
+.list li{
+	height: 12vh;
+	display: flex;
+	align-items: center;
+	padding: 0vh 1vw;
+	justify-content: center;
+	color: #fff;
+	font-size: 2.5vh;
+	font-weight: 700;
+	text-shadow: 0.3vh 0.6vh 1.5vh rgba(48,48,48,0.54);
+	cursor: pointer;
+	text-shadow: 0.3vh 1vh 1.5vh rgba(48,48,48,0.54);
+	border-left: 0.4vw solid rgba(254,251,88,0);
+}
+.list li:hover{
+	text-shadow: 0.3vh 1vh 1.5vh  rgba(48,48,48,0.54);
+	border-left: 0.4vw solid rgb(254,251,88);
+}
+.bar{
+	border-left: 0.4vw solid rgb(254,251,88) !important;
+}
+.list li:nth-child(2){
+	background: rgb(196,168,131);
+}
+.list li:nth-child(3){
+	background: rgb(191,162,128);
+}
+.list li:nth-child(4){
+	background: rgb(185,159,126);
+}
+.list li:nth-child(5){
+	background: rgb(181,154,124);
+}
+.center{
+	position: absolute;
+	left: 17.2vw;
+	height: inherit;
+	width: 60.7vw;
+	background: url(../statics/images//historycenterBg.png) no-repeat;
+	background-size: 100% 100%;
+}
+.centerLogo{
+	position: absolute;
+	top: 3vh;
+	left: 3.5vw;
+	height:5.5vh;
+	width: 100%;
+}
+.centerLogo>img{
+	height: 100%;
+}
+.centerTit{
+	position: absolute;
+	left: 8vw;
+	top: 9.5vh;
+	font-size: 2.3vh;
+	color: rgb(178,16,5);
+	font-weight: 700;
+}
+.centerTit span{
+	background: rgb(248,220,147);
+}
+.control1{
+	display: none;
+	position: absolute;
+	height: 5vh;
+	width: 50.2vw;
+	top: 6.3vh;
+	right: 3vw;
+	border-bottom:0.1vh solid rgb(178,16,5) ;
+}
+.control2{
+	position: absolute;
+	height: 5vh;
+	width: 50.2vw;
+	color: rgb(200,28,29);
+	font-size: 2vh;
+	text-align: right;
+	bottom: 0.35vh;
+	border-bottom:0.1vh solid rgb(178,16,5) ;
+}
+.control2 input{
+	height: 3vh;
+	margin-left: 1vw;
+	width: 7vw;
+	padding: 0 0.5vw;
+	border: 0.1vh solid rgb(178,16,5);
+	background: none;
+	vertical-align: bottom;
+}
+.fa-search {
+	position: absolute;
+	margin-left: -1.5vw;
+	top: 0.5vh;
+	font-size: 2vh !important;
+}
+.control2 span{
+	cursor: pointer;
+}
+.control2 span:hover{
+	opacity: 0.8;
+}
+.control2 i{
+	cursor: pointer;
+}
+.control2 i:hover{
+	opacity: 0.8;
+}
+.wrapperBig{
+	width: 63.7vw;
+	height: 82vh;
+}
+.famous{
+	display: none;
+	position: absolute;
+	height: 69vh;
+	bottom: 3vh;
+	top: 14vh;
+	width: inherit;
+	overflow-x: hidden;
+	overflow-y: scroll;
+}
+.meeting{
+	display: none;
+	position: absolute;
+	height: 69vh;
+	top: 13vh;
+	bottom: 3vh;
+	width: inherit;
+	overflow-x: hidden;
+	overflow-y: scroll;
+}
+.redtitle{
+	position: absolute;
+	left: 9vw;
+	top: 30vh;
+	font-size: 2.2vh;
+	font-family: '微软雅黑';
+	font-weight: 700;
+	color: rgb(178,15,5);
+}
+.sumup{
+	position: fixed;
+	font-family: '微软雅黑';
+	top: 19.5vh;
+	left: 24vw;
+	font-size: 2.5vh;
+	font-weight: 700;
+	color: rgb(178,15,5);
+}
+.sumup span{
+	background: rgb(248,220,147);
+}
+.recallItem{
+	height: 30vh;
+}
+.redtit{
+	margin-left: 9vw;
+	height: 3.5vh;
+	line-height: 3.5vh;
+	padding: 0 1vw;
+	overflow: hidden;
+	color: rgb(127,54,17);
+	font-size: 1.8vh;
+	background: url(../statics/images//redtitbg.png) no-repeat ;
+	background-size: 100% 100%;
+	margin-bottom: 1.5vh;
+	width: 12vw;
+}
+.classes{
+	position: absolute;
+	display: none;
+	height: 69vh;
+	top: 14vh;
+	bottom: 3vh;
+	width: inherit;
+	overflow-x: hidden;
+	overflow-y: scroll;
+}
+.result{
+	position: absolute;
+	height: 62vh;
+	bottom: 3vh;
+	top: 21vh;
+	width: inherit;
+	overflow-x:hidden ;
+	overflow-y: scroll;
+}
+.result .people{
+	padding: 0 3vw;
+	height: 26.5vh;
+}
+.movie{
+    position: absolute;
+	display: flex;
+	flex-wrap:wrap;
+    height: 69vh;
+	justify-content: space-between;
+    top:11vh;
+    bottom: 3vh;
+    width: 78%;
+	padding: 0 10.5%;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+.movie::after{
+	width: 45%;
+	flex: auto;
+	content: "";
+}
+.movieItem{
+	cursor: pointer;
+	margin-bottom: 4vh;
+	height: 27vh;
+	width: 45%;
+	border-radius: 1vh;
+	position: relative;
+	background: rgba(0,0,0,.1);
+}
+.movieItem:hover{
+	opacity: 0.9;
+}
+.movieItem:active{
+	transform: scale(1.01);
+}
+.movieItem>img{
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	object-fit: cover;
+	border-radius: inherit;
+}
+.right{
+	position: absolute;
+	height: inherit;
+	width: 11vw;
+	right: 0;
+	background: url(../statics/images//historyrightBg.png) no-repeat;
+	background-size:100% 100%;
+}

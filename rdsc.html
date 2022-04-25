@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>入党誓词</title>
+		<link rel="stylesheet" type="text/css" href="css/rdsc.css"/>
+		<link rel="stylesheet" href=" css/fontAwesome.css" />
+	</head>
+	<body>
+		<div class="nav-top" style="margin-top: 2vh;">
+			<div class="control1">
+				<a href="app.html">返回</a>
+			</div>
+		</div>
+		<audio class="music1" autoplay="autoplay" src=" statics/images/shici_mr.mp3" >
+			当前浏览器不支持audio
+		</audio>
+		<div class="rdsc_bg"></div>
+		<div class="rdsc_right_nav">
+			<ul>
+				<li>入党誓词</li>
+				<li>习近平领誓</li>
+				<li>奏唱国歌</li>
+			</ul>
+		</div>
+		<div class="control"><</div>
+		<div class="other">
+			<div class="center">
+				<div class="center_words">
+					我志愿加入中国共产党，拥护党的纲领，遵守党的章程，履行党员义务，执行党的决定，严守党的纪律，保守党的秘密，对党忠诚，积极工作，为共产主义奋斗终身，随时准备为党和人民牺牲一切，永不叛党。
+				</div>
+			</div>
+			<div class="bottom"></div>
+			<div class="left"></div>
+			<div class="right"></div>
+			<div class="bottom2"></div>
+			<div class="xdd"></div>
+		</div>
+		<script src="lib/jquery/jquery-3.5.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			// 控制条
+			$('.control').addClass('show');
+			$('.control').on('click',function(){
+				if($(this).hasClass('show')){
+					$(this).addClass('nav_anim');
+					$('.rdsc_right_nav').addClass('nav1_anim');
+					$(this).text(">");
+					$(this).removeClass('show');
+				}else{
+					$(this).removeClass('nav_anim');
+					$('.rdsc_right_nav').removeClass('nav1_anim');
+					$(this).text("<");
+					$(this).addClass('show');
+				}
+			});
+			// 音乐打开关闭
+			$('.music1').addClass('play');
+			$('.music').on('click',function(){
+				if($('.music1').hasClass('play')){
+					$('.music1')[0].pause();
+					$('.line_close').show()
+					$('.music1').removeClass('play');
+				}else{
+					$('.music1')[0].play();
+					$('.line_close').hide();
+					$('.music1').addClass('play');
+				}
+			})
+			// 誓词动效
+			var text = $(".center_words").text().trim();
+			// 导航点击]
+			var t;
+			$('.rdsc_right_nav ul li').eq(0).addClass('yellow-words');
+			$('.rdsc_right_nav ul li').on('click',function(){
+				$(this).addClass('yellow-words').siblings().removeClass('yellow-words');
+				var index = $(this).index()+1;
+				if(index == 1){
+					$('audio').attr('src','');
+					clearInterval(t)
+					$('audio').attr('src',' statics/images/shici_mr.mp3');
+					$('.other').show(200);
+					$('.rdsc_bg').html("");
+					$('.left').removeClass('to_left');
+					$('.right').removeClass('to_right');
+					$('.xdd').removeClass('xdd_anim');
+					$('.bottom').slideDown(1000);
+					$(".center_words").html("");
+					$(".center_words").text(text);
+					$(".center_words").animate({'opacity':1},1000);
+				}else if(index == 2){
+					clearInterval(t)
+					t = setTimeout(function(){
+						$('audio').attr('src',' statics/images/lingshi.mp3');
+					},3000)
+					$('.other').show(200);
+					$('.rdsc_bg').html("");
+					$('.bottom').fadeOut(500);
+					$('.left').addClass('to_left')
+					$('.right').addClass('to_right');
+					$('.xdd').addClass('xdd_anim');
+					var s = 0;
+					$(".center_words").html("");
+					for(var i = 0;i < text.length;i++){
+						$(".center_words").append("<span>"+text[i]+"</span>");
+					}
+					$('audio').attr('src','');
+				}else if(index == 3){
+					clearInterval(t)
+					$('audio').attr('src','');
+					$('.other').hide(200);
+					$('.rdsc_right_nav').animate({'opacity':'0.7'},500)
+					$('.rdsc_right_nav').removeClass('nav1_anim');
+					$('.control').animate({'opacity':'0.7'},500);
+					$('.control').removeClass('nav_anim');
+					$('.control').text("<");
+					$('.control').addClass('show');
+					var html = '<video autoplay loop poster="statics/images/loading.png" ><source src="http://people.5cy.com/p3/dj/video/ggym.mp4" type="video/mp4"></source></video>';
+					$('.rdsc_bg').html(html);
+				}
+			});
+		</script>
+	</body>
+</html>

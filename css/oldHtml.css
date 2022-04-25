@@ -1,0 +1,213 @@
+ *{
+	 margin: 0;
+	 padding: 0;
+ }
+ html, body {
+  margin: 0;
+  height: 100%;
+  width: 100%;
+  background: url(../statics/images/beijing1.jpg) no-repeat;
+  background-size: 100% 100%;
+  overflow: hidden;
+	user-select: none;
+}
+a{
+	text-decoration: none;
+}
+a:hover{
+	cursor: pointer;
+}
+input[type=text]:focus, select:focus{
+	border:0.1vh solid rgb(192,33,27);
+	outline:none;
+}
+[v-cloak]{
+ display:none !important
+}
+input:focus, select:focus{
+	outline:none;
+}
+::-webkit-scrollbar  
+{  
+    width: 0.3vw;    
+    background-color: rgba(225,225,225,0);  
+}
+::-webkit-scrollbar-track  
+{  
+    border-radius: 0.2vw;  
+    background-color: rgba(225,225,225,0); 
+}
+::-webkit-scrollbar-thumb  
+{  
+    border-radius: 0.2vw;  
+    background-color:none;
+	background: linear-gradient(to bottom, #BB0000 0%, #D51425 100%);
+}
+.wrap{
+	height: 100%;
+	width: 100%;
+}
+.leftNav{
+	position: fixed;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 4%;
+	background: rgb(132,0,0);
+}
+.leftNav>div{
+	cursor: pointer;
+	line-height: 8vh;
+	margin-bottom: 2vh;
+	color: #fff;
+	width: 100%;
+	font-weight: bold;
+	font-size: 4vh;
+	text-align: center;
+}
+.leftNav>div:hover{
+	background: #FF0000;
+}
+.activeSelect{
+	background: #FF0000;
+}
+.rightCont{
+	position: fixed;
+	right: 0;
+	height: 100%;
+	width: 92%;
+	padding:0 2%;
+}
+.rightContTitle{
+	height: 5%;
+	color: #fff;
+	font-size: 2.5vh;
+	font-weight: bold;
+	line-height: 8vh;
+}
+.rightConts{
+	height: 89%;
+	width: 100%;
+	margin:1.5% auto 0 auto;
+	overflow-x: hidden;
+	overflow-y: scroll;
+}
+.rightContss{
+	width: 100%;
+	display: flex;
+	flex-wrap: wrap;
+}
+.rightContss::after{
+	content: "";
+	flex: auto;
+	width: 22%;
+}
+.contitemWrap{
+	position: relative;
+	height: 25vh;
+	width: 22%;
+	background: #fff;
+	margin-bottom: 2%;
+	margin-right: 3%;
+}
+.contItem{
+	position: absolute;
+	cursor: pointer;
+	position: relative;
+	width: 100%;
+	height: 25vh;
+	background: #ccc;
+}
+.contItem>img{
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	object-fit: cover;
+}
+.contItem2{	
+	opacity: 0;
+	position: absolute;
+	z-index: 10;
+	margin-top: 0;
+	width: 90%;
+	background: #fff;
+	padding: 3% 5%;
+	font-size: 2vh;
+	border-bottom-left-radius: 1vh;
+	border-bottom-right-radius: 1vh;
+}
+.contItem2>div{
+	margin-top: 2vh;
+}
+.contItem2>div:nth-child(1){
+	overflow: hidden;
+	display: -webkit-box;
+	word-break: break-all;
+	text-overflow: ellipsis; 
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 1;
+}
+.contItem2>div:nth-child(2){
+	color: #7A7A7A;
+	line-height: 3vh;
+	font-size: 1.8vh;
+	overflow: hidden;
+	display: -webkit-box;
+	word-break: break-all;
+	text-overflow: ellipsis; 
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 2;
+}
+.contItem2>div:nth-child(3){
+	display: flex;
+	justify-content: space-between;
+}
+.contItem2>div:nth-child(3) span:nth-child(2){
+	cursor: pointer;
+	padding: 0.6vh 1vw;
+	background: linear-gradient(to right,red, yellow);
+	color: #fff;
+	border-radius: 3vh;
+	font-size: 1.8vh;
+}
+.tipss{
+	position: absolute;
+	bottom: 0;
+	color: #fff;
+	height: 4vh;
+	line-height: 4vh;
+	font-size: 1.7vh;
+	padding: 0 3%;
+	width: 94%;
+	background: rgba(0,0,0,.5);
+	overflow: hidden;
+	display: -webkit-box;
+	word-break: break-all;
+	text-overflow: ellipsis; 
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 1;
+}
+.tips{
+	position: absolute;
+	top: 0;
+	right: 0;
+	color: #fff;
+	font-size: 1.7vh;
+	padding: 1% 4%;
+	background: rgba(0,0,0,.5);
+}
+.liulan{
+	opacity: 1;
+	transition: 0.2s;
+}
+.null{
+	position: fixed;
+	top: 20%;
+	left: 50%;
+	margin-left: -10vw;
+	width: 20vw;
+	text-align: center;
+	color: #fff;
+	font-size: 4vh;
+	font-weight: bold;
+}

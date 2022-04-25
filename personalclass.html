@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+        <meta http-equiv="page-Enter" content="revealTrans(Duration=3.0,Transition=23)">
+		<link rel="stylesheet" type="text/css" href="css/index.css?id=123456"/>
+		<link rel="stylesheet" type="text/css" href="lib/font-awesome/css/font-awesome.css"/>
+		<script src="lib/jquery/jquery-3.5.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/setCookie.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/ajax.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/vue.min.js" type="text/javascript" charset="utf-8"></script>
+		<title>个人专题</title>
+		<style type="text/css">
+			body{
+				background: linear-gradient(270deg, #FFF3D2 0%, #FFF9E6 51%, #FFF4D3 100%);;
+			}
+			.mainBody {
+			    height: 81%;
+			}
+			.searchBox{
+				display: flex;
+				justify-content: space-between;
+				background:#fff;
+			}
+			.searchBox>div>div:nth-child(1) {
+			    color: #3C4353;
+			    font-size: 1.8vh;
+			}
+			.fenlei {
+				margin-right: 1vw;
+				color: #DC030C;
+				border: 1px solid rgba(0,0,0,0);
+			}
+			#searchclass>div:nth-child(2) {
+				border: 1px solid #DDE2EE;
+			    color: #A1A1A1;
+			}
+			#searchclass>div input {
+			    color: #A1A1A1;
+			}
+			.searchBox>div>div:nth-child(1) {
+			    color: #DC030C;
+			}
+			.fenlei:hover{
+				border: 1px solid #DC030C;
+			}
+			.selectClass{
+				border: 1px solid #DC030C;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="app" v-cloak>
+			<!-- 进入页面 -->
+			<div class="topNavBar">
+				<span onclick="window.location.href='app.html'">返回</span>
+				 &nbsp;| &nbsp;
+				<a href="app.html">首页</a>
+			</div>
+			<div class="topbanner">
+				<span>{{title}}</span>
+			</div>
+			<div class="mainBody">
+				<!-- 搜索框 -->
+				<div class="searchBox">
+					<div id="">
+						<div style="color: #3C4353;">专栏：</div>
+						<div class="fenlei" :class="fenleiSelect == 0?'selectClass':''" @click="selectType(0)">全部</div>
+						<div class="fenlei" v-for="item in zllist" :class="fenleiSelect == item.id?'selectClass':''" @click="selectType(item.id)">{{item.column_title}}</div>
+					</div>
+					<div id="searchclass">
+						<div>内容搜索：</div>
+						<div>
+							<input v-model="searchbox" type="text" name="" id="" value="" />
+							<i @click="search" class="fa fa-search" aria-hidden="true"></i>
+						</div>
+					</div>
+				</div>
+				<!-- 内容列表 -->
+				<div class="contList" id="appWrap">
+					<!-- 此处循环 -->
+					<div>
+						<div class="personItem" v-for="item in contlist" @click="startActive(item.id,item.bs_id)">
+							<img :src="'http://'+item.ym+'/'+item.file_img" >
+							<p>{{item.file_title}}</p>
+						</div>
+						<div class="null" v-show="contlist.length == 0">暂无数据</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript">
+			window.onload = function(){
+				var app = new Vue({
+					el:"#app",
+					data:{
+						step:1,
+						// 个体数据传参
+						get:{
+							user_id:user.dwid,
+							special_id :""
+						},
+						title:"",
+						zllist:[],
+						fenleiSelect:"",
+						searchbox:"",
+						contlist:[],
+						getlist:{
+							column_id:"",
+							special_id:"",
+							title:""
+						},
+						total:'',
+						page:""
+					},
+					methods:{
+						// 开始学习
+						startActive(rid,bsid){
+							var that = this;
+							showDetail(bsid,rid,3,2)
+						},
+						// 活动中资源详情
+						showStudyDetail(){
+							var that = this;
+							window.location.href = 'detailClass.html'
+						},
+						// 分类筛选
+						selectType(cid){
+							var that = this;
+							that.fenleiSelect = cid;
+							that.getlist.column_id = cid;
+							that.getlist.page = 1;
+							that.contListWrap();
+						},
+						// 专栏列表
+						importClass(){
+							var that = this;
+							that.dataList = [];
+							postData("myColumn",that.get,function(res){
+								if(res.code == 200){
+									if(res.data != null){
+										that.zllist = res.data;
+									}
+								}
+							})
+						},
+						// 内容列表
+						contListWrap(){
+							var that = this;
+							that.dataList = [];
+							postData("myColumnResouce",that.getlist,function(res){
+								if(res.code == 200){
+									if(res.data != null){
+										if(res.data.length > 0){
+											for(var i=0;i<res.data.length;i++){
+												if(res.data[i].sz_img != '' && res.data[i].sz_img != null){
+														if(res.data[i].sz_img.search('http') == -1){
+															res.data[i].sz_img = 'http://'+res.data[i].ym+'/'+res.data[i].sz_img
+														}else{
+															
+														}
+												}else{
+													res.data[i].sz_img = 'statics/images/djstudy.png'
+												}
+											}
+										}
+										that.contlist = res.data;
+									}else{
+										that.contlist = []
+									}
+								}
+							})
+						},
+						// 搜索
+						search(){
+							var that = this;
+							that.getlist.title = that.searchbox;
+							that.getlist.page = 1;
+							that.contListWrap();
+						},
+						scroll(){
+							var that = this;
+							var scroll = document.getElementById('appWrap');
+							scroll.onscroll = function(){
+							    var t = scroll.scrollTop;  //离上方du的距zhi离
+							    var h =scroll.innerHeight || scroll.clientHeight || scroll.clientHeight; //可见dao宽度
+							    if( t >= scroll.scrollHeight -h ) {
+									that.page++;
+									if(that.page == that.total+1){
+										that.page = that.total
+									}else{
+										if(that.page <= that.total){
+											that.getlist.page = that.page
+											that.contListWrap()
+										}
+									}
+							    }
+							}
+						},
+					},
+					mounted() {
+						var that = this;
+						that.scroll();
+					},
+					created() {
+						var that = this;
+						that.title = getUrlParam("title");
+						that.get.special_id = getUrlParam("id");
+						that.getlist.special_id = getUrlParam("id");
+						that.importClass();
+						that.contListWrap();
+						// 回车键搜索
+						$(document).keydown(function(event){
+							if(event.keyCode == 13){
+								that.getlist.title = that.searchbox;
+								that.getlist.page = 1;
+								that.contListWrap();
+							}
+						})
+					}
+				})
+			}
+		</script>
+	</body>
+</html>

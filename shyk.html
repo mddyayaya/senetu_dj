@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>三会一课</title>
+		<link rel="stylesheet" type="text/css" href="css/shyk.css"/>
+		<link rel="stylesheet" type="text/css" href="lib/font-awesome/css/font-awesome.css"/>
+		<link rel="stylesheet" type="text/css" href="css/selectbox.css"/>
+		<link rel="stylesheet" type="text/css" href="lib/layui/css/layui.css"/>
+		<style type="text/css">
+		.addred{
+			color: rgb(201,27,29);
+			cursor: pointer;
+			border-bottom: 0.4vh solid rgb(201,27,29);
+		}
+		.addshadow{
+			color: rgb(201,27,29);
+		}
+		.margin-top{
+			margin-top: 7vh;
+			transition:  ease-in-out;
+		}
+		</style>
+		</head>
+		<body>
+			<!-- 遮罩 -->
+			<div class="blackMark" onclick="closeBag()"></div>
+			<!-- 头 -->
+			<div class="top-nav">
+				<div class="control">
+					<a href="javascript:history.back(-1)"><i class="fa fa-mail-reply" aria-hidden="true"></i>返回&nbsp;&nbsp;|&nbsp;</a>
+					<a href="javascript:window.location='app.html';"><i class="fa fa-home" aria-hidden="true"></i>首页</a>
+				</div>
+			</div>
+			<div id="app"  v-cloak>
+				<!-- 主体 -->
+				<div class="shykMainbody">
+					<div class="shykleft">
+						<div class="shykleftTop">
+							<div class="block" @click="selectLeft(1)">
+								<p class="shykimg"><img src="statics/images/shyk1.png"/></p>
+								<p class="imgWords" :class="leftSelect.id == 1?'addshadow':''">三会一课</p>
+							</div>
+							<div class="block" @click="selectLeft(2)">
+								<p class="shykimg"><img src="statics/images/shyk3.png"/></p>
+								<p class="imgWords" :class="leftSelect.id == 2?'addshadow':''">支部党员大会</p>
+							</div>
+							<div class="block" @click="selectLeft(3)">
+								<p class="shykimg"><img src="statics/images/shyk2.png"/></p>
+								<p class="imgWords" :class="leftSelect.id == 3?'addshadow':''">支部委员会</p>
+							</div>
+							<div class="block" @click="selectLeft(4)">
+								<p class="shykimg"><img src="statics/images/shyk4.png"/></p>
+								<p class="imgWords" :class="leftSelect.id == 4?'addshadow':''">党小组会</p>
+							</div>
+						</div>
+						<ul class="shykleftbottom">
+							<li v-for="item in leftList" @click="showDetail1(item.id,item.cate)">{{item.title}}</li>
+						</ul>
+					</div>
+					<div class="shykright">
+						<div class="shykrightTop">
+							<div class="bannerNav">
+								<div @click="selectBar(1)" :class="selectBarIndex == 1?'addred':''">党课</div>
+								<div @click="selectBar(2)" :class="selectBarIndex == 2?'addred':''">案例</div>
+							</div>
+							<div class="searchBth">
+								<span>搜索</span>
+								<span><input type="text" v-model="searchBox"/><i  @click="search"  class="fa fa-search" aria-hidden="true"></i></span>
+								<span class="selectbar-open"  @click="openSelect"><i class="fa fa-filter" aria-hidden="true"></i><span >筛选</span></span>
+							</div>
+						</div>
+						<div class="shykrightBottom">
+							<div class="select-bar" v-show="selectBox == true">
+								<div class="layui-form">
+								  <div class="layui-form-item">
+									<label class="layui-form-label" style="width: 8vw;font-size: 2vh;padding-left: 0;line-height: 3vh;">选择资源类型:</label>
+									<div class="layui-input-block">
+									  <input type="radio" name="typeSelect" value="0" title="全部" checked lay-filter="beshared">
+									  <input type="radio" name="typeSelect" value="4" title="视频" lay-filter="beshared">
+									  <input type="radio" name="typeSelect" value="3" title="音频" lay-filter="beshared">
+									  <input type="radio" name="typeSelect" value="2" title="图文" lay-filter="beshared">
+									  <input type="radio" name="typeSelect" value="1" title="PPT" lay-filter="beshared">
+									</div>
+								  </div>
+								</div>
+							</div>
+							<div class="selectShow" :class="selectBox == true?'showTop':''">
+								<div class="selectShowitem" v-for="item in dataBagList" @click="showDetail(10,item.title,item.ftid,item.id)"><img :src="item.img" alt=""/><span>{{item.title}}</span></div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- 展开资源包 -->
+				<div class="resource-packages">
+					<div class="close-icon" onclick="closeBag()">×</div>
+					<div class="select-content">
+					<div class="name1">第一批</div>
+						<div class="select-content-item">
+							<div class="main-body-item body-item1" id="PPT1"><a><img src="statics/images/index1.jpg"/></a><a class="tips">PPT</a><span>习近平新时代中国特色社会主义理论体系</span></div>
+						</div>
+					</div>
+				</div>
+				<!-- 搜索结果为空 -->
+				<div class="null" v-show="dataBagList.length == 0">未找到您要搜索的内容</div>
+			</div>
+		<script src="lib/jquery/jquery-3.5.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/ajax.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/vue.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="lib/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			window.onload = function(){
+				var app = new Vue({
+					el:"#app",
+					data:{
+						// get数据传参
+						getSoucre:{
+							template:10,
+							ft_id:"1",
+							kw:"",
+						},
+						// 左侧筛选
+						leftSelect:{
+							id:1,
+						},
+						selectBox:false,
+						// 默认左侧展开
+						selectIndex:0,
+						// 资源包
+						bag:false,
+						// 选中导航
+						selectBarIndex:1,
+						// 搜索框搜索
+						searchBox:'',
+						// 数据包
+						dataBagList:[],
+						// 数据包
+						leftList:[]
+					},
+					methods:{
+						// 打开筛选框
+						openSelect(){
+							var that = this;
+							if(that.selectBox == true){
+								that.selectBox = false;
+								that.selectNum = 0
+							}else{
+								that.selectBox = true
+							}
+						},
+						// 打开资源包
+						openBag(){
+							var that = this;
+							that.bag = true;
+						},
+						// 导航点击
+						selectBar(index){
+							var that = this;
+							that.selectBarIndex = index;
+							that.getSoucre.ft_id = index;
+							that.getSoucre.kw = "";
+							that.dataBag();
+						},
+						// 资源包
+						dataBag(){
+							var that = this;
+							that.dataBagList = [];
+							postData("special",that.getSoucre,function(res){
+								if(res.code == 200){
+									that.dataBagList = res.data.cate_r;
+								}
+							})
+						},
+						// 资源包
+						leftData(){
+							var that = this;
+							that.leftList = [];
+							postData("shykL",that.leftSelect,function(res){
+								if(res.code == 200){
+									that.leftList = res.data.cate_info
+								}
+							})
+						},
+						// 打开资源包
+						showDetail(template,title,ft_id,rid){
+							openBag(template,title,ft_id,rid)
+						},
+						// 聚焦搜索
+						search(){
+							var that = this;
+							that.getSoucre.kw = that.searchBox;
+							that.dataBag();
+						},
+						// 左侧筛选
+						selectLeft(index){
+							var that = this;
+							that.leftSelect.id = index;
+							that.leftData();
+						},
+						// 资源详情
+						showDetail1(id,cate){
+							window.location.href = 'shykItem.html?id='+id+'&pid='+cate
+						}
+					},
+					mounted() {
+						var that = this;
+						// 初始化layui框架
+						layui.use(['layer','form'],function(){
+							var layer = layui.layer;
+							var form = layui.form;
+							form.on('radio(beshared)', function (data) {
+								that.selectNum = data.value;
+								that.getSoucre.bsid = data.value;
+								that.dataBag();
+								form.render();
+							})
+						})
+					},
+					created() {
+						var that = this;
+						that.dataBag();
+						that.leftData();
+						// 回车键搜索
+						$(document).keydown(function(event){
+							if(event.keyCode == 13){
+								that.getSoucre.kw = that.searchBox;
+								that.dataBag();
+							}
+						})
+					}
+				})
+			}
+		</script>
+	</body>
+</html>

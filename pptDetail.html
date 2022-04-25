@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+        <meta http-equiv="page-Enter" content="revealTrans(Duration=3.0,Transition=23)">
+		<link rel="stylesheet" type="text/css" href="css/index.css?id=123131"/>
+		<link rel="stylesheet" type="text/css" href="css/swiper-bundle.min.css"/>
+		<link rel="stylesheet" type="text/css" href="lib/font-awesome/css/font-awesome.css"/>
+		<title>PPT详情</title>
+	</head>
+	<style type="text/css">
+		body{
+			background: #fff;
+		}
+	</style>
+	<body>
+		<div class="mainBody" id="app" v-cloak>
+			<!-- 进入页面 -->
+			<div class="topNavBar" style="color: #FFFAED !important;height: 5vh;line-height: 5vh;">
+				<span onclick="window.history.back(-1)">返回</span>
+				 &nbsp;| &nbsp;
+				<a style="color: #FFFAED !important;" href="app.html">首页</a>
+				<div class="detialTit">
+				</div>
+			</div>
+			<!-- 二维码弹窗 -->
+			<div class="codeMark" v-show="codeShow == true">
+				<div class="codeImgWrap">
+					<div class="closeCode">
+						<span @click="closeCode">×</span>
+					</div>
+					<div class="littlePro">小程序扫码带走</div>
+					<div class="scanCode">
+						<img :src="codeImg" >
+					</div>
+				</div>
+			</div>
+			<div class="videoWrap2">
+				<div class="videoTit">{{playTitle}}</div>
+				<div class="videoSubtit">
+					<!-- <div class="videoParam">课时：12</div> -->
+					<div class="videoParam">发布时间：{{addtime}}</div>
+					<div class="videoParam" style="display: flex;flex: 1;"></div>
+					<div class="videoParam" style="cursor: pointer;">
+						<div style="display: flex;align-items: center;">
+							<img style="height: 2.5vh;width: 2.5vh;margin-right: 0.2vw;" src="statics/images/downloadIcon.png" >
+						</div>
+						<div>
+							<form action="http://dj.gxsentu.net/?c=d_two_api&m=downResouce" method="post">
+								<input hidden="hidden" type="text" name="type" value="1"/>
+								<input hidden="hidden" type="text" name="upload_flag" value=""/>
+								<input hidden="hidden" type="text" name="upload_id" :value="data.id"/>
+								<input hidden="hidden" type="text" name="classs" value="3"/>
+								<input hidden="hidden" type="text" name="uid" :value="uid"/>
+								<input hidden="hidden" type="text" name="flag" :value="flag"/>
+								<input hidden="hidden" type="text" name="ment_url" :value="downLoadUrl"/>
+								<input hidden="hidden" type="text" name="title" :value="playTitle"/>
+								<input class="downSubmit" type="submit" value="资料下载"/>
+							</form>
+						</div>
+					</div>
+				</div>
+				<!-- 视频详情 -->
+				<div class="videDetial">
+					<div class="videoSrc">
+						<video v-if="playBsid == 3" :src="playUrl" poster="" preload  controls autoplay controlsList="nodownload" class=""></video>
+						<iframe
+								allowfullscreen="true"
+								style="
+								display: block;
+								background: rgb(39,40,34);
+								border: none;
+								height: 100%;
+								width: 100%;" v-if="playBsid == 1" :src="playUrl"></iframe>
+						<iframe allowfullscreen="true" v-if="playBsid == 8" :src="playUrl+'#toolbar=0'"></iframe>
+					</div>
+					<div class="videoList">
+						<div class="classList">
+							<div class="videoDownload" :class="playBsid == 3?'videoDownloading':''" @click="changeData(3)">
+								<span v-show="playBsid != 3"></span>
+								<span v-show="playBsid == 3"></span>
+								<span>视频</span>
+							</div>
+							<div class="videoDownload" :class="playBsid == 1?'videoDownloading':''" @click="changeData(1)">
+								<span v-show="playBsid != 1"></span>
+								<span v-show="playBsid == 1"></span>
+								<span>PPT</span>
+							</div>
+							<div class="videoDownload" :class="playBsid == 8?'videoDownloading':''" @click="changeData(8)">
+								<span v-show="playBsid != 8"></span>
+								<span v-show="playBsid == 8"></span>
+								<span>讲稿</span>
+							</div>
+						</div>
+						<div class="codeWrap1" @click="openCode">
+							<div class="codeImg1"></div>
+							<div>扫码带走</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script src="js/swiper-bundle.js" type="text/javascript" charset="utf-8"></script>
+		<script src="lib/jquery/jquery-3.5.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/setCookie.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/ajax.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/vue.min.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			window.onload = function(){
+				var app = new Vue({
+					el:"#app",
+					data:{
+						codeShow:false,
+						// 资源id
+						id:"",
+						addtime:"",
+						playUrl:"",
+						pptUrl:"",
+						playTitle:"",
+						playBsid:1,
+						uuid:"",
+						// 二维码
+						codeImg:"statics/images/loading.gif",
+						playing:0,
+						flag:user.flag,
+						uid:user.id,
+						pptDownload:"",
+						pdfDownload:"",
+						downLoadUrl:"",
+						//进入页面时间
+						startTime:0,
+						// 离开页面时间
+						leaveTime:0,
+						total_minute:0,
+						data:{
+							id:"",
+							flag:""
+						}
+					},
+					methods:{
+						// 打开二维码
+						openCode(){
+							var that = this;
+							var data = {
+								sid:that.data.id,
+								bsid:that.playBsid
+							}
+							postData('getWxcode',data,function(res){
+								that.codeImg = res.responseText
+							})
+							that.codeShow = true;
+						},
+						// 关闭二维码弹窗
+						closeCode(){
+							var that = this;
+							that.codeShow = false;
+						},
+						// 资源详情
+						detail(){
+							var that = this;
+							that.playUrl = "";
+							postData("resouceDetail",that.data,function(res){
+								if(res.code == 200){
+									that.playUrl = res.data.ment_url;
+									that.playBsid = 1;
+									that.total_minute = res.data.time;
+									that.uuid = res.data.UUID;
+									// 显示文件
+									that.pptUrl = res.data.ment_url;
+									that.videoUrl = 'http://people.5cy.com/p1/dj/video/'+that.uuid+'.mp4';
+									that.pdfUrl =  'http://people.5cy.com/p1/dj/pdf/'+that.uuid+'.pdf';
+									// 下载文件
+									that.pptDownload = 'http://people.5cy.com/p1/dj/ppt/'+that.uuid+'.pptx';
+									that.pdfDownload = 'http://people.5cy.com/p1/dj/pdf/'+that.uuid+'.docx';
+									that.playTitle = res.data.title;
+									// 默认下载地址
+									that.downLoadUrl = that.pptDownload;
+									that.addtime = toNumber(res.data.addtime);
+									that.startTime = new Date().getTime();
+								}
+							})
+						},
+						// 切换资源类型
+						changeData(bsid){
+							var that = this;
+							that.playBsid = bsid;
+							that.playUrl = "";
+							if(bsid == 3){
+								that.playUrl = that.videoUrl;
+								that.downLoadUrl = that.videoUrl;
+							}else if(bsid == 1){
+								that.playUrl = that.pptUrl;
+								that.downLoadUrl = that.pptDownload;
+							}else if(bsid == 8){
+								that.playUrl = that.pdfUrl;
+								that.downLoadUrl = that.pdfDownload;
+							}
+						},
+						// 监听离开页面
+						leavePage(){
+							var that = this;
+							window.onbeforeunload=function(e){
+							　　var e = window.event||e;  
+								that.leaveTime = new Date().getTime();
+								var minute = parseInt((that.leaveTime-that.startTime) / 1000);
+								browHistory(0,0,getUrlParam("type"),that.data.id,minute,parseInt(that.total_minute),that.uid,that.flag);
+								// 黔江
+								resourceQd('','',that.data.id,that.playBsid,3,minute,1)
+							}
+						}
+					},
+					created() {
+						var that = this;
+						that.data.id = getUrlParam('id');
+						that.data.flag = getUrlParam('flag');
+						that.detail();
+						setTimeout(function(){
+							that.leavePage();
+						},500)
+					},
+					mounted() {
+						var swiper = new Swiper('.swiper-container', {
+							slidesPerView:5,
+							spaceBetween: 10,
+						});
+					}
+				})
+			}
+		</script>
+	</body>
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>四史教育</title>
+		<link rel="stylesheet" type="text/css" href="css/guoshi.css"/>
+		<link rel="stylesheet" type="text/css" href="lib/font-awesome/css/font-awesome.css"/>
+		<link rel="stylesheet" type="text/css" href="css/selectbox.css"/>
+		<style type="text/css">
+			.tips{
+				position: absolute;
+				color: #fff;
+				padding: 1vh 1.5vw;
+				right: 0;
+				background: rgba(0,0,0,.5);
+				border-top-right-radius: 1.5vh;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="top-nav">
+			<div class="control">
+				<a href="javascript:history.back(-1)"><i class="fa fa-mail-reply" aria-hidden="true"></i>返回&nbsp;&nbsp;|&nbsp;</a>
+				<a href="javascript:window.location='app.html';"><i class="fa fa-home" aria-hidden="true"></i>首页</a>
+			</div>
+		</div>
+		<div class="wrapper1" id="app" v-cloak>
+			<div class="left">
+				<div class="leftbg"></div>
+				<ul class="list">
+					<li :class="navSelect == 1?'bar':''" @click="selectBar(1)">党史</li>
+					<li :class="navSelect == 2?'bar':''" @click="selectBar(2)">新中国史</li>
+					<li :class="navSelect == 3?'bar':''" @click="selectBar(3)">社会主义发展史</li>
+					<li :class="navSelect == 4?'bar':''" @click="selectBar(4)">改革开放史</li>
+				</ul>
+			</div>
+			<div class="center">
+				<div class="titlogo">
+					<div class="centerLogo">
+						<img :src="topLogo" >
+					</div>
+				</div>
+				<div class="wrapperBig">
+					<!-- 红色影片 -->
+					<div class="movie">
+						<div class="movieItem" v-for="item in history" @click="jumpDetail(item.bs_id,item.rid)">
+							<img :src="item.sz_img" >
+							<p class="tipss">{{item.title}}</p>
+							<p class="tips">{{item.bsid1}}</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="right"></div>
+		</div>
+	</body>
+	<script src="lib/jquery/jquery-3.5.1.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/vue.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/ajax.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		window.onload = function(){
+			var app = new Vue({
+				el:"#app",
+				data:{
+					// 导航样式
+					navSelect:1,
+					getSoucre:{
+						template:2,
+						cate:1
+					},
+					// 数据存储
+					history:[],
+					// 顶部图标
+					topLogo:"statics/images/gs_n_1.png"
+				},
+				methods:{
+					// 导航切换
+					selectBar(index){
+						var that = this;
+						$('.movie').animate({
+							scrollTop:"0px"
+						},0)
+						that.navSelect = index;
+						that.topLogo = 'statics/images/gs_n_'+index+'.png';
+						that.getSoucre.cate = index;
+						that.dataBag();
+					},
+					// 数据渲染
+					dataBag(){
+						var that = this;
+						that.dataBagList = [];
+						postData("special",that.getSoucre,function(res){
+							if(res.code == 200){
+								for(var i=0;i<res.data.list.length;i++){
+									res.data.list[i].bsid1 = changeSourceType(res.data.list[i].bs_id)
+								}
+								that.history = res.data.list;
+							}
+						})
+					},
+					jumpDetail(bsid,id){
+						var that = this;
+						showDetail(bsid,id,3,1)
+					}
+				},
+				created(){
+					var that = this;
+					that.dataBag();
+				}
+			})
+		}
+	</script>
+</html>

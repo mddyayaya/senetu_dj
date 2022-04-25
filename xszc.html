@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>形势政策</title>
+		<link rel="stylesheet" type="text/css" href="css/xszc.css"/>
+		<link rel="stylesheet" type="text/css" href="lib/font-awesome/css/font-awesome.css"/>
+	</head>
+	<body>
+		<!-- 头 -->
+		<div class="top-nav">
+			<div class="control">
+				<a href="javascript:history.back(-1)"><i class="fa fa-mail-reply" aria-hidden="true"></i>返回&nbsp;&nbsp;|&nbsp;</a>
+				<a href="javascript:window.location='app.html';"><i class="fa fa-home" aria-hidden="true"></i>首页</a>
+			</div>
+		</div>
+	<!-- 主体 -->
+	<div id="app" v-cloak>
+		<div class="search-box">
+			<a class="search">搜索</a>
+			<input type="text" v-model="searchBox"/><i @click="search" class="fa fa-search" aria-hidden="true"></i>
+		</div>
+		<div class="mainBody">
+			<div class="xszcleft">
+				<div class="lefeItem1">
+					<div :class="leftNav == 1?'leftNav':''" @click="selectInfo(1)">政策解读</div>
+					<div :class="leftNav == 2?'leftNav':''" @click="selectInfo(2)">形势报告</div>
+				</div>
+				<div class="leftItem2">
+					<div class="logo"><img src="statics/images/xszcIcon.png" alt=""></div>
+					<ul class="content">
+						<li v-for="(item,index) in leftData" :class="selectIndex == index?'gaoliang':''" @click="selectData(index,item.id,item.type)">{{item.type}}</li>
+					</ul>
+				</div>
+			</div>
+			<div class="xszccenter">
+				<div class="centertitle">
+					<div class="titleItem"><span>{{selectName}}</span><span v-show="centerGet.ft_id != 8">政策</span></div>
+					<div class="pages">
+						<span class="prev" id="prev1"><i class="fa fa-angle-left" aria-hidden="true"></i></span>
+						<span class="page1">{{infoPage}}</span>/
+						<span class="total1">{{infoTotal}}</span>
+						<span class="next" id="next1"><i class="fa fa-angle-right" aria-hidden="true"></i></span>
+					</div>
+				</div>
+				<div class="conterCont" id="tb">
+					<!-- 此处循环 -->
+					<div class="centerContent" v-for="item in centerData" @click="jumpDetail(item.id,item.bs_id)">
+						<div class="centerContTitle">{{item.title}}</div>
+						<div class="centerContContent">{{item.content}}</div>
+					</div>
+				</div>
+			</div>
+			<div class="xszcright">
+				<div class="centertitle">
+					<div class="titleItem">图解政策</div>
+					<div class="pages" id="pages2">
+						<span class="prev" id="prev2"><i class="fa fa-angle-left" aria-hidden="true"></i></span>
+						<span class="page2">{{rightPage}}</span>/
+						<span class="total2">{{rightTotal}}</span>
+						<span class="next" id="next2"><i class="fa fa-angle-right" aria-hidden="true"></i></span>
+					</div>
+				</div>
+				<div class="rightCont">
+					<div class="rightContent" v-for="item in rightData" id="tb2" @click="jumpImg(item.id)">
+						<div class="image"><img :src="item.img" alt=""></div>
+						<div class="explain">{{item.title}}</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	</body>
+	<script src="lib/jquery/jquery-3.5.1.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="lib/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/ajax.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/vue.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		window.onload = function(){
+			var app = new Vue({
+				el:"#app",
+				data:{
+					// 导航样式
+					leftNav:1,
+					leftGet:{
+						ft_id:1,
+						cate:"",
+						kw:""
+					},
+					centerGet:{
+						ft_id:1,
+						cate:"",
+						kw:""
+					},
+					rightGet:{
+						ft_id:1,
+						cate:"",
+						kw:""
+					},
+					// 左侧竖导航
+					selectIndex:0,
+					// 左侧
+					leftData:[],
+					// 中间数据
+					centerData:[],
+					// 右侧数据
+					rightData:[],
+					selectName:"",
+					// 左侧分页
+					rightPage:1,
+					rightTotal:1,
+					// 中间分页
+					infoPage:1,
+					infoTotal:1,
+					// 搜索
+					searchBox:""
+				},
+				methods:{
+					// 左侧数据
+					leftWrap(){
+						var that = this;
+						that.leftData = [];
+						postData("xszcL",that.leftGet,function(res){
+							if(res.code == 200){
+								if(res.data.length>0){
+									that.leftData = res.data
+									that.selectName = res.data[0].type
+								}
+							}
+						})
+					},
+					// 中间数据
+					centerWrap(){
+						var that = this;
+						that.centerData = [];
+						postData("xszcInfo",that.centerGet,function(res){
+							if(res.code == 200){
+								if(res.data.length>0){
+									that.centerData = res.data
+									that.infoTotal = Math.ceil(res.data.length / 4);
+									setTimeout(function(){
+										// 分页
+										tabPage({
+											pageMain: '#td',
+											pageNav: '#pages1',
+											pagePrev: '#prev1',
+											pageNext: '#next1',
+											curNum: 4, /*每页显示的条数*/
+											className:'centerContent',
+											total:'total1',
+											page:'page1'
+										});
+									},300)
+								}
+							}
+						})
+					},
+					// 右侧数据
+					rightWrap(){
+						var that = this;
+						that.rightData = [];
+						postData("xszcR",that.rightGet,function(res){
+							if(res.code == 200){
+								if(res.data.length>0){
+									that.rightData = res.data;
+									that.rightTotal = Math.ceil(res.data.length / 2);
+									setTimeout(function(){
+										// 右
+										tabPage({
+											pageMain: '#tb2',
+											pageNav: '#pages2',
+											pagePrev: '#prev2',
+											pageNext: '#next2',
+											curNum: 2, /*每页显示的条数*/
+											className:'rightContent',
+											total:'total2',
+											page:'page2'
+										});
+									},300)
+								}
+							}
+						})
+					},
+					// 左侧两个导航点击筛选
+					selectInfo(index){
+						var that = this;
+						that.leftGet.cate = index;
+						that.leftNav = index;
+						that.selectIndex = 0;
+						if(index == 2){
+							that.centerGet.ft_id = 13;
+						}else{
+							that.centerGet.ft_id = index;
+						}
+						that.centerGet.cate = index;
+						that.rightGet.cate = index;
+						that.leftWrap();
+						that.centerWrap();
+						that.rightWrap();
+					},
+					// 左侧列表导航筛选
+					selectData(index,cate,name){
+						var that = this;
+						that.selectName = name;
+						that.selectIndex = index;
+						that.centerGet.ft_id = cate;
+						that.centerGet.infoPage = 1;
+						that.centerWrap()
+					},
+					// 详情页跳转
+					jumpDetail(id,bsid){
+						showDetail(bsid,id,3,1)
+					},
+					// 图解跳转
+					jumpImg(id){
+						window.location.href = 'imgDetial.html?id='+id+'&type=3'
+					},
+					search(){
+						var that = this;
+						window.location.href='xszcItem.html?kw='+that.searchBox
+					}
+				},
+				created(){
+					var that = this;
+					that.leftWrap();
+					that.centerWrap();
+					that.rightWrap();
+					// 回车键搜索
+					$(document).keydown(function(event){
+						if(event.keyCode == 13){
+							window.location.href='xszcItem.html?kw='+that.searchBox
+						}
+					})
+				}
+			})
+		}
+	</script>
+</html>

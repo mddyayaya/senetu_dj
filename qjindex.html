@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>新时代党建</title>
+    <link rel="stylesheet" href="css/qjindex.css">
+    <script src="lib/jquery/jquery-3.5.1.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/ajax.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/vue.min.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+    <div class="mark">
+        <div class="box">
+            <div class="login_text">登录</div>
+            <div class="login_cont">
+                <div class="login_item">
+                    <input type="text" placeholder="请输入账号">
+                </div>
+                <div class="login_item">
+                    <input type="text" placeholder="请输入密码">
+                </div>
+                <div class="login_in">登录</div>
+            </div>
+        </div>
+    </div>
+    <div class="qjtitle">
+        <img src="./statics/images/qjindex/qjtitle.png" alt="">
+    </div>
+    <div class="center" id="app">
+        <img onclick="location.href='./qjdetail.html'" src="./statics/images/qjindex/1.png" alt="">
+        <img onclick="location.href='./app.html'" src="./statics/images/qjindex/2.png" alt="">
+        <img onclick="location.href='./zbxc.html'" src="./statics/images/qjindex/3.png" alt="">
+        <img class="toAmin" src="./statics/images/qjindex/4.png" alt="">
+    </div>
+    <div class="text">中共重庆中烟工业有限责任公司黔江卷烟厂委员会</div>
+    <script>
+		// 后台
+		$('.toAmin').on('click',function(){
+			gui.Shell.openExternal("http://dj.gxsentu.net/dj2.0admin");
+		});
+    </script>
+</body>
+</html>

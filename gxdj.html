@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>高校党建</title>
+		<link rel="stylesheet" type="text/css" href="css/gxdj.css"/>
+		<link rel="stylesheet" type="text/css" href="lib/font-awesome/css/font-awesome.css"/>
+		<link rel="stylesheet" type="text/css" href="lib/swiper/css/swiper.min.css"/>
+		<script src="lib/jquery/jquery-3.5.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/ajax.js" type="text/javascript" charset="utf-8"></script>
+		<script src="lib/swiper/js/swiper.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/vue.min.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class="control">
+			<a href="javascript:history.back(-1)"><i class="fa fa-mail-reply" aria-hidden="true"></i>返回&nbsp;&nbsp;|&nbsp;</a>
+			<a href="javascript:window.location='app.html';"><i class="fa fa-home" aria-hidden="true"></i>首页</a>
+		</div>
+		<!-- 顶部banner -->
+		<div class="gxdj_banner"></div>
+		<!-- 底部数据 -->
+		<div class="gxdj_cont" id="app" v-cloak>
+			<!-- 左侧导航 -->
+			<div class="gxdj_left">
+				<div class="gxdj_leftnav">
+					<div class="gxdj_navitem" @click="changenav(item.id,index)" v-for="(item,index) in navList">
+						<div class="navwords" :class="leftnav == index?'gxdjselect':''">{{item.type}}</div>
+					</div>
+				</div>
+			</div>
+			<!-- 中间数据 -->
+			<div class="gxdj_center">
+				<div class="gxdj_centertop"></div>
+				<div class="gxdj_centeritem" v-if="leftnav == 0">
+					<div class="gxdj_centernav swiper-container">
+						<div class="swiper-wrapper">
+							<div class="gxdj_centernavitem swiper-slide" @click="yearChange(index,item.id)" :class="index == selectYear?'selectyear':''" v-for="(item,index) in yearList">{{item.title}}</div>
+						</div>
+					</div>
+					<div class="gxdj_centercont">
+						<!-- 此处循环 -->
+						<div class="gxdj_centertime" v-for="item in textWrap" @click="startStudy(item.bs_id,item.r_id,1)">
+							<div class="gxdj_centerdate">{{changeTime(item.time)}}</div>
+							<div class="gxdj_c">
+								<div class="gxdj_centertit">
+									<span class="point"></span>
+									<span>{{item.title}}</span>
+								</div>
+								<div class="gxdj_centersub">{{item.content}}</div>
+							</div>
+						</div>
+						<div class="nullData" v-if="textWrap.length <= 0">暂无数据</div>
+					</div>
+				</div>
+				<div class="gxdj_centeritem1" v-if="leftnav != 0">
+					<!-- 此处循环 -->
+					<div class="gxdj_study" v-for="item in textWrap" @click="startStudy(item.bs_id,item.r_id,1)">
+						<span>{{changebsid(item.bs_id)}}</span>
+						<p>{{item.title}}</p>
+						<img :src="item.sz_img" >
+					</div>
+					<div class="nullData" v-if="textWrap.length <= 0">暂无数据</div>
+				</div>
+			</div>
+			<!-- 右侧数据 -->
+			<div class="gxdj_right">
+				<div class="gxdj_search">
+					<label>搜索：</label>
+					<input type="text" name="" id="" value="" v-model="gxdjData.kw" />
+				</div>
+				<div class="gxdj_pic">
+					<img :src="rightImg" >
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript">
+			var app = new Vue({
+				el:"#app",
+				data:{
+					leftnav:0,
+					yearList:[],
+					selectYear:0,
+					// get数据传参
+					getSoucre:{
+						template:17,
+						kw:""
+					},
+					dataList:[],
+					navList:[],
+					textWrap:[],
+					imgWrap:[],
+					gxdjData:{
+						id:1,
+						resid:"",
+						kw:""
+					},
+					keywords:"",
+					rightImg:''
+				},
+				methods:{
+					// 改变左侧导航
+					changenav(id,index){
+						var that = this;
+						that.leftnav = index;
+						if(index == 0){
+							that.gxdjData.resid = that.yearList[0].id;
+						}else{
+							that.gxdjData.resid = '';
+						}
+						that.selectYear = 0;
+						that.gxdjData.kw = "";
+						that.gxdjData.id = id;
+						that.dataSelect();
+						that.rightImg ="http://"+that.navList[index].ym+'/'+that.navList[index].img
+					},
+					// 年份筛选
+					yearChange(index,id){
+						var that = this;
+						that.selectYear = index;
+						that.gxdjData.resid = id;
+						that.dataSelect();
+					},
+					// 年分列表
+					dataBag(){
+						var that = this;
+						that.dataBagList = [];
+						postData("special",that.getSoucre,function(res){
+							if(res.code == 200){
+								for(var i=0;i<res.data[0].array.length;i++){
+									var arr = {
+										title:parseInt(res.data[0].array[i].title),
+										id:res.data[0].array[i].id
+									}
+									that.yearList.push(arr)
+								}
+								that.navList = res.data;
+								that.rightImg ="http://"+'/'+that.navList[that.leftnav].ym+ that.navList[that.leftnav].img
+								that.$nextTick(res =>{
+									var swiper = new Swiper('.swiper-container', {
+									  slidesPerView: 8,
+									  freeMode:true
+									});
+								})
+								that.gxdjData.resid = that.yearList[0].id;that.dataSelect();
+							}
+						})
+					},
+					// 数据筛选
+					dataSelect(){
+						var that = this;
+						that.textWrap = [];
+						// if(that.gxdjData.id == 1){
+						// 	that.gxdjData.resid = that.selectYear1;
+						// }else{
+						// 	that.gxdjData.resid = 0;
+						// }
+						postData("gxdjData",that.gxdjData,function(res){
+							if(res.code == 200){
+								that.textWrap = res.data;
+								setTimeout(function(){
+									var swiper = new Swiper('.swiper-container', {
+										slidesPerView: 14,
+										spaceBetween: 15,
+										freeMode: true,
+									});
+								},300)
+							}
+						})
+					},
+					// 时间戳转化
+					changeTime(time){
+						var that = this;
+						var date = new Date(parseInt(time) * 1000);
+						var month = date.getMonth() + 1;
+						var day = date.getDate();
+						return time = that.add0(month)+'月'+that.add0(day)+'日';
+					},
+					// 不足加0；
+					add0(num){
+						var that = this;
+						if(num < 10){
+							num = '0'+num
+						}
+						return num;
+					},
+					// 开始学习
+					startStudy(bsid,id,type){
+						showDetail(bsid,id,2,1)
+					},
+					// 资源类型转化
+					changebsid(bs_id){
+						if(bs_id == 1){
+							bs_id = "PPT"
+						}else if(bs_id == 2){
+							bs_id = "图文"
+						}else if(bs_id == 3){
+							bs_id = "视频"
+						}else if(bs_id == 8){
+							bs_id = "PDF"
+						}
+						return bs_id;
+					}
+				},
+				created() {
+					var that = this;
+					that.dataBag();
+					$(document).keydown(function(e){
+						if(e.keyCode == 13){
+							that.selectYear = 0;
+							that.dataSelect();
+						}
+					})
+				},
+			})
+		</script>
+	</body>
+</html>

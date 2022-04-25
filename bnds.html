@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>学史明理</title>
+		<link rel="stylesheet" type="text/css" href="css/xsml.css"/>
+		<link rel="stylesheet" type="text/css" href="lib/swiper/css/swiper.min.css"/>
+		<link rel="stylesheet" type="text/css" href="lib/font-awesome/css/font-awesome.css"/>
+		<script src="lib/jquery/jquery-3.5.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="lib/swiper/js/swiper.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/vue.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/ajax.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div id="app" :style="'background:url('+bgimg+') no-repeat;'" v-cloak>
+			<!-- 背景音乐 -->
+			<!-- 顶部 -->
+			<div class="control">
+				<a href="javascript:history.back(-1)"><i class="fa fa-mail-reply" aria-hidden="true"></i>返回&nbsp;&nbsp;|&nbsp;</a>
+				<a href="javascript:window.location='app.html';"><i class="fa fa-home" aria-hidden="true"></i>首页</a>
+			</div>
+			<div class="mainWrap">
+				<audio id="musice" src ="" hidden="hidden" autoplay="autoplay"></audio>
+				<div class="bgm" v-show="getdata.resid != ''">
+					<img @click="pause" title="关闭背景音乐" src="statics/images/bnds/bgm_play.png" v-if='play_m'>
+					<img @click="play" title="打开背景音乐" src="statics/images/bnds/bgm_pause.png" v-if='!play_m' >
+				</div>
+				<div class="topselect">
+					<div class="navtop">
+						<div class="nav_item" 
+							v-for="(item,index) in bottomWrap" 
+							v-if="index > 18"
+							@click="changeswiper(item.id,item.content)"
+							:class="getdata.resid == item.id?'nav_selected':''">
+							<span>{{item.content}}</span>
+						</div>
+					</div>
+					<div class="top_search">
+						<i class="fa fa-search" aria-hidden="true"></i>
+						<input v-model="getdata.title" type="text" name="" id="" value="" />
+						<span @click="searchResource">搜索</span>
+					</div>
+					<div class="center_slide">
+						<div class="centerlunbo">
+							<div class="centersub">{{name}}</div>
+						</div>
+						<div class="centercont" v-if="!search">
+							<div class="swiper-container center_slide1" v-if="datawrap.length > 0">
+								<div class="swiper-wrapper">
+									<div class="swiper-slide" v-for='item in datawrap'>
+										<div class="swiper_item">
+											<div v-for="items in item" @click="showDetail(items.r_id,items.bs_id)">
+												<img :src="items.sz_img" >
+												<p class="tips">{{items.title}}</p>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="nodata" v-else>暂无数据</div>
+							<div class="swiper-button-next next"  v-if="datawrap.length > 0"></div>
+							<div class="swiper-button-prev prev"  v-if="datawrap.length > 0"></div>
+						</div>
+						<!-- 搜索 -->
+						<div class="centercont" v-if="search">
+							<div class="swiper-container center_search" style="display: none;" v-if="datawrap.length > 0">
+								<div class="swiper-wrapper">
+									<div class="swiper-slide" v-for='item in datawrap' @click="showDetail(item.r_id,item.bs_id)">
+										<img :src="item.sz_img" >
+										<p class="tips">{{item.title}}</p>
+									</div>
+								</div>
+							</div>
+							<div class="nodata" v-if="datawrap.length == 0">暂无数据</div>
+							<div class="swiper-button-next searchNext"  v-if="datawrap.length > 0"></div>
+							<div class="swiper-button-prev searchPrev"  v-if="datawrap.length > 0"></div>
+						</div>
+						<div class="bottomicon"></div>
+					</div>
+					<div class="bottom_slide swiper-container">
+						<div class="swiper-container bottom_slide1">
+							<div class="swiper-wrapper">
+								<div class="bottom_slide_item  swiper-slide"
+									:class="getdata.resid == item.id?'selected_bottom':''"
+									 v-for="(item,index) in bottomWrap"
+									 v-if="index <= 18"
+									 @click="changeswiper(item.id,item.content)">{{item.content}}</div>
+							</div>
+						</div>
+					</div>
+					<div class="fenyeqi">
+						<div class="progress"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript">
+		var app = new Vue({
+			el:"#app",
+			data(){
+				return{
+					getdata:{
+						template:23,
+						resid:26,
+						title:""
+					},
+					bgimg:"",
+					search:false,
+					name:"学史明理",
+					bottomWrap:[],
+					datawrap:[],
+					totalPage:0,
+					play_m:true
+				}
+			},
+			methods:{
+				// 请求数据
+				datalist(){
+					var that = this;
+					postData("special",that.getdata,function(res){
+						if(res.code == 200){
+							if(that.search){
+								if(res.data.length > 0){
+									that.datawrap = res.data;
+									that.searchLunbo();
+								}
+							}else{
+								if(res.data.length > 0){
+									that.datawrap = that.splicearr(res.data,5);
+									that.changepage();
+								}
+								that.bottomWrap.forEach((item,index) => {
+									if(parseInt(item.id) == that.getdata.resid){
+										that.bgimg = item.img;
+										var audio = document.getElementById("musice");
+										audio.src = item.bgm;
+										if(that.play_m){
+											audio.play();
+										}else{
+											audio.pause();
+										}
+									}
+								})
+							}
+						}
+					})
+				},
+				// 修改数据
+				changeswiper(resid,name){
+					var that = this;
+					that.name = name;
+					that.getdata.resid = resid;
+					that.getdata.title = '';
+					that.datawrap = [];
+					that.datalist();
+				},
+				// 底部列表
+				bottomList(){
+					var that = this;
+					getData("bndsClass",function(res){
+						if(res.code == 200){
+							that.bottomWrap = res.data;
+							that.datalist();
+							setTimeout(function(){
+								var swiper = new Swiper('.bottom_slide1',{
+									slidesPerView : 9.53,  
+									slidesPerGroup : 10,
+									slidesPerColumn: 1,//显示1行
+									slidesPerColumnFill : 'row',
+									centerInsufficientSlides: true,
+									on:{
+										slideChange: function(){
+											var width = (this.progress*100)+'%';
+											$('.progress').animate({
+												width:width
+											},200)
+										},
+									}
+								})
+							},300)
+						}
+					})
+				},
+				// 截数组
+				splicearr(arr,num){
+					var newarr = [];
+					for(var i=0;i<arr.length;i+=num){
+						newarr.push(arr.slice(i,i+num));
+					}
+					return newarr
+				},
+				// 非搜索轮播
+				changepage(){
+					var that = this;
+					setTimeout(function(){
+						var swiper2 = new Swiper('.center_slide1',{
+							navigation: {
+								nextEl: '.next',
+								prevEl: '.prev',
+							},
+							slidesPerColumnFill : 'row',
+						})
+					},300)
+				},
+				// 搜索后轮播
+				searchLunbo(){
+					var that = this;
+					setTimeout(function(){
+						$('.center_search').fadeIn(200)
+						var swiper3 = new Swiper('.center_search',{
+							slidesPerView: 4,
+							slidesPerColumn : 2,
+							slidesPerColumnFill : 'row',
+							navigation: {
+								nextEl: '.searchNext',
+								prevEl: '.searchPrev',
+							}
+						})
+					},300)
+				},
+				// 搜索
+				searchResource(){
+					var that = this;
+					that.datawrap = [];
+					if(that.getdata.title == ''){
+						that.search = false;
+					}else{
+						that.search = true;
+					}
+					that.datalist();
+				},
+				// 资源详情
+				showDetail(id,bsid){
+					showDetail(bsid,id,3,1)
+				},
+				// 播放背景音乐
+				play(){
+					var that = this;
+					that.play_m = true;
+					var audio = document.getElementById("musice");
+					audio.play();
+				},
+				// 暂停背景音乐
+				pause(){
+					var that = this;
+					that.play_m = false;
+					var audio = document.getElementById("musice")
+					audio.pause();
+				},
+			},
+			created() {
+				
+			},
+			mounted() {
+				var that = this;
+				that.bottomList();
+			}
+		})
+	</script>
+</html>

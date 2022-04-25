@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+        <meta http-equiv="page-Enter" content="revealTrans(Duration=3.0,Transition=23)">
+		<link rel="stylesheet" type="text/css" href="css/index.css"/>
+		<link rel="stylesheet" type="text/css" href="css/swiper-bundle.min.css"/>
+		<link rel="stylesheet" type="text/css" href="lib/font-awesome/css/font-awesome.css"/>
+		<title>书记访谈详情</title>
+	</head>
+	<style type="text/css">
+		body{
+			background: #fff;
+		}
+	</style>
+	<body>
+		<div class="mainBody" id="app" v-cloak>
+			<!-- 进入页面 -->
+			<div class="topNavBar" style="color: #FFFAED !important;height: 5vh;line-height: 5vh;">
+				<span onclick="window.history.back(-1)">返回</span>
+				 &nbsp;| &nbsp;
+				<a style="color: #FFFAED !important;" href="app.html">首页</a>
+				<div class="detialTit">
+					{{playTitle}}
+				</div>
+			</div>
+			<div class="videoWrap2" style="width: 66%;">
+				<div class="videoTit">{{playTitle}}</div>
+				<div class="videoSubtit">
+					<div class="videoParam" style="display: flex;flex: 1;"></div>
+				</div>
+				<!-- 视频详情 -->
+				<div class="videDetial" style="height: 75vh;">
+					<div class="videoSrc" style="height: 100%;width: 100%;">
+						<video :src="playUrl" poster="" preload  controls autoplay controlsList="nodownload" class=""></video>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script src="js/swiper-bundle.js" type="text/javascript" charset="utf-8"></script>
+		<script src="lib/jquery/jquery-3.5.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/ajax.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/vue.min.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			window.onload = function(){
+				var app = new Vue({
+					el:"#app",
+					data:{
+						// 资源id
+						id:"",
+						playUrl:"",
+						playTitle:"",
+					},
+					methods:{
+						// 资源详情
+						detail(){
+							var that = this;
+							postData("cyzd_video",{rid:that.id},function(res){
+								if(res.code == 200){
+									for(var i=0;i<res.data.length;i++){
+										res.data[i].addtime = toNumber(res.data[i].addtime)
+									}
+									that.playUrl = res.data[0].video_url;
+									that.playTitle = res.data[0].title;
+									that.playBsid = 3;
+									that.resourceList = res.data
+								}
+							})
+						},
+					},
+					created() {
+						var that = this;
+						that.id = getUrlParam('id');
+						that.detail();
+					},
+					mounted() {
+						
+					}
+				})
+			}
+		</script>
+	</body>
+</html>

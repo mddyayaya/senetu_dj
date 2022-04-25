@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>中国共产党人的精神谱系</title>
+		<link rel="stylesheet" type="text/css" href="css/jsxp.css"/>
+		<link rel="stylesheet" type="text/css" href="lib/swiper/css/swiper.min.css"/>
+	</head>
+	<body>
+		<div class="control">
+			<div onclick="history.back()">返回</div>
+			<div>|</div>
+			<div onclick="location.href='app.html'">首页</div>
+		</div>
+		<div id="app" v-cloak>
+			<!-- 加载动图 -->
+			<img class="loadingImg" src="statics/images/loading.gif" >
+			<!-- 封面 -->
+			<div class="loading" @click="closeIndex">
+				<img src="statics/images/jsxp/jsxp_bg.png" >
+			</div>
+			<!-- 顶部图标 -->
+			<div class="top_title">
+				<img src="statics/images/jsxp/top_title.png" >
+			</div>
+			<!-- 中间渲染 -->
+			<div class="swiper-container swipers">
+				<div class="swiper-wrapper">
+					<div class="center_box swiper-slide" v-for="item in 1">
+						<div class="boxes" v-for="(item,index) in datas">
+							<div class="box_sub" @click="changeBook(index)" v-if="index != select">{{item.name}}</div>
+							<div class="box_show" v-if="index == select">
+								<div class="box_title">
+									<img :src="item.sz_img" >
+								</div>
+								<div class="line"></div>
+								<div class="box_cont">
+									<div class="box_item" 
+									v-for="items in item.two" @click="godetial(items)">{{items.name}}</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- <div class="swiper-button-prev"></div>
+			<div class="swiper-button-next"></div>
+			<div class="pages">
+				<div class="swiper-pagination"></div>
+			</div> -->
+			<!-- 精神详情 -->
+			<div class="jsdetail" @click.stop="closeDetail">
+				<div class="jstitle" @click.stop="jumpDetail()">{{openJs}}</div>
+				<div class="titlebg">
+					<img src="statics/images/jsxp/titlebg.png" >
+				</div>
+				<div class="jscenter">
+					<div class="jsitem">
+						<div class="leftimg" @click.stop="jumpDetail()">
+							<img :src="openImg" >
+						</div>
+						<div class="right_words">
+							<!-- <div class="right_title" @click.stop="jumpDetail()">{{openTitle}}</div> -->
+							<div class="right_nh">精神内涵</div>
+							<div class="right_content" @click.stop="jumpDetail()">{{openConnotation}}</div>
+							<div class="show_detail" @click.stop="jumpDetail()">查看详情</div>
+						</div>
+					</div>
+				</div>
+				<div class="jsjj"  @click.stop="jumpDetail()">
+					<div class="jsjjtitle">精神简介</div>
+					<div class="jsjjcontent">{{opentContent}}</div>
+				</div>
+			</div>
+		</div>
+		<script src="lib/jquery/jquery-3.5.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/vue.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="lib/swiper/js/swiper.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/ajax.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			var app = new Vue({
+				el:"#app",
+				data(){
+					return{
+						select:0,
+						datas:[],
+						current:0,
+						openTitle:"",
+						openJs:"",
+						opentContent:"",
+						openImg:"",
+						openConnotation:"",
+						openRid:"",
+						openBsid:""
+					}
+				},
+				methods:{
+					changeBook(index){
+						this.select = index;
+					},
+					closeIndex(){
+						$('.loading').fadeOut(500);
+						this.datalist()
+					},
+					// 打开精神
+					godetial(item){
+						$(".jsdetail").fadeIn(500)
+						var that = this;
+						that.openTitle = item.name;
+						that.openJs = item.name;
+						that.opentContent = item.content;
+						that.openImg = item.sz_img;
+						that.openConnotation = item.connotation;
+						that.openRid = item.rid;
+						that.openBsid = item.bs_id;
+					},
+					// 关闭精神
+					closeDetail(){
+						$(".jsdetail").fadeOut(500)
+					},
+					// 数据
+					datalist(){
+						var that = this;
+						postData("special",{
+							template:25,
+						},function(res){
+							if(res.code == 200){
+								that.datas = res.data;
+								$('.loadingImg').hide()
+							}else{
+								
+							}
+						});
+					},
+					// 详情页跳转
+					jumpDetail(){
+						showDetail(this.openBsid,this.openRid,3,1)
+					}
+				},
+				created() {
+				},
+				mounted() {
+				},
+				watch:{
+					datas:function(){
+						// this.$nextTick(function(){
+						// 	var swiper = new Swiper('.swipers',{
+						// 		navigation: {
+						// 			nextEl: '.swiper-button-next',
+						// 			prevEl: '.swiper-button-prev',
+						// 		},
+						// 		pagination: {
+						// 			el: '.swiper-pagination',
+						// 		},
+						// 	})
+						// })
+					}
+				}
+			})
+		</script>
+	</body>
+</html>

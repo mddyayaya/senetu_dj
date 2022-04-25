@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>个人中心</title>
+		<link rel="stylesheet" type="text/css" href="css/index.css"/>
+		<link rel="stylesheet" type="text/css" href="lib/swiper/css/swiper.min.css"/>
+		<link rel="stylesheet" type="text/css" href="lib/font-awesome/css/font-awesome.css"/>
+		<link rel="stylesheet" type="text/css" href="lib/layui/css/layui.css"/>
+		<script src="lib/jquery/jquery-3.5.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/setCookie.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/ajax.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/vue.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="lib/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+		<style type="text/css">
+			.contListItem1 {
+			    height: 41.5vh;
+				margin-left: 1%;
+			}
+			.bottomWords1 {
+			    height: auto;
+			}
+		</style>
+	</head>
+	<body>
+		<!-- 进入页面 -->
+		<script src="js/nav.js" type="text/javascript" charset="utf-8"></script>
+		<div class="mainBody" id="app" v-cloak>
+			<div class="infoTop">
+				<div class="pic">
+					<img :src="personData.info.u_picture" >
+				</div>
+				<div class="userInfo">
+					<div class="userName">{{personData.info.u_name}}</div>
+					<div class="userDw">{{personData.info.cy_zz}}</div>
+					<div class="userStudy">
+						<div>累计学习:{{personData.all}}课时</div>
+						<div>本年度:{{personData.year}}课时</div>
+						<div>今日:{{personData.day}}课时</div>
+					</div>
+				</div>
+			</div>
+			<!-- 导航 -->
+			<div class="infoSelectbar">
+				<div :class="select == 1?'infoSelected':''" @click="selectBar(1)">学习记录</div>
+				<div :class="select == 2?'infoSelected':''" @click="selectBar(2)">党课记录</div>
+				<div :class="select == 3?'infoSelected':''" @click="selectBar(3)">浏览记录</div>
+			</div>
+			<div class="infoSelectbar2" v-show="select == 1">
+				<div :class="select == 1 && navSecond == 0?'infoSelected2':''" @click="selectBar2(1,0)">全部</div>
+				<div :class="select == 1 && navSecond == 1?'infoSelected2':''" @click="selectBar2(1,1)">未开始</div>
+				<div :class="select == 1 && navSecond == 2?'infoSelected2':''" @click="selectBar2(1,2)">进行中</div>
+				<div :class="select == 1 && navSecond == 3?'infoSelected2':''" @click="selectBar2(1,3)">已学完</div>
+			</div>
+			<div class="infoSelectbar2" v-show="select == 2">
+				<div :class="select == 2 && navSecond2 == 0?'infoSelected2':''" @click="selectBar2(2,0)">全部</div>
+				<div :class="select == 2 && navSecond2 == 2?'infoSelected2':''" @click="selectBar2(2,2)">进行中</div>
+				<div :class="select == 2 && navSecond2 == 3?'infoSelected2':''" @click="selectBar2(2,3)">已学完</div>
+			</div>
+			<div class="infoSelectbar2" v-show="select == 3">
+				<div :class="select == 3 && navSecond3 == 0?'infoSelected2':''" @click="selectBar2(3,0)">全部</div>
+				<div :class="select == 3 && navSecond3 == 3?'infoSelected2':''" @click="selectBar2(3,3)">视频</div>
+				<div :class="select == 3 && navSecond3 == 1?'infoSelected2':''" @click="selectBar2(3,1)">PPT</div>
+				<div :class="select == 3 && navSecond3 == 8?'infoSelected2':''" @click="selectBar2(3,8)">PDF</div>
+				<div :class="select == 3 && navSecond3 == 2?'infoSelected2':''" @click="selectBar2(3,2)">图文</div>
+			</div>
+			<!-- 学习记录 -->
+			<div class="infoWrap" v-show="select == 1" id="xxid">
+				<!-- 此处循环 -->
+				<div class="flexWrap">
+					<div class="contListItem1" v-for="item in studyRecord" @click="goStudy(item.id,item.flag)" style="width: 18%;">
+						<div class="topImg">
+							<img :src="item.sz_img" >
+						</div>
+						<div class="bottomWords1">
+							<div class="bbTit">{{item.title}}</div>
+							<div class="bbTime bbTime1">
+								<div class="bbtime1">时间：{{item.k_time}}</div>
+								<div class="bbtime1">{{item.hour}}课时</div>
+							</div>
+							<div class="bbTime bbTime1">
+								资源数量：{{item.count}}
+							</div>
+							<div class="bbbtn1">
+								<div>
+									<span v-if="item.speed != 3">已学{{item.yixue}}%</span>
+									<span class="finshed" v-if="item.speed == 3">已学完</span>
+								</div>
+								<div v-if="item.speed == 1 || item.speed == 2">继续学习</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="null" v-show="studyRecord.length == 0">暂无数据</div>
+			</div>
+			<!-- 党课记录 -->
+			<div class="infoWrap" v-show="select == 2" id="dkid">
+				<!-- 此处循环 -->
+				<div class="flexWrap">
+					<div class="contListItem1" style="height: 38.5vh;width: 18%;" v-for="item in classRecord" >
+						<div class="topImg">
+							<img :src="item.sz_img" >
+						</div>
+						<div class="bottomWords1">
+							<div class="bbTit">{{item.title}}</div>
+							<div class="bbTime bbTime1">
+								<div class="bbtime1">时间：{{item.addtime}}</div>
+								<div class="bbtime1">{{((item.time / 40 / 60).toFixed(2))}}课时</div>
+							</div>
+							<div class="bbbtn1">
+								<div>
+									<span v-if="item.speed != 3">已学{{item.yixue}}%</span>
+									<span class="finshed" v-if="item.speed == 3">已学完</span>
+								</div>
+								<div @click="goDk(item.bs_id,item.rid,2)">继续学习</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="null" v-show="classRecord.length == 0">暂无数据</div>
+			</div>
+			<!-- 浏览记录 -->
+			<div class="infoWrap" v-show="select == 3" id="llid">
+				<div class="flexWrap">
+					<div class="contListItem1 contListItem12" style="height: 21vh;box-shadow: none;position: relative;width: 18%;"v-for="item in showRecord" @click="goDk(item.bs_id,item.rid,3)">
+						<img style="height: 100%;width: 100%;object-fit: cover;position: absolute;background: rgba(0,0,0,0.1);" :src="item.sz_img" >
+						<p class="tipss">{{item.title}}</p>
+						<p class="typeIcon">{{item.bs_id1}}</p>
+					</div>
+				</div>
+				<div class="null" v-show="showRecord.length == 0">暂无数据</div>
+			</div>
+		</div>
+		<script>
+			var app = new Vue({
+				el:"#app",
+				data:{
+					select:1,
+					// 二级导航选中
+					navSecond:0,
+					navSecond2:0,
+					navSecond3:0,
+					// 获取数据
+					get:{
+						user_id:user.id,
+						time1:0,
+						time2:0
+					},
+					// 学习记录
+					study:{
+						page:1,
+						user_id:user.id,
+						flag:user.flag,
+						type:2,
+						bsid:"",
+						speed:0
+					},
+					// 学习记录
+					study1:{
+						page:1,
+						user_id:user.id,
+						speed:0
+					},
+					page:1,
+					total:0,
+					// 个人数据
+					personData:{},
+					// 学习记录
+					studyRecord:[],
+					// 党课记录
+					classRecord:[],
+					// 浏览记录
+					showRecord:[],
+				},
+				methods:{
+					// 导航切换
+					selectBar(index){
+						var that = this;
+						that.select = index;
+						var that = this;
+						if(index == 1){
+							// 学习记录筛选
+							that.studyRecord = [];
+							that.select = index;
+							that.page = 1;
+							that.navSecond = 0;
+							that.studylist();
+						}else if(index == 2){
+							// 党课记录筛选
+							that.classRecord = [];
+							that.study.type = index;
+							that.study.bsid =0;
+							that.speed = index;
+							that.select = index;
+							that.page = 1;
+							that.navSecond2 = 0;
+							that.dangke();
+						}else if(index == 3){
+							// 浏览记录筛选
+							that.showRecord = [];
+							that.study.type = index;
+							that.bs_id = index;
+							that.select = index;
+							that.page = 1;
+							that.navSecond3 = 0;
+							that.dangke();
+						}
+					},
+					// 二级导航切换
+					selectBar2(pindex,index){
+						var that = this;
+						// 当导航样式
+						if(pindex == 1){
+							// 学习记录筛选
+							that.studyRecord = [];
+							that.study1.speed =index;
+							that.studylist();
+							that.navSecond = index;
+						}else if(pindex == 2){
+							// 党课记录筛选
+							that.classRecord = [];
+							that.study.speed =index;
+							that.study.bsid =0;
+							that.dangke();
+							that.navSecond2 = index;
+						}else if(pindex == 3){
+							// 浏览记录筛选
+							that.showRecord = [];
+							that.study.speed = 0;
+							that.study.bsid =index;
+							that.dangke();
+							that.navSecond3 = index;
+						}
+					},
+					// 党员信息
+					dataList(){
+						var that = this;
+						postData("dyPerson",that.get,function(res){
+							if(res.code == 200){
+								if(res.data.info.u_picture != "" && res.data.info.u_picture != null){
+									if(res.data.u_picture.search("http") != -1){
+										res.data.info.info.u_picture = res.data.info.u_picture
+									}else{
+										res.data.info.u_picture = "http://"+res.data.info.ym+'/'+res.data.info.u_picture;
+									}
+								}else{
+									if(res.data.info.sex == "男"){
+										res.data.info.u_picture = "statics/images/bigMan.png";
+										
+									}else{
+										res.data.info.u_picture = "statics/images/bigWoman.png";
+									}
+								}
+								that.personData = res.data
+							}
+						})
+					},
+					// 个人浏览记录和党课记录
+					dangke(){
+						var that = this;
+						postData("browseList",that.study,function(res){
+							if(res.code == 200){
+								if(that.study.type == 2){
+									if(res.data.pagedata != null){
+										for(var i=0;i<res.data.pagedata.length;i++){
+											res.data.pagedata[i].addtime = toNumber(res.data.pagedata[i].addtime);
+											res.data.pagedata[i].yixue = (((res.data.pagedata[i].hour) *40*60) / res.data.pagedata[i].time).toFixed(2);	
+											that.classRecord.push(res.data.pagedata[i]);
+										}
+										that.total = res.data.total;
+										console.log(that.classRecord)
+									}else{
+										that.classRecord = [];
+									}
+								}else{
+									if(res.data.pagedata != null){
+										for(var i=0;i<res.data.pagedata.length;i++){
+											res.data.pagedata[i].addtime = toNumber(res.data.pagedata[i].addtime);
+											res.data.pagedata[i].bs_id1 = changeSourceType(res.data.pagedata[i].bs_id);
+											that.showRecord.push(res.data.pagedata[i]);
+										}
+										that.total = res.data.total;
+									}else{
+										that.showRecord = [];
+									}
+								}
+							}
+						})
+					},
+					// 个人学习记录
+					studylist(){
+						var that = this;
+						postData("studyList",that.study1,function(res){
+							if(res.code == 200){
+								if(res.data.pagedata != null){
+									for(var i=0;i<res.data.pagedata.length;i++){
+										res.data.pagedata[i].yixue = ((((res.data.pagedata[i].complete_hour) *40*60) / res.data.pagedata[i].hour).toFixed(2));	
+										that.studyRecord.push(res.data.pagedata[i]);
+									}
+									that.total = res.data.total;
+								}else{
+									that.studyRecord = [];
+								}
+							}
+						})
+					},
+					// 继续个人学习
+					goStudy(id,flag){
+						window.location.href = 'detailClass.html?id='+id+'&flag='+flag+'&type=1'
+					},
+					// 继续党课记录
+					goDk(bsid,id,type){
+						showDetail(bsid,id,type)
+					}
+				},
+				mounted() {
+					
+				},
+				created() {
+					var that = this;
+					that.dataList();
+					that.studylist();
+				}
+			})
+		</script>
+	</body>
+</html>

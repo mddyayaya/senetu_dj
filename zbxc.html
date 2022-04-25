@@ -1,0 +1,1615 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<link rel="stylesheet" type="text/css" href="css/index.css"/>
+		<link rel="stylesheet" type="text/css" href="lib/layui/css/layui.css"/>
+		<link rel="stylesheet" type="text/css" href="lib/swiper/css/swiper.min.css"/>
+		<link rel="stylesheet" type="text/css" href="css/swiper-bundle.min.css"/>
+		<link rel="stylesheet" type="text/css" href="css/globle.css"/>
+		<link rel="stylesheet" type="text/css" href="lib/font-awesome/css/font-awesome.css"/>
+		<link rel="stylesheet" type="text/css" href="css/style-2.css"/>
+		<script src="lib/jquery/jquery-3.5.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/scroll-number.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/swiper-bundle.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/echarts.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/echarts-liquidfill.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/vue.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/setCookie.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/ajax.js" type="text/javascript" charset="utf-8"></script>
+		<script src="lib/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+		<script src="lib/swiper/js/swiper.min.js" type="text/javascript" charset="utf-8"></script>
+		<title>党建宣传</title>
+		<style type="text/css">
+			.topNavBar{
+				background: none;
+				box-shadow: none;
+			}
+			body{
+				background: url(statics/images/bigDataBg.png) no-repeat;
+				background-size: 100% 100%;
+				font-size: 1.8vh;
+			}
+			.kshWord{
+				font-size: 1.8vh;
+			}
+			.layui-form-item {
+			    margin-bottom: 0;
+			}
+			.layui-form-select .layui-input {
+				border: 1px solid #F15454;
+			}
+		</style>
+	</head>
+	<body>
+		<!-- 进入页面 -->
+		<div class="nav-top" style="margin-top: 2vh;width: 20%;">
+			<div class="control1">
+				<a href="app.html" style="background: none !important">返回</a>
+			</div>
+		</div>
+		<div class="bigDataWrap" id="app" v-cloak>
+			<div class="bigDataTitle">党建大数据</div>
+			<div class="bigChart">
+				<div class="chartLeft">
+					<!-- 左边列表 -->
+					<div class="zbItem">
+						<div class="zbItemTit">
+							<span></span>
+							<span v-if="get.flag == 1">党委简介</span>
+							<span v-if="get.flag == 2">总支简介</span>
+							<span v-if="get.flag == 3">支部简介</span>
+						</div>
+						<div class="userPic">
+							<div>
+								<img src="statics/images/zbmoren.png">
+							</div>
+							<div style="width: 92%;">
+								<div v-if="get.flag == 1">党委名称：{{zb_name}}</div>
+								<div v-if="get.flag == 2">总支名称：{{zb_name}}</div>
+								<div v-if="get.flag == 3">支部名称：{{zb_name}}</div>
+								<div v-if="get.flag != 1">上级组织：{{zb_p_name}}</div>
+							</div>
+						</div>
+						<div class="userMess" v-if="zb_address != ''">通讯地址：{{zb_address}}</div>
+						<div class="userMess" v-if="zb_shuji != ''">支部书记：{{zb_shuji}}</div>
+						<div class="userMess" v-if="0 != ''">支部副书记：{{zb_fshuji}}</div>
+						<div class="userMess" v-if="zb_weiyuan != ''">支部委员：{{zb_weiyuan}}</div>
+						<div class="userMess" v-if="zb_organ_class != ''">组织类型：{{zb_organ_class}}</div>
+						<div class="userMess" v-if="zb_head_name != ''">联系人：{{zb_head_name}}</div>
+						<div class="userMess" v-if="zb_head_phone != ''">联系电话：{{zb_head_phone}}</div>
+					</div>
+					<div class="zbItem" style="min-height: 20vh;">
+						<div class="zbItemTit">
+							<span></span>
+							<span>组织机构</span>
+						</div>
+						<div class="zbActiv1">
+							<div class="zbActivItem1" :class="{seletZbbg:key == selectZbindex}" @click="selectzbbxc(item.id,item.flag,key,item.dw)" v-for="(item,key) in selectZblist"><span>{{item.dw}}</span></div>
+						</div>
+					</div>
+				</div>
+				<!-- 风采列表页 -->
+				<div class="showFc" v-show="showFclist && !showFldetail">
+					<div class="backfc" @click="backFc(1)"></div>
+					<div class="zbItemTit" style="padding: 4vh 0 2vh 10%">
+						<span></span>
+						<span>{{openWord}}</span>
+					</div>
+					<div class="selectfc">
+						<div class="selectTime" :class="yearShow?'showChild':''" @click="showYearSelect">
+							<span>年份：</span>
+							<span>{{yearWords}}</span>
+							<span><i class="fa fa-caret-down" aria-hidden="true"></i></span>
+						</div>
+						<div class="selectTime" :class="monthShow?'showChild':''" @click="showMonthSelect">
+							<span>月份：</span>
+							<span>{{monthWords}}</span>
+							<span><i class="fa fa-caret-down" aria-hidden="true"></i></span>
+						</div>
+					</div>
+					<div class="selectList selectYearList" v-if="yearShow">
+						<div class="yearItem" @click="selectYear(item,index)" :class="yearIndex == index?'selectdate':''" v-for="(item,index) in yearList">{{item}}</div>
+					</div>
+					<div class="selectList selectMonthList" v-if="monthShow">
+						<div class="monthItem" @click="selectMonth(item,index)" :class="monthIndex == index?'selectdate':''" v-for="(item,index) in monthList">{{item}}</div>
+					</div>
+					<!-- 支部风采 -->
+					<div class="fclist" style="display: none;">
+						<div class="swiperWrap swiper-container" v-if="openWord!='各支部会议记录'">
+							<div class="swiper-wrapper">
+								<div class="fcmore swiper-slide" @click="gofcdetail(item.type,item.id)" v-for="item in fclistWrap">
+									<img :src="item.img">
+									<span>{{item.title}}</span>
+								</div>
+							</div>
+							<div v-if="fclistWrap==null||fclistWrap.length==0" style="margin: 5vh auto;text-align: center;">暂无数据</div>
+						</div>
+						<div v-else style="padding: 2vh 5vw;box-sizing: border-box;width: 100%;height: 100%;overflow-y: scroll;color: #fff;">
+							<div 
+							style="line-height: 5vh;
+							overflow: hidden;font-size: 1.6vh;
+							cursor: pointer;display: flex;align-items: center;" class="hyjl" 
+							@click="gofcdetail(3,item.hyid,item.hy_flag)" 
+							v-for="item in fclistWrap">
+								<span style="width: 30vw;margin-right: 0.5vw;">{{item.hy_title}}</span>
+								<span style="flex:1">{{item.type}}</span>
+								<span style="width: 7vw;margin-left: 0.5vw;">{{toNumber(item.h_stime)}}</span>
+							</div>
+							<div v-if="fclistWrap==null||fclistWrap.length==0" style="margin: 5vh auto;text-align: center;">暂无数据</div>
+						</div>
+						<div class="swiper-button-next" v-if="openWord!='各支部会议记录'">></div>
+						<div class="swiper-button-prev" v-if="openWord!='各支部会议记录'">></div>
+					</div>
+				</div>
+				<!-- 风采详情页 -->
+				<div class="showFc" v-show="showFldetail && !showFclist">
+					<div class="backfc" @click="backFc(2)"></div>
+					<div class="zbItemTit" style="padding: 4vh 0 2vh 10%">
+						<span></span>
+						<span>{{openWord}}</span>
+					</div>
+					<div class="fclistDetail">
+						<div class="fcdetailtitle">{{fcDetialwrap.title}}</div>
+						<div class="fcpubtime">
+							<span>时间：{{toNumber(fcDetialwrap.h_stime)}}</span>
+							<span>所属党组织：{{fcDetialwrap.gu_name}}</span>
+						</div>
+						<div class="fccontent" v-if="fcDetialwrap.content!=null&&fcDetialwrap.content!=''" v-html="fcDetialwrap.content"></div>
+						<div class="fccontent" style="margin: 5vh auto;text-align: center;" v-else>暂无活动记录</div>
+					</div>
+				</div>
+				<div class="chartCenter" v-show="!showFclist && !showFldetail">
+					<!-- 滚动数字 -->
+					<div class="scrollnumber" v-if="get.flag == 1 || get.flag == 2">
+						<div>党员总数</div>
+						<div id="dataNums"></div>
+					</div>
+					<img class="wave" src="statics/images/building.png" v-show="get.flag == 3">
+					<img class="rotate1" src="statics/images/point1.png" v-show="get.flag == 3">
+					<img class="rotate rotate2" src="statics/images/point2.png" v-show="get.flag == 3">
+					<img src="statics/images/localIcon.png" class="localIcon wave"  v-show="get.flag == 1 || get.flag == 2">
+					<img class="wave" src="statics/images/dwMap.png"  v-show="get.flag == 1 || get.flag == 2">
+					<div class="dyfb">
+						<div class="dyfbItem">
+							<div class="dyfbItems">
+								<div class="zbItemTit zbItemTit1" style="display: flex;justify-content: center;margin-top: 1.8vh;">
+									<span></span>
+									<span>党员年龄分布</span>
+								</div>
+								<div id="age" class="chartItem">
+									
+								</div>
+							</div>
+							<div class="dyfbItems">
+								<div class="zbItemTit zbItemTit1" style="display: flex;justify-content: center;margin-top: 1.8vh;">
+									<span></span>
+									<span>党员性别比例</span>
+								</div>
+								<div class="chartItem" id="sex">
+									<div>
+										<div id="man"></div>
+										<div>男：{{parseInt(man*100)}}%</div>
+									</div>
+									<div>
+										<div id="woman"></div>
+										<div>女：{{parseInt(Math.ceil(woman*100))}}%</div>
+									</div>
+								</div>
+							</div>
+							<div class="dyfbItems">
+								<div class="zbItemTit zbItemTit1" style="display: flex;justify-content: center;margin-top: 1.8vh;">
+									<span></span>
+									<span>党员学历分布</span>
+								</div>
+								<div id="edu" class="chartItem">
+									
+								</div>
+							</div>
+							<div class="dyfbItems">
+								<div class="zbItemTit zbItemTit1" style="display: flex;justify-content: center;margin-top: 1.8vh;">
+									<span></span>
+									<span>党员干部比例</span>
+								</div>
+								<div id="leader" class="chartItem">
+									
+								</div>
+							</div>
+						</div>
+						<div class="dyfbItem1">
+							<div class="dyfbItems1 dyfbItems11 ">
+								<div v-if="get.flag == 3">
+									<div class="kshChart">
+										<img src="statics/images/normal.png" >
+										<div>
+											<div class="kshWord">正式党员数量</div>
+											<div class="kshNum">{{dynumber}}</div>
+										</div>
+									</div>
+								</div>
+								<div v-if="get.flag == 1 || get.flag == 2">
+									<div class="kshChart">
+										<img src="statics/images/zbnumber.png" >
+										<div>
+											<div class="kshWord">党委支部数量</div>
+											<div class="kshNum">{{zb_count}}</div>
+										</div>
+									</div>
+								</div>
+								<div>
+									<div class="kshChart1">
+										<img src="statics/images/actNum.png" >
+										<div>
+											<div class="kshWord">活动数量统计</div>
+											<div class="kshNum">{{activenumber}}</div>
+										</div>
+									</div>
+								</div>
+								<div>
+									<div class="kshChart3">
+										<img src="statics/images/studyTimeLong.png" >
+										<div>
+											<div class="kshWord">学习课时统计</div>
+											<div class="kshNum">{{studyTime}}</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="dyfbItems1 dyfbItems12">
+								<div>
+									<div class="kshChart2">
+										<img src="statics/images/developNum.png" >
+										<div>
+											<div class="kshWord">发展党员数量</div>
+											<div class="kshNum">{{developnumber}}</div>
+										</div>
+									</div>
+								</div>
+								<div>
+									<div class="kshChart4">
+										<img src="statics/images/sourseNum.png" >
+										<div>
+											<div class="kshWord">学习资源数量</div>
+											<div class="kshNum">{{resources}}</div>
+										</div>
+									</div>
+								</div>
+								<div>
+									<div class="kshChart5">
+										<img src="statics/images/testNum.png" >
+										<div>
+											<div class="kshWord">题库试题数量</div>
+											<div class="kshNum">{{testnumber}}</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="dyfbItem2">
+							<div>
+								<div class="zbItemTit zbItemTit1">
+									<span></span>
+									<span>发展党员情况</span>
+								</div>
+								<div id="develop" class="chartItem1"></div>
+							</div>
+							<div>
+								<div class="zbItemTit zbItemTit1">
+									<span></span>
+									<span>参与活动情况</span>
+								</div>
+								<div id="active" class="chartItem1"></div>
+							</div>
+							<div>
+								<div class="zbItemTit zbItemTit1">
+									<span></span>
+									<span>党费缴纳情况</span>
+								</div>
+								<div id="money" class="chartItem1"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="chartRight">
+					<div class="zbItem">
+						<div class="zbItemTit">
+							<span></span>
+							<span>星级评定</span>
+						</div>
+						<div class="zbActiv" v-if="get.flag == 3">
+							<div class="pingding">
+								<div class="pingdingItem">
+									<div>
+										<div>班子建设</div>
+										<div>{{starWrap.score[0]}}</div>
+									</div>
+								</div>
+								<div class="pingdingItem">
+									<div>
+										<div>党员教育</div>
+										<div>{{starWrap.score[1]}}</div>
+									</div>
+								</div>
+								<div class="pingdingItem">
+									<div>
+										<div>组织生活</div>
+										<div>{{starWrap.score[2]}}</div>
+									</div>
+								</div>
+								<div class="pingdingItem">
+									<div>
+										<div>党委评分</div>
+										<div>{{starWrap.score[3]}}</div>
+									</div>
+								</div>
+								<div class="starStep">{{starWrap.star}}</div>
+							</div>
+						</div>
+						<div class="zbActiv" v-if="get.flag == 1 || get.flag == 2">
+							<div class="pingding">
+								<div class="dwPingding">
+									<div>五星级</div>
+									<div id="starFive"></div>
+								</div>
+								<div class="dwPingding">
+									<div>四星级</div>
+									<div id="starFour"></div>
+								</div>
+								<div class="dwPingding">
+									<div>三星级</div>
+									<div id="starThree"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="zbItem">
+						<div class="zbItemTit">
+							<span></span>
+							<span>党员风采</span>
+						</div>
+						<div class="zbActiv">
+							<div class="moreact" @click="tomore(1)" v-if="dyfc.length>0">更多</div>
+							<div class="fengcai fengcai1 swiper-container" v-if="dyfc.length>0" style="display: none;">
+								<div class="swiper-wrapper">
+									<div class="swiper-slide" v-for="item in dyfc" @click="gofcdetail(1,item.id)">
+										<img :src="item.img" >
+									</div>
+								</div>
+							</div>
+							<div class="fengcai fengcai1" v-if="dyfc.length==0">
+								<div style="text-align: center;width: 100%;color:#fff;">暂无数据</div>
+							</div>
+						</div>
+					</div>
+					<div class="zbItem">
+						<div class="zbItemTit">
+							<span></span>
+							<span>支部风采</span>
+						</div>
+						<div class="zbActiv">
+							<div class="moreact" @click="tomore(2)" v-if="zbfc.length > 0">更多</div>
+							<div class="fengcai fengcai1 swiper-container" v-if="zbfc.length>0" style="display: none;">
+								<div class="swiper-wrapper">
+									<div class="swiper-slide" v-for="item in zbfc" @click="gofcdetail(2,item.id)">
+										<img :src="item.img" >
+									</div>
+								</div>
+							</div>
+							<div class="fengcai fengcai1" v-if="zbfc.length==0">
+								<div style="text-align: center;width: 100%;color:#fff;">暂无数据</div>
+							</div>
+						</div>
+					</div>
+					<div class="zbItem">
+						<div class="zbItemTit">
+							<span></span>
+							<span>各支部会议记录</span>
+						</div>
+						<div class="zbActiv" style="overflow-y: scroll;max-height: 16vh;">
+							<div class="moreact" @click="tomore(3)" v-if="dyfc.length>0">更多</div>
+							<div class="zbActivItem">
+								<div>序号</div>
+								<div>主题</div>
+								<div>时间</div>
+							</div>
+							<div class="zbActivItem" v-for="(item,index) in ywzx" @click="gofcdetail(3,item.hyid,item.hy_flag)">
+								<div>{{index+1}}</div>
+								<div>{{item.hy_title}}</div>
+								<div>{{toNumber(item.h_stime)}}</div>
+							</div>
+							<div class="zbActivItem" v-if="ywzx.length == 0">
+								<div></div>
+								<div style="text-align: center;">暂无数据</div>
+								<div></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript">
+			window.onload = function(){
+				var app = new Vue({
+					el:"#app",
+					data:{
+						// 获取数据
+						get:{
+							user_id:user.id,
+							flag:user.flag
+						},
+						monthList:["01","02","03","04","05","06","07","08","09","10","11","12"],
+						monthIndex:-1,
+						yearList:[],
+						yearIndex:-1,
+						yearWords:"",
+						monthWords:"",
+						yearShow:false,
+						monthShow:false,
+						fclistWrap:[],
+						totpage:0,
+						openWord:"",
+						fcDetialwrap:"",
+						p_id:user.dwid,
+						flag:user.flag,
+						// 活动记录
+						activity:[],
+						// 学习记录
+						focus:[],
+						// 雷达图最大值
+						max:100,
+						// 年龄最大值
+						max1:0,
+						// 党员学历
+						education:[],
+						// 党员数量
+						dynumber:0,
+						//发展党员数量
+						developnumber:0,
+						// 活动数量
+						activenumber:0,
+						// 学习课时统计
+						studyTime:0,
+						// 试题数量
+						testnumber:0,
+						// 学习资料数量
+						resources:0,
+						// 女性数量
+						woman:0,
+						// 男性数量
+						man:0,
+						// 发展党员
+						develop:[],
+						// 支部数量
+						zb_count:0,
+						// 支部风采
+						zbfc:[],
+						// 党员风采
+						dyfc:[],
+						// 要闻资讯
+						ywzx:[],
+						zhiwei:[],
+						typeActivity:[],
+						starWrap :{},
+						zb_name:"暂无数据",
+						zb_p_name:"暂无数据",
+						zb_address:"暂无数据",
+						zb_shuji:"暂无数据",
+						zb_fshuji:"暂无数据",
+						zb_weiyuan:"暂无数据",
+						zb_head_name:"暂无数据",
+						zb_head_phone:"暂无数据",
+						zb_organ_class:"暂无数据",
+						selectZblist:[],
+						selectZbindex:-1,
+						showToggle:false,
+						selectname:"请选择",
+						showFclist:false,
+						showFldetail:false,
+						type:0,
+						activeMax:0
+					},
+					methods:{
+						// 数据获取
+						dataList(){
+							var that = this;
+							postData("organProfile",that.get,function(res){
+								if(res.code == 200){
+									// 支部名称
+									if(that.get.flag == 1 || that.get.flag == 2){
+										that.zb_name = res.data.dw;
+										console.log(that.zb_name)
+										// 通讯地址
+										that.zb_address = res.data.address;
+										// 支部负责人
+										that.zb_head_name = res.data.head_name;
+										// 负责人电话
+										that.zb_head_phone = res.data.head_phone;
+									}else{
+										that.zb_name = res.data.zb_name;
+										// 通讯地址
+										that.zb_address = res.data.zb_address;
+										// 支部负责人
+										that.zb_head_name = res.data.zb_head_name;
+										// 负责人电话
+										that.zb_head_phone = res.data.zb_head_phone;
+									}
+									// // 上级党组织
+									that.zb_p_name = res.data.zb_p_name;
+									// // 支部书记
+									that.zb_shuji = res.data.zb_shuji;
+									// // 支部副书记
+									that.zb_fshuji = res.data.zb_fshuji;
+									// // 支部委员
+									that.zb_weiyuan = res.data.zb_weiyuan;
+									// // 支部类型
+									that.zb_organ_class = changeType(res.data.zb_organ_class);
+									// // 党员年龄分布
+									that.age = res.data.ages;
+									that.max1 = Math.max(...res.data.ages);
+									// // 女性比例
+									that.woman = (res.data.women / (res.data.women+res.data.man));
+									// // 男性比例
+									that.man = res.data.man / (res.data.women+res.data.man);
+									// // 党员学历
+									that.education = res.data.edu;
+									that.max = Math.max(...res.data.edu);
+									// // 发展党员
+									that.develop = res.data.userDevelop;
+									that.maxdy = Math.max(...res.data.userDevelop);
+									// // 党费缴纳
+									that.money = res.data.dfjn;
+									// // 发展党员数量
+									that.developnumber = res.data.dev_count_member;
+									// // 党员数量
+									that.dynumber = res.data.all_count_member;
+									// // 活动数量
+									that.activenumber = res.data.activity_count;
+									// // 学习课时统计
+									that.studyTime = res.data.hour;
+									// // 试题数量
+									that.testnumber = res.data.qustion_count;
+									// // 学习资料数量
+									that.resources = res.data.resouce_count;
+									// // 党员风采
+									that.dyfc = res.data.dyfc;
+									// // 支部风采
+									that.zbfc = res.data.zbfc;
+									// // 支部数量
+									that.zb_count = res.data.zb_count;
+									// 干部信息
+									that.zhiwei = res.data.zhiwei;
+									// 活动情况
+									that.typeActivity = res.data.typeActivity;
+									that.activeMax = Math.max(...res.data.typeActivity);
+									$(".loadings").fadeOut(600, function () {
+										$(this).remove(); 
+									})
+									// 星级
+									if(that.get.flag == 3){
+										if(res.data.star != "" && res.data.star.length > 0){
+											that.starWrap = {
+												score:res.data.star[0].score!=""?res.data.star[0].score.split(','):'',
+												star:res.data.star[0].star
+											}
+										}
+									}else{
+										if(res.data.star != ""){
+											that.starWrap = res.data.star;
+										}
+									}
+									// 活动记录
+									that.activity = res.data.activity!=null?res.data.activity:[];
+									that.ywzx = res.data.activity!=null?res.data.activity:[];
+									// 学习记录
+									that.focus = res.data.focus;
+									that.$nextTick(() => {
+										that.chart();
+										$('.fengcai1').fadeIn(300)
+										var swiper = new Swiper('.fengcai1', {
+											slidesPerView: 3,
+											spaceBetween: 0,
+											centeredSlides: true,
+											loop: true,
+											autoplay: {
+												delay: 5000,
+												stopOnLastSlide: false,
+												disableOnInteraction: false,
+											},
+										});
+										scrollNumber('dataNums',that.dynumber);
+									})
+								}
+							})
+						},
+						// 时间戳转化（数字到日期  年月日）
+						toNumber(time){
+							if(time != null){
+								var date = ""
+								if(time.length>=13){
+									date = new Date(parseInt(time));
+								}else{
+									date = new Date(parseInt(time) * 1000);
+								}
+								var year = date.getFullYear();
+								var month = date.getMonth() + 1;
+								var day = date.getDate();
+								time = year + '-' + add0(month) + '-' + add0(day);
+								return time;
+							}else{
+								return time="";
+							}
+						},
+						// 图表格
+						chart(){
+							var that = this;
+							var age = echarts.init(document.getElementById('age'));
+							var woman = echarts.init(document.getElementById('woman'));
+							var man = echarts.init(document.getElementById('man'));
+							var edu = echarts.init(document.getElementById('edu'));
+							var leader = echarts.init(document.getElementById('leader'));
+							var develop = echarts.init(document.getElementById('develop'));
+							var active = echarts.init(document.getElementById('active'));
+							var money = echarts.init(document.getElementById('money'));
+							// 年龄
+							var option1 = {
+								title: {
+									textStyle:{
+										color:'#fff',
+										fontSize:'2vh'
+									}
+								},
+								tooltip: {
+									formatter: function (params) {
+										var info = '<div style="border-radius:0.5vh;padding:0.5vh 1vw;text-align:center;background:#FF762A;color:#fff;font-size:1vh">'+params.value+'人</p></div>'
+										return info;
+									},
+									backgroundColor:'none',
+									textStyle: { color: "#fff" } //提示标签字体颜色
+								},
+								xAxis: {
+									data: ["10-20","20-30","30-40","40-50","50以上"],
+									axisLabel: {
+										color: "#F15454",
+										fontSize:"8"
+									},
+									axisLine:{
+										show:true,
+										lineStyle:{
+											color:'#EEE501',
+											width:2,
+										},
+									},
+									axisTick: {
+										show: false
+									},
+								},
+								yAxis: {
+									max:that.max1,
+									axisLine:{
+										show:false,
+									},
+									axisLabel:{					//---坐标轴 标签
+										show:false,					//---默认取轴线的颜色
+									},
+									type:'value',
+									title: {
+										text: ''
+									},
+									splitLine: {
+										show: false,                         
+									},
+									axisTick: {
+										show: false
+									},
+								},
+								grid : {
+									left : '3%',   //组件离容器左侧的距离
+									right : '4%',
+									top:'10%',
+									bottom:'5%',
+									containLabel : true     //grid 区域是否包含坐标轴的刻度标签
+								},
+								series: [{
+									barHeight:500,
+									barWidth:13,
+									barCateGoryGap:'20%',
+									name: '年龄',
+									type: 'bar',
+									data: that.age,
+									itemStyle: {
+									    normal: {
+											barBorderRadius:[10, 10, 0, 0],
+									        color: new echarts.graphic.LinearGradient(
+												0, 0, 0,1,
+									            [
+									                {offset: 0, color: '#FF2A2A'},
+									                {offset: 1, color: '#EEE501'}
+									            ]
+									        )
+									    },
+									}
+								}]
+							};
+							// 女
+							var option2 =  {
+								series: [{
+									waveAnimation:true,
+									type: 'liquidFill',
+									data: [that.woman],
+									label: {
+										show:false,
+									    fontSize: 10
+									},
+									outline: {
+										show: true,
+										borderDistance: 2,
+										itemStyle: {
+											borderColor: '#F15454', // 轮廓颜色
+											borderWidth: 1, // 轮廓大小
+											shadowBlur: 'none', // 轮廓阴影
+										}
+									},
+									itemStyle: {
+									    normal: {
+											barBorderRadius:[10, 10, 0, 0],
+									        color: new echarts.graphic.LinearGradient(
+												0, 0, 0,1,
+									            [
+									                {offset: 0, color: '#FF2A2A'},
+									                {offset: 1, color: '#EEE501'}
+									            ]
+									        )
+									    },
+									},
+									backgroundStyle: {
+									    color: 'none',
+									},
+									radius: '90%'
+								}]
+							};
+							var option8 =  {
+								series: [{
+									waveAnimation:true,
+									type: 'liquidFill',
+									data: [that.man],
+									label: {
+										show:false,
+									    fontSize: 10
+									},
+									outline: {
+										show: true,
+										borderDistance: 2,
+										itemStyle: {
+											borderColor: '#F15454', // 轮廓颜色
+											borderWidth: 1, // 轮廓大小
+											shadowBlur: 'none', // 轮廓阴影
+										}
+									},
+									itemStyle: {
+									    normal: {
+											barBorderRadius:[10, 10, 0, 0],
+									        color: new echarts.graphic.LinearGradient(
+												0, 0, 0,1,
+									            [
+									                {offset: 0, color: '#FF2A2A'},
+									                {offset: 1, color: '#EEE501'}
+									            ]
+									        )
+									    },
+									},
+									backgroundStyle: {
+									    color: 'none',
+									},
+									radius: '90%'
+								}]
+							};
+							// 学历
+							var option3 = {
+								title: {
+									textStyle:{
+										color:'#fff',
+										fontSize:'2vh'
+									}
+								},
+								tooltip: {
+									formatter: function (params) {
+										var info = '<div style="border-radius:0.5vh;padding:0.5vh 1vw;text-align:center;background:#FF762A;color:#fff;font-size:1vh">'+params.value+'人</p></div>'
+										return info;
+									},
+									backgroundColor:'none',
+									textStyle: { color: "#fff" } //提示标签字体颜色
+								},
+								xAxis: {
+									data: ["高中","大专","本科","硕士及以上","高中以下"],
+									axisLabel: {
+										color: "#F15454",
+										fontSize:"9",
+										interval:0,
+										rotate:0
+									},
+									axisLine:{
+										show:true,
+										lineStyle:{
+											color:'#EEE501',
+											width:2,
+										},
+									},
+									axisTick: {
+										show: false
+									},
+								},
+								yAxis: {
+									max:that.max,
+									axisLine:{
+										show:false,
+									},
+									axisLabel:{					//---坐标轴 标签
+										show:false,					//---默认取轴线的颜色
+									},
+									type:'value',
+									title: {
+										text: ''
+									},
+									splitLine: {
+										show: false,                         
+									},
+									axisTick: {
+										show: false
+									},
+								},
+								grid : {
+									left : '0%',   //组件离容器左侧的距离
+									right : '0%',
+									top:'10%',
+									bottom:'0%',
+									containLabel : true     //grid 区域是否包含坐标轴的刻度标签
+								},
+								series: [{
+									barHeight:500,
+									barWidth:13,
+									barCateGoryGap:'20%',
+									name: '学历',
+									type: 'bar',
+									data: that.education,
+									itemStyle: {
+									    normal: {
+											barBorderRadius:[10, 10, 0, 0],
+									        color: new echarts.graphic.LinearGradient(
+												0, 0, 0,1,
+									            [
+									                {offset: 0, color: '#FF2A2A'},
+									                {offset: 1, color: '#EEE501'}
+									            ]
+									        )
+									    },
+									}
+								}]
+							};
+							var option4 = {
+								color: [ '#FF2A2A','#FDE400', '#FF762A'],
+								tooltip : {
+									formatter: function (params) {
+										console.log(params)
+										var info = '<div style="border-radius:0.5vh;padding:0.5vh 1vw;text-align:center;background:#FF762A;color:#fff;font-size:1vh">'+params.value*100+'%</p></div>'
+										return info;
+									},
+									backgroundColor:'none',
+									textStyle: { color: "#fff" } //提示标签字体颜色
+								},
+								legend: {
+									// orient 设置布局方式，默认水平布局，可选值：'horizontal'（水平） ¦ 'vertical'（垂直）
+									orient: 'vertical',
+									// x 设置水平安放位置，默认全图居中，可选值：'center' ¦ 'left' ¦ 'right' ¦ {number}（x坐标，单位px）
+									x: '65%',
+									y:'10%',
+									textStyle: {
+										color: '#F15454',// 图例文字颜色
+										fontSzie:"10"
+									}, 
+									itemWidth: 20,   // 设置图例图形的宽
+									itemHeight: 10,  // 设置图例图形的高
+									itemGap: 12,
+								},
+								toolbox: {
+								show : true,
+								},
+								series : that.getData1(that.zhiwei)
+							};
+							// 发展党员情况
+							var option5 = {
+								title: {
+									textStyle:{
+										color:'#fff',
+										fontSize:'2vh'
+									}
+								},
+								tooltip: {
+									formatter: function (params) {
+										var info = '<div style="border-radius:0.5vh;padding:0.5vh 1vw;text-align:center;background:#FF762A;color:#fff;font-size:1vh">'+params.value+'人</p></div>'
+										return info;
+									},
+									backgroundColor:'none',
+									textStyle: { color: "#fff" } //提示标签字体颜色
+								},
+								xAxis: {
+									
+									data: ["入党申请","积极分子","发展对象","预备党员","预备转正"],
+									axisLabel: {
+										color: "#F15454",
+										fontSize:"8"
+									},
+									axisLine:{
+										show:true,
+										lineStyle:{
+											color:'#EEE501',
+											width:2,
+										},
+									},
+									axisTick: {
+										show: false
+									},
+								},
+								yAxis: {
+									max:that.maxdy,
+									axisLine:{
+										show:false,
+									},
+									axisLabel:{					//---坐标轴 标签
+										show:false,					//---默认取轴线的颜色
+									},
+									type:'value',
+									title: {
+										text: ''
+									},
+									splitLine: {
+										show: false,                         
+									},
+									axisTick: {
+										show: false
+									},
+								},
+								grid : {
+									left : '3%',   //组件离容器左侧的距离
+									right : '4%',
+									top:'10%',
+									bottom:'5%',
+									containLabel : true     //grid 区域是否包含坐标轴的刻度标签
+								},
+								series: [{
+									barHeight:500,
+									barWidth:13,
+									barCateGoryGap:'20%',
+									name: '发展党员',
+									type: 'bar',
+									data: that.develop,
+									itemStyle: {
+									    normal: {
+											barBorderRadius:[10, 10, 0, 0],
+									        color: new echarts.graphic.LinearGradient(
+												0, 0, 0,1,
+									            [
+									                {offset: 0, color: '#FF2A2A'},
+									                {offset: 1, color: '#EEE501'}
+									            ]
+									        )
+									    },
+									}
+								}]
+							};
+							// 参与活动情况
+							var category = ['三会一课', '组织生活会', '党日活动', '其他活动'];
+							var barData = that.typeActivity;
+							var option6 = {
+								tooltip: {
+									formatter: function (params) {
+										var info = '<div style="border-radius:0.5vh;padding:0.5vh 1vw;text-align:center;background:#FF762A;color:#fff;font-size:1vh">'+params.value+'次</p></div>'
+										return info;
+									},
+									backgroundColor:'none',
+									textStyle: { color: "#fff" } //提示标签字体颜色
+								},
+								legend: {
+									orient:"vertical",
+									x:'right',
+									y:'bottom',
+									textStyle:{
+										color:'#fff',
+										fontSize:'8'
+									},
+									itemHeight: 8,
+									itemWidth: 12,
+									icon:'stack'
+								},
+								 grid: {
+									 left: '4%',
+									 right: '25%',
+									 bottom: '0%',
+									 top:'2%',
+									 containLabel: true
+								 },
+								 xAxis: {
+									 type: 'value',
+									 max:that.activeMax,
+									 min:0,
+									 axisLine: {
+										lineStyle:{  
+											color:'#fff',  
+										}  
+									 },
+									 axisLabel: {
+									 	show: true,
+									 	textStyle:{
+									 		color:'#fff',
+									 		fontSize:'10'
+									 	},
+									 },
+									 axisTick: {
+										 show: false
+									 },
+									splitLine: {
+										show: false,
+									},
+								 },
+								 yAxis: {
+									type: 'category',
+									data: category,
+									splitLine: {
+										show: false
+									},
+									axisLine: {
+										show: false,
+										lineStyle:{
+											color:'#fff'
+										},
+									}, 
+									axisLabel: {
+										show: true,
+										textStyle:{
+											color:'#fff',
+											fontSize:'10'
+										},
+									}, 
+									 minInterval : 1,
+									 boundaryGap : [ 0, 0.1 ],
+									 axisTick: {
+										 show: false
+									 },
+									 offset: 10,
+								 },
+								 series: [
+									 {
+										 name: '支部活动',
+										 type: 'bar',
+										 data: barData,
+										 barWidth: 10,
+										 barGap: 10,
+										 smooth: true,
+										 label: {
+											 normal: {
+												 show: false,
+												 position: 'right',
+												 offset: [5, 2],
+												 textStyle: {
+													 color: '#fff',
+													 fontSize: '14'
+												 }
+											 }
+										 },
+										 itemStyle: {
+											 normal: {
+												barBorderRadius:[10, 10,10, 10],
+												 color: new echarts.graphic.LinearGradient(
+													 0, 0, 1, 0,
+													 [
+														{offset: 0, color: '#EEE501'},
+														{offset: 1, color: '#FF2A2A'}
+													 ]
+												 )
+											 }
+										 }
+									 }
+								 ]
+							 };
+							// 党费缴纳
+							var option7 = {
+								tooltip: {
+									formatter: function (params) {
+										var info = '<div style="border-radius:0.5vh;padding:0.5vh 1vw;text-align:center;background:#FF762A;color:#fff;font-size:1vh">'+params.value+'元</p></div>'
+										return info;
+									},
+									backgroundColor:'none',
+									textStyle: { color: "#fff" } //提示标签字体颜色
+								},
+								legend: {
+									orient:"vertical",
+									x:'right',
+									y:'top',
+									textStyle:{
+										color:'#fff',
+										fontSize:'8'
+									},
+									itemHeight: 8,
+									itemWidth: 12,
+									icon:'stack'
+								},
+								grid: {
+									top:'5%',
+									bottom: '0%',
+									left:'0%',
+									right:'20%',
+									containLabel: true
+								},
+								xAxis: [{
+									type: 'category',
+									boundaryGap: false,
+									axisLabel:{
+										textStyle:{
+											fontSize:'10',
+											color:'#fff'
+										}
+									},
+									axisTick: {
+										show: false
+									},
+									axisLine:{
+										lineStyle:{
+											color:"#FDE400"	
+										}
+									},
+									data: ['1','2','3','4','5','6','7','8','9','10','11','12'],
+								}],
+								yAxis: [{
+									type: 'value',
+									axisLabel:{
+										textStyle:{
+											fontSize:'8',
+											color:'#fff'
+										},
+									},
+									axisTick: {
+										show: false
+									},
+									axisLine:{
+										lineStyle:{
+											color:"#FDE400"	
+										}
+									},
+									splitLine: {
+										show:false,
+									},
+								}],
+								series: [
+									{
+										name: '实缴',
+										type: 'line',
+										color: '#FDE400',
+										symbol:'show',
+										barWidth:10,
+										itemStyle: {
+											normal: {
+												lineStyle: {
+													color: '#FDE400' ,//改变折线颜色
+													width:1.3
+												}
+											}
+										},
+										areaStyle:{
+											color: new echarts.graphic.LinearGradient(
+												0, 0, 0, 1,
+												[
+													{ offset: 0, color: '#FDE400' },
+													{ offset: 0.5, color: '#FDE400' },
+													{ offset: 1, color: 'rgba(0,0,0,0)' }
+												]
+											)
+										},
+										data: that.money
+									}
+								]
+							};
+							if(that.get.flag == 1 || that.get.flag == 2){
+								var five = echarts.init(document.getElementById('starFive'));
+								var four = echarts.init(document.getElementById('starFour'));
+								var three = echarts.init(document.getElementById('starThree'));
+								// 五星级
+								var option9 = {
+									color:['#FF762A','#691211'],
+									tooltip: {
+										formatter: function (params) {
+											var info = '<div style="border-radius:0.5vh;padding:0.5vh 1vw;text-align:center;background:#FF762A;color:#fff;font-size:1vh">'+params.value+'人</p></div>'
+											return info;
+										},
+										backgroundColor:'none',
+										textStyle: { color: "#fff" } //提示标签字体颜色
+									},
+								    calculable : true,
+								    series : [
+								        {
+								            name:'男',
+								            type:'pie',
+								            radius : ['70%', '100%'],
+											hoverAnimation:false,
+											silent:true,
+											label:{
+												normal:{
+													show:true,
+													position:'center',
+													formatter:function(){
+														return 
+													},
+													textStyle:{
+														fontSize:10,
+														color:'#fff'
+													}
+												}
+											},
+								            data:[
+								                {value:that.starWrap.five},
+								                {value:100-that.starWrap.five},
+								            ]
+								        }
+								    ]
+								}
+								// 四星级
+								var option10 = {
+									color:['#FDE400','#691211'],
+									tooltip: {
+										formatter: function (params) {
+											var info = '<div style="border-radius:0.5vh;padding:0.5vh 1vw;text-align:center;background:#FF762A;color:#fff;font-size:1vh">'+params.value+'人</p></div>'
+											return info;
+										},
+										backgroundColor:'none',
+										textStyle: { color: "#fff" } //提示标签字体颜色
+									},
+								    calculable : true,
+								    series : [
+								        {
+								            name:'男',
+								            type:'pie',
+								            radius : ['70%', '100%'],
+											hoverAnimation:false,
+											silent:true,
+											label:{
+												normal:{
+													show:true,
+													position:'center',
+													formatter:function(){
+														return 
+													},
+													textStyle:{
+														fontSize:10,
+														color:'#fff'
+													}
+												}
+											},
+								            data:[
+								                {value:that.starWrap.four},
+								                {value:100-that.starWrap.four},
+								            ]
+								        }
+								    ]
+								}
+								// 三星级
+								var option11 = {
+									color:['#FF2A2A','#691211'],
+									tooltip: {
+										formatter: function (params) {
+											var info = '<div style="border-radius:0.5vh;padding:0.5vh 1vw;text-align:center;background:#FF762A;color:#fff;font-size:1vh">'+params.value+'人</p></div>'
+											return info;
+										},
+										backgroundColor:'none',
+										textStyle: { color: "#fff" } //提示标签字体颜色
+									},
+								    calculable : true,
+								    series : [
+								        {
+								            name:'男',
+								            type:'pie',
+								            radius : ['70%', '100%'],
+											hoverAnimation:false,
+											silent:true,
+											label:{
+												normal:{
+													show:true,
+													position:'center',
+													formatter:function(){
+														return 
+													},
+													textStyle:{
+														fontSize:10,
+														color:'#fff'
+													}
+												}
+											},
+								            data:[
+								                {value:that.starWrap.three},
+								                {value:100-that.starWrap.three},
+								            ]
+								        }
+								    ]
+								}
+								
+								five.setOption(option9);
+								four.setOption(option10);
+								three.setOption(option11);
+								// 图表自适应
+								window.onresize = function(){
+									five.resize();
+									four.resize();
+									three.resize();
+								}
+							}
+							age.setOption(option1);
+							woman.setOption(option2);
+							man.setOption(option8);
+							edu.setOption(option3);
+							leader.setOption(option4);
+							develop.setOption(option5);
+							active.setOption(option6);
+							money.setOption(option7);
+							// 图表自适应
+							window.onresize = function(){
+								age.resize();
+								man.resize();
+								woman.resize();
+								edu.resize();
+								leader.resize();
+								develop.resize();
+								active.resize();
+								money.resize();
+							}
+						},
+						// 干部比例
+						getData1(data) {
+							var res = [],legendData=[];
+							var dataStyle = { 
+								normal: {
+									label: {show:false},
+									labelLine: {show:false},
+									shadowBlur: 10,
+									shadowColor: 'rgba(40, 40, 40, 0.5)',
+								}
+							};
+							var placeHolderStyle = {
+							    normal : {
+							        color: 'rgba(40, 40, 40, 0.1)',
+							        label: {show:false},
+							        labelLine: {show:false}
+							    },
+							    emphasis : {
+							        color: 'rgba(0,0,0,0)'
+							    }
+							};
+							var sortData=data.sort((a,b)=>{
+								return b.value-a.value
+							});
+							for (let i = 0; i < sortData.length; i++) {
+								legendData.push(sortData[i].name);
+								res.push({
+									type: 'pie',
+									clockWise: false, //顺时加载
+									hoverAnimation: false, //鼠标移入变大
+									radius: [43 - i * 6.5,35 - i * 5.5],
+									center:['35%','50%'],
+									series:[{axisLine:{lineStyle:{color:['#000']}}}],　　　　　//radius: [65 - i * 15 + '%', 57 - i * 15 + '%'],
+									itemStyle: dataStyle,
+									data: [{
+										value: sortData[i].value,
+										name: sortData[i].name
+									}, {
+										value: 1 - sortData[i].value,
+										name:sortData[i].name,
+										itemStyle: placeHolderStyle,
+									}]
+								});
+							}
+							return res;
+						},
+						
+						// 党委筛选
+						selectZb(){
+							var that = this;
+							that.selectZblist = [];
+							postData("partyOrgan",{
+								user_id:that.p_id,
+								flag:1
+							},function(res){
+								if(res.code == 200){
+									that.selectZblist = res.data;
+								}
+							})
+						},
+						// 下拉框筛选
+						selectzbbxc(user_id,flag,index,dw){
+							var that = this;
+							that.selectZbindex = index;
+							that.showToggle = !that.showToggle;
+							that.showFclist = false;
+							that.showFldetail = false;
+							that.selectname = dw;
+							that.get = {
+								user_id:user_id,
+								flag:flag
+							}
+							that.dataList();
+						},
+						// 年份筛选列表
+						yearListData(){
+							var that = this,
+							year = new Date().getFullYear();
+							for(var i=0;i<6;i++){
+								that.yearList.push(year--);
+							}
+						},
+						// 点击显示年份筛选
+						showYearSelect(){
+							var that = this;
+							that.yearShow = !that.yearShow
+						},
+						showMonthSelect(){
+							var that = this;
+							that.monthShow = !that.monthShow
+						},
+						// 年份筛选点击事件
+						selectYear(year,index){
+							var that = this;
+							var that = this;
+							that.yearIndex = index;
+							that.yearWords = year;
+							that.yearShow = !that.yearShow;
+							that.tomore(that.type)
+						},
+						// 月份筛选点击事件
+						selectMonth(month,index){
+							var that = this;
+							that.monthIndex = index;
+							that.monthWords = month;
+							that.monthShow = !that.monthShow;
+							that.tomore(that.type)
+						},
+						// 支部风采更多
+						moreList(){
+							var that = this;
+							var swiper = new Swiper('.swiperWrap',{
+								slidesPerView: 3,
+								slidesPerColumn : 3,
+								slidesPerColumnFill : 'row',
+								spaceBetween : 22,
+								navigation: {
+									nextEl: '.swiper-button-next',
+									prevEl: '.swiper-button-prev',
+								}
+							})
+						},
+						tomore(index){
+							var that = this;
+							that.showFclist = true;
+							that.showFldetail = false;
+							that.type = index;
+							if(index == 1){
+								that.fclistWrap = [];
+								that.dyfclist(1,'dyfcMore',index);
+								that.openWord = '党员风采';
+							}else if(index == 2){
+								that.fclistWrap = [];
+								that.dyfclist(1,'zbfcMore',index);
+								that.openWord = '支部风采'
+							}else{
+								that.fclistWrap = [];
+								that.dyfclist(1,'activityMore',index);
+								that.openWord = '各支部会议记录'
+							}
+						},
+						// 风采列表
+						dyfclist(page,url,type){
+							var that = this;
+							postData(url,{
+								flag:that.get.flag,
+								user_id:that.get.user_id,
+								page:"",
+								year:that.yearWords,
+								month:that.monthWords,
+							},function(res){
+								if(res.code == 200){
+									if(res.data != null && res.data.length > 0){
+										that.fclistWrap = res.data;
+										if(that.openWord!='各支部会议记录'){
+											for(var i=0;i<that.fclistWrap.length;i++){
+												that.fclistWrap[i].type = type
+											}
+										}
+										that.totpage = res.total;
+										$('.fclist').hide()
+										setTimeout(function(){
+											$('.fclist').fadeIn(300)
+											that.moreList();
+										},300)
+									}else{
+										that.fclistWrap = [];
+									}
+								}
+							})
+						},
+						// 风采详情
+						dyfcDetail(url,data){
+							var that = this;
+							that.fcDetialwrap = "";
+							postData(url,data,function(res){
+								if(res.code == 200){
+									that.fcDetialwrap = res.data;
+								}
+							})
+						},
+						// 风采详情
+						zbdetail(id,flag){
+							var that = this;
+							that.fcDetialwrap = "";
+							postData('activityDetail',{
+								id:id,
+								flag:flag,
+								user_id:user.id,
+							},function(res){
+								if(res.code == 200){
+									that.fcDetialwrap = res.data;
+								}
+							})
+						},
+						gofcdetail(index,id,hy_flag){
+							var that = this;
+							that.showFclist = false;
+							that.showFldetail = true;
+							that.type = index;
+							if(index == 1){
+								that.openWord = '党员风采'
+								that.dyfcDetail('dyfcDetail',{id:id});
+							}else if(index == 2){
+								that.openWord = '支部风采'
+								that.dyfcDetail('zbfcDetail',{id:id});
+							}else{
+								that.openWord = '各支部的会议记录'
+								that.zbdetail(id,hy_flag);
+							}
+						},
+						// 返回详情
+						backFc(index){
+							var that = this;
+							that.tomore(that.type)
+							that.yearWords = "";
+							that.monthWords = "";
+							that.yearIndex = -1;
+							that.monthIndex = -1;
+							if(index == 1){
+								$('.fclist').fadeOut(300)
+								that.showFclist = false;
+								that.showFldetail = false;
+							}else{
+								that.showFclist = true;
+								that.showFldetail = false;
+							}
+						},
+						loadings(){
+							var html = '<div class="loadings">'+
+											'<div class="loader">'+
+												'<span class="text1">Loading</span>'+
+												'<span class="spinner"></span>'+
+											'</div>'+
+										'</div>';
+							$('body').append(html)
+						}
+					},
+					mounted() {
+						var that = this;
+						this.$nextTick(() => {
+							that.dataList();
+						})
+						that.yearListData();
+						that.selectZb();
+					},
+					created() {
+						this.loadings();
+					}
+				})
+			}
+		</script>
+	</body>
+</html>

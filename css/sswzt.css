@@ -1,0 +1,121 @@
+*{
+	margin: 0;
+	padding: 0;
+}
+html,body{
+	height: 100%;
+	width: 100%;
+	overflow: hidden;
+	user-select: none;
+	background: #fff;
+}
+::-webkit-scrollbar  
+{  
+    width: 0.3vw;    
+    background-color: rgba(225,225,225,0);  
+}
+::-webkit-scrollbar-track  
+{  
+    border-radius: 0.2vw;  
+    background-color: rgba(225,225,225,0); 
+}
+::-webkit-scrollbar-thumb  
+{  
+    border-radius: 0.2vw;  
+    background-color:none;
+	background: rgba(0,0,0,.2);
+}
+.topnav{
+	width: 100%;
+	height: 47vh;
+	position: relative;
+	background: url(../statics/images/ssw_banenr.png) no-repeat;
+	background-size: 100% 100%;
+}
+.topnav .control{
+	padding: 2vh;
+	color: #fff;
+	position: absolute;
+}
+.topnav .control>a{
+	cursor: pointer;
+	color: #fff;
+	font-size: 2vh;
+}
+.mainData{
+	width: 80%;
+	padding: 0 5%;
+	height: 45vh;
+	overflow-x: hidden;
+	overflow-y: scroll;
+	display: flex;
+	flex-wrap: wrap;
+	/* justify-content: space-between; */
+	margin: 5vh auto 0 auto;
+}
+.mainData::after{
+	width: 23%;
+	content: "";
+}
+.dataItem{
+	cursor: pointer;
+	border-radius: 0.7vh;
+	width:23%;
+	margin-left: 2%;
+	height: 22vh;
+	margin-bottom: 3vh;
+	background: #000000;
+}
+.dataItem>img{
+	width: 100%;
+	height: 100%;
+}
+.dataItem:hover{
+	opacity: 0.9;
+}
+.centerNav{
+	display: flex;
+	justify-content: space-between;
+	position: absolute;
+	z-index: 10;
+	height: 7vh;
+	width: 50%;
+	left: 25%;
+	margin-top: -10.5vh;
+}
+.centerNav>div{
+	position: relative;
+	cursor: pointer;
+	width: 44%;
+	height: 100%;
+}
+.centerNav>div:hover{
+	opacity: 0.9;
+}
+.centerNav>div>img{
+	z-index: 1;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+}
+.star{
+	z-index: 2;
+	position: absolute;
+	bottom: 0;
+	left: 18%;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	height: 82%;
+	width: 70%;
+}
+.centerNav>div:nth-child(2) .star{
+	width: 70%;
+	left: 13%;
+}
+.star>span{
+	height: 2.8vh;
+	width: 2.8vh;
+	background: url(../statics/images/star.png) no-repeat;
+	background-size: 100% 100%;
+}

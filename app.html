@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html >
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="Pragma" content="no-cache">
+		<meta http-equiv="Expires" content="0">
+		<meta http-equiv="Cache-Control" content="no-cache">
+		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" /> <meta http-equiv="Pragma" content="no-cache" /> <meta http-equiv="Expires" content="0" />
+		<title>新时代党建</title>
+		<link rel="stylesheet" type="text/css" href="css/index.css"/>
+		<link rel="stylesheet" type="text/css" href="lib/swiper/css/swiper.min.css"/>
+		<link rel="stylesheet" type="text/css" href="lib/font-awesome/css/font-awesome.css"/>
+		<link rel="stylesheet" type="text/css" href="lib/layui/css/layui.css"/>
+		<script src="lib/jquery/jquery-3.5.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="lib/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/setCookie.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/ajax.js" type="text/javascript" charset="utf-8"></script>
+		<script src="lib/swiper/js/swiper.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/vue.min.js" type="text/javascript" charset="utf-8"></script>
+		<style type="text/css">
+		</style>
+	</head>
+	<body>
+		<!-- 进入页面 -->
+		<script src="js/nav.js" type="text/javascript" charset="utf-8"></script>
+		<div class="mainBody" id="app" v-cloak>
+			<div class="topBox">
+				<div class="topBox1">
+					<div class="swiper-container">
+						<div class="swiper-wrapper newData" style="background: #CCCCCC;">
+							<div class="swiper-slide" v-if="index<3" v-for="(item,index) in bannerl" @click="resourceDetail(item.bs_id,item.id)">
+								<img :src="item.sz_img" >
+							</div>
+						</div>
+						<div class="swiper-pagination"></div>
+					</div>
+				</div>
+				<div class="topBox2">
+					<div class="topBox2Item">
+						<!-- 组织活动 -->
+						<div class="topBox2Item1"  v-if="flag == 3 || flag == 1 || flag == 2" onmouseover="hoverClass(this)" onmouseout="outClass(this)">
+							<a href="zzhd.html">
+								<img src="statics/images/zzhd_icon.png" >
+							</a>
+						</div>
+						<!-- 在线考试 -->
+						<div class="topBox2Item1" v-if="flag == 4" onmouseover="hoverClass(this)" onmouseout="outClass(this)">
+							<a href="zxks.html">
+								<img src="statics/images/zxks.png" >
+							</a>
+						</div>
+						<!-- 重点党课 -->
+						<div class="topBox2Item1" onmouseover="hoverClass(this)" onmouseout="outClass(this)">
+							<a href="zddk.html">
+								<img src="statics/images/zddk_icon.png" >
+							</a>
+						</div>
+					</div>
+					<!-- 集中学习 -->
+					<div class="topBox2Item"  v-if="flag == 3 || flag == 1 || flag == 2" onmouseover="hoverClass(this)" onmouseout="outClass(this)">
+						<a href="jzxx.html">
+							<img src="statics/images/jzxx_icon.png" >
+						</a>
+					</div>
+					<!-- 个人学习 -->
+					<div class="topBox2Item" v-if="flag == 4" onmouseover="hoverClass(this)" onmouseout="outClass(this)">
+						<a href="grxx.html">
+							<img src="statics/images/grxx.png" >
+						</a>
+					</div>
+				</div>
+			</div>
+			<div class="bottomBox" @click="stopBlo">
+				<div class="bottomTit" @click="slideUp">
+					<div class="allWord"><span class="allIcon"></span>{{alltitle}}</div>
+					<div class="allSearch">
+						<span>搜索：</span>
+						<div class="search">
+							<input @focus="slideUp" type="text" v-model="searchBox" @change="changeSearch" placeholder="输入查询"/>
+							<i class="fa fa-search" aria-hidden="true" @click="searchFun"></i>
+						</div>
+					</div>
+				</div>
+				<div class="bottomContent" v-show="isSearch == false">
+					<div class="bottomItem" v-for="(item,index) in dataListWrap" @click="jumpDetail(item.template,item.id,item.title)">
+						<p class="typeIcon" v-show="index<3">最新</p>
+						<img :src="'http://'+item.ym+'/'+item.img" />
+					</div>
+				</div>
+				<div class="bottomContent" v-show="isSearch == true" id="appWrap">
+					<div class="bottomItem" v-for="(item,index) in searchList" @click="resourceDetail(item.bs_id,item.id)">
+						<img :src="item.sz_img" />
+						<p class="tipss">{{item.title}}</p>
+						<p class="typeIcon">{{item.bs_id1}}</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript">
+			window.onload = function(){
+				var app = new Vue({
+					el:"#app",
+					data:{
+						// 用户权限
+						flag:user.flag,
+						// 搜索
+						searchBox:"",
+						// 专题列表
+						dataListWrap:[],
+						// 搜否是搜索
+						isSearch:false,
+						searchGet:{
+							page:1,
+							title:""
+						},
+						page:1,
+						total:1,
+						searchList:[],
+						bannerl:[],
+						alltitle:"党建专题"
+					},
+					methods:{
+						// 聚焦上滑
+						slideUp(){
+							var that = this;
+							that.isSearch = false;
+							that.searchGet.title = "";
+							that.searchBox = "";
+							that.page = 0;
+							that.total = 0;
+							$('.bottomBox').animate({
+								height:'100%',
+								top:0,
+								paddingBottom: "4vh"
+							},200)
+							$('.topBox').animate({
+								opacity:0,
+							},200)
+						},
+						// 专题列表
+						dataList(){
+							var that = this;
+							// 专题列表
+							postData("specialWeek",{user_id:user.dwid},function(res){
+								if(res.code == 200){
+									if(res.data != null){
+										that.dataListWrap = res.data;
+										setTimeout(function(){
+											var swiper = new Swiper('.swiper-container',{
+												pagination: {
+													el: '.swiper-pagination',
+												},
+												autoplay: {
+													delay: 3000,
+													stopOnLastSlide: false,
+													disableOnInteraction: false,
+												},
+											});
+										},300)
+									}
+								}
+							});
+							// 轮播
+							postData("banner",{},function(res){
+								if(res.code == 200){
+									if(res.data != null){
+										that.bannerl = res.data;
+									}
+								}
+							});
+						},
+						// 搜索框值变化
+						changeSearch(value){
+							var that = this;
+							if(value != ""){
+								that.searchList = [];
+								that.searchGet.title = value;
+							}
+							that.page = 1;
+							that.searchGet.page = 1;
+						},
+						// 资源全局搜索
+						searchFun(){
+							var that = this;
+							that.searchGet.title = that.searchBox
+							that.isSearch = true;
+							that.searchList = [];
+							that.searchDatalist();
+						},
+						// 搜索数据
+						searchDatalist(){
+							var that = this;
+							postData("search",that.searchGet,function(res){
+								if(res.code == 200){
+									if(res.data.pagedata != null){
+										for(var i=0;i<res.data.pagedata.length;i++){
+											res.data.pagedata[i].bs_id1 = changeSourceType(res.data.pagedata[i].bs_id)
+											that.searchList.push(res.data.pagedata[i]);
+										}
+										that.total = res.data.total;
+										that.scroll();
+									}
+								}
+							})
+						},
+						//阻止冒泡
+						stopBlo(event){
+							event.stopPropagation();
+						},
+						// 专题详情
+						jumpDetail(template,id,title){
+							goClass(template,id,title)
+						},
+						// 资源详情
+						resourceDetail(bsid,id){
+							showDetail(bsid,id,3,1);
+						},
+						scroll(){
+							var that = this;
+							var scroll = document.getElementById('appWrap');
+							scroll.onscroll = function(){
+							    var t = scroll.scrollTop;  //离上方du的距zhi离
+							    var h =scroll.innerHeight || scroll.clientHeight || scroll.clientHeight; //可见dao宽度
+							    if( t >= scroll.scrollHeight -h ) {
+									that.page++;
+									if(that.page == that.total+1){
+										that.page = that.total
+									}else{
+										if(that.page <= that.total){
+											that.searchGet.page = that.page
+											that.searchDatalist()
+										}
+									}
+							    }
+							}
+						}
+					},
+					mounted() {
+						var that = this;
+						var time1 = new Date("2021-12-14").getTime();
+						var time = new Date().getTime();
+						if(time1 <= time){
+							$('html').removeClass("zhe")
+						}else{
+							$('html').addClass("zhe")
+						}
+						$('body').on('click',function(){
+							var app =$('#app')
+							that.isSearch = false;
+							that.searchGet.title = "";
+							that.searchBox = "";
+							that.page = 0;
+							that.total = 0;
+							$('.bottomBox').animate({
+								height:'24vh',
+								top:'72%'
+							},200)
+							$('.topBox').animate({
+								opacity:1,
+							},200)
+							$('.topNavBar2 .topNavItem').eq(0).addClass("topNavselect").siblings().removeClass('topNavselect');
+						})
+						if(getUrlParam('type') == 'click'){
+							that.slideUp()
+							$('.topNavBar2 .topNavItem').eq(2).addClass("topNavselect").siblings().removeClass('topNavselect');
+						}
+					},
+					created() {
+						var that = this;
+						that.dataList();
+						// 回车键搜索
+						$(document).keydown(function(event){
+							if(event.keyCode == 13){
+								that.searchFun();
+							}
+						})
+						if(user.dwid == 333){
+							that.alltitle = "党建专题"
+						}
+					}
+				})
+			}
+			// document点击恢复
+			
+			function goClass(template,id,title){
+				if(template == 1){
+					// 初心使命
+					window.location.href = 'cxsm.html'
+				}else if(template == 8){
+					// 党建文库
+					window.location.href = 'djwk.html'
+				}else if(template == 9){
+					// 两学一做
+					window.location.href = 'lxyz.html'
+				}else if(template == 7){
+					// 支部建设
+					window.location.href = 'zbjs.html'
+				}else if(template == 10){
+					// 三会一课
+					window.location.href = 'shyk.html'
+				}else if(template == 4){
+					// 新时代新思想
+					window.location.href = 'xsd.html'
+				}else if(template == 5){
+					// 从严治党
+					window.location.href = 'cyzd.html'
+				}else if(template == 6){
+					// 人民战役
+					window.location.href = 'rmzy.html'
+				}else if(template == 3){
+					// 精准扶贫
+					window.location.href = 'jzfp.html'
+				}else if(template == 2){
+					// 四史教育
+					window.location.href = 'history.html'
+				}else if(template == 11){
+					// 形势政策
+					window.location.href = 'xszc.html'
+				}else if(template == 12){
+					// 两会精神
+					window.location.href = 'lhjs.html'
+				}else if(template == 13){
+					// 十九大精神
+					window.location.href = 'ydyl.html?template=13'
+				}else if(template == 14){
+					// 一带一路
+					window.location.href = 'ydyl.html?template=14'
+				}else if(template == 15){
+					// 新中国成立70周年
+					window.location.href = 'seventy.html'
+				}else if(template == 16){
+					// 十九届三中全会
+					window.location.href = 'sswzt.html'
+				}else if(template == 17){
+					// 高校党建
+					window.location.href = 'gxdj.html'
+				}else if(template == 18){
+					// 学习讲话
+					window.location.href = 'xxjh.html'
+				}else if(template == 24){
+					// 先进典型
+					window.location.href = 'xjdx.html'
+				}else if(template == 23){
+					// 百年党史
+					window.location.href = 'bnds.html'
+				}else if(template == 25){
+					// 精神谱系
+					window.location.href = 'jsxp.html'
+				}else if(template == 26){
+					// 新征程面对面
+					window.location.href = 'xzc.html'
+				}else{
+					// 十九届三中全会
+					window.location.href = 'personalclass.html?title='+title+'&id='+id
+				}
+			}
+		</script>
+	</body>
+</html>

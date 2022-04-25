@@ -1,0 +1,184 @@
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<link rel="stylesheet" type="text/css" href="css/cyzd.css"/>
+	<link rel="stylesheet" type="text/css" href="lib/font-awesome/css/font-awesome.css"/>
+	<link rel="stylesheet" type="text/css" href="lib/swiper/css/swiper.min.css"/>
+	<title>从严治党</title>
+</head>
+<body>
+	<div id="app" v-cloak>
+		<div class="top">
+			<div class="control">
+				<a href="javascript:history.back(-1)"><i class="fa fa-mail-reply" aria-hidden="true"></i>返回&nbsp;&nbsp;|&nbsp;</a>
+				<a href="javascript:window.location='app.html';"><i class="fa fa-home" aria-hidden="true"></i>首页</a>
+			</div>
+			<div class="search-box">
+				<input type="text" placeholder="搜索"/><i  class="fa fa-search" aria-hidden="true"></i>
+			</div>
+		</div>
+		<div class="center">
+			<div class="centerLeft">
+				<div class="centerleftItem centerleftItem1" v-for="(item,index) in leftData">
+					<div class="child child1" @click="selectIndex = index" @mouseover="selectIndex = index">
+						<img :src="item.img" >
+					</div>
+					<div class="child2 childList1" v-if="index == selectIndex">
+						<div class="more" @click="toMore(item.list[0].ftid)">更多></div>
+						<div class="content">
+							<div class="imgItem" v-for="items in item.list" @click="goBag(items.ftid,items.id,items.title)"><img :src="items.img" alt=""><span>{{items.title}}</span></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="centerRight">
+				<div class="centerrightItem1">
+					<div class="title"><strong>政治立魂</strong>
+					</div>
+					<ul>
+						<li v-for="item in zzlh"  @click="zzlhDetail(item.id)">
+							<i class="fa fa-caret-right" aria-hidden="true"></i>
+							习近平论坚持全面从严治党(<span>{{item.title}}</span>)
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="foot"></div>
+	</div>
+	<script src="lib/jquery/jquery-3.5.1.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="lib/swiper/js/swiper.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/ajax.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/vue.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		window.onload = function(){
+			var app = new Vue({
+				el:"#app",
+				data:{
+					// 左侧数据
+					leftData:[
+						{img:"statics/images/cyzdList1.png",list:[{
+							title:"",img:"statics/images/loading.gif"
+						}]},
+						{img:"statics/images/cyzdList2.png",list:[{
+							title:"",img:""
+						}]},
+						{img:"statics/images/cyzdList3.png",list:[{
+							title:"",img:""
+						}]},
+						{img:"statics/images/cyzdList4.png",list:[{
+							title:"",img:""
+						}]}
+					],
+					// 默认左侧展开
+					selectIndex:0,
+					// get数据传参
+					getSoucre:{
+						template:5,
+						ft_id:""
+					},
+					// 政治立魂
+					zzlh:[],
+					// 书记访谈
+					zjft:[]
+				},
+				methods:{
+					// 更多页面
+					toMore(ftid){
+						window.location.href = 'cyzdItem.html?ftid='+ftid
+					},
+					// 资源包
+					dataBag(){
+						var that = this;
+						postData("special",that.getSoucre,function(res){
+							if(res.code == 200){
+								if(res.data != null || res.data.length != 0){
+									that.zzlh = res.data.con;
+									that.leftData[0].list = res.data.cate["1"]
+									that.leftData[1].list = res.data.cate["2"]
+									that.leftData[2].list = res.data.cate["3"]
+									that.leftData[3].list = res.data.cate["4"]
+									that.zjft = res.data.von;
+								}
+							}
+						})
+					},
+					// 打开资源包
+					showDetail(template,title,ft_id,rid){
+						openBag(template,title,ft_id,rid)
+					},
+					// 资源包直接跳转页面
+					goBag(ftid,id,title){
+						window.location.href = 'cyzdItem.html?ftid='+ftid+'&id='+id+'&type=isBag&title='+title;
+					},
+					// 详情页面
+					jumpDetail(bsid,id){
+						console.log(bsid,id)
+						showDetail(bsid,id,3)
+					},
+					// 政治立魂详情
+					zzlhDetail(id){
+						window.location.href = 'zzlhDetial.html?id='+id+'&type=3'
+					},
+					// 书记访谈详情
+					sjftDetail(id){
+						window.location.href = 'sjftDetial.html?id='+id+'&type=3'
+					}
+				},
+				mounted() {
+					var that = this;
+				},
+				created() {
+					var that = this;
+					that.dataBag();
+				},
+				watch:{
+					zjft:function(){
+						let that=this;
+						that.$nextTick(function(){
+							// 轮播
+							var swiper = new Swiper('.swiper-container', {
+								slidesPerView: 3,
+								autoplay: true,
+								centeredSlides: true,
+								loop: true,
+								navigation: {
+									nextEl: '.swiper-button-next',
+									prevEl: '.swiper-button-prev',
+								},
+								speed:1000,
+								autoplay:{
+									delay: 4000,  // 设置轮播的时间
+									disableOnInteraction: false,  // 这一行是为了避免手动滑动轮播图后，自动轮播失效，默认为true
+								},
+							});
+						})
+					}
+				 },
+			})
+		}
+	</script>
+</body>
+<script>
+	// $(function(){
+	// 	// 拉帘
+	// 	$('.child').mouseover(function(){
+	// 		$(this).siblings().show(200).parent().siblings().find('div.child2').hide();
+	// 	})
+	// 	// 单击搜索
+	// 	$('.search-box i').click(function(){
+	// 		if($('input').val() == ""){
+	// 			location.reload();
+	// 		}else{
+	// 			//搜索
+	// 		}
+	// 	})
+	// 	// 单击条幅跳转值更多资源页面
+	// 	$('.child').click(function(){
+	// 		window.location.href = '更多资源.html'
+	// 	})
+	// })
+</script>
+</html>

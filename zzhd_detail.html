@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+        <meta http-equiv="page-Enter" content="revealTrans(Duration=3.0,Transition=23)">
+		<link rel="stylesheet" type="text/css" href="css/index.css"/>
+		<link rel="stylesheet" type="text/css" href="lib/layui/css/layui.css"/>
+		<script src="lib/jquery/jquery-3.5.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/vue.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/setCookie.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/ajax.js" type="text/javascript" charset="utf-8"></script>
+		<script src="lib/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+		<script src="lib/jquery/qrcode.min.js" type="text/javascript" charset="utf-8"></script>
+		<title>内容详情</title>
+		<style type="text/css">
+			.topNavBar{
+				line-height: 4.5vh;
+				height: 4.5vh;
+			}
+			.mainBody{
+				height: 91.5vh;
+				margin-top: 6.5vh;
+				overflow-y: scroll;
+				overflow-x: hidden;
+				background: #fff;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="mainBody" id="app" v-cloak>
+			<!-- 进入页面 -->
+			<div class="topNavBar" style="color: #FFFAED !important;height: 5vh;line-height: 5vh;">
+				<span onclick="window.history.back(-1)">返回</span>
+				 &nbsp;| &nbsp;
+				<a style="color: #FFFAED !important;" href="app.html">首页</a>
+				<div class="detialTit">{{studyData.title}}</div>
+			</div>
+			<div class="detailTop">
+				<div class="detailImg">
+					<img :src="studyData.img" >
+				</div>
+				<div class="detailWords">
+					<div class="detailWordsTit">{{studyData.title}} 
+						<form style="
+							cursor: pointer;
+							display: inline-block;
+							vertical-align: middle;
+							font-size: 1.6vh;
+							height: 3.5vh;
+							line-height: 3.5vh;
+							background:rgb(198,10,13) ;
+							padding:0 1vw;
+							text-align: center;"
+							 action="http://dj.gxsentu.net/?c=d_two_api&m=exportWord" method="post">
+							<input hidden="hidden" type="text" name="hyid" :value="get.id"/>
+							<input hidden="hidden" type="text" name="flag" :value="get.flag"/>
+							<input
+							style="color: #fff !important;"
+							class="downSubmit" type="submit" value="下载会议记录"/>
+						</form>
+					</div>
+					
+					<div class="detailWordsCont">
+						<div class="detailGroup">
+							<span>发布组织：</span>
+							<span>{{pubUser}}</span>
+						</div>
+						<div class="detailType">
+							<span>活动类型：</span>
+							<span>{{studyData.type}}</span>
+						</div>
+					</div>
+					<div class="detailWordsCont">
+						<div class="detailTime">
+							<span>活动时间：</span>
+							<span>{{studyData.h_stime}}</span>
+						</div>
+						<div class="detailAddress">
+							<span>活动地点：</span>
+							<span>{{studyData.h_address}}</span>
+						</div>
+					</div>
+					<div class="detailWordsCont1">
+						<span>参与组织：</span>
+						<span>{{studyData.u_name}}</span>
+					</div>
+				</div>
+			</div>
+			<div class="detailBottom">
+				<div class="members">
+					<span>应到人员：</span>
+					<span>{{attendDy.length}}人</span>
+				</div>
+				<div class="members">
+					<span>实到人员：</span>
+					<span>{{hasAddtend.length}}人</span>
+				</div>
+				<div class="membersList">
+					<div class="member" v-for="item in hasAddtend">
+						<div class="memberImg">
+							<img src="http://dj.gxsentu.net/statics/images/xcx/moren_img.png" >
+						</div>
+						<div class="memberName">{{item.u_name}}</div>
+					</div>
+				</div>
+				<div class="studyData">
+					<div class="studyDataTit">活动资料：</div>
+					<div class="studyDataCont" v-if="studyFile.length > 0">
+						<div class="studyDataItem" v-for="(item,index) in studyFile">
+							<div class="studyDataItemImg">
+								<img :src="item.sz_img" >
+								<p class="typeIcon">{{item.bs_id1}}</p>
+							</div>
+							<div class="studyDataItemWords">{{item.title}}</div>
+							<div class="studyDataItemBtn">
+								<form class="sBtn1" style="width: 4vw;
+    text-align: center;" action="http://dj.gxsentu.net/?c=d_two_api&m=downResouce" method="post">
+									<input hidden="hidden" type="text" name="type" :value="item.type"/>
+									<input hidden="hidden" type="text" name="upload_flag" :value="item.type == 9?item.file_flag:''"/>
+									<input hidden="hidden" type="text" name="upload_id" :value="item.rid"/>
+									<input hidden="hidden" type="text" name="classs" :value="item.bs_id"/>
+									<input hidden="hidden" type="text" name="uid" :value="uid"/>
+									<input hidden="hidden" type="text" name="flag" :value="flag"/>
+									<input hidden="hidden" type="text" name="ment_url" :value="item.download"/>
+									<input hidden="hidden" type="text" name="title" :value="item.title"/>
+									<input class="downSubmit" type="submit" value="下载"/>
+								</form>
+								<div class="sBtn2" v-if="item.bs_id!=10&&item.bs_id!=9" @click="showStudyDetail(item.hyid,item.rid,index)">查看</div>
+							</div>
+						</div>
+					</div>
+					<div class="studyDataCont" style="text-align: center;
+														font-size: 2vh;
+														color: #333333;" v-if="studyFile.length == 0">暂无学习资料</div>
+				</div>
+			</div>
+			<!-- 签到 -->
+			<div class="qd" @click="openQdBox">
+				<img src="statics/images/qd.png" >
+			</div>
+			<!-- 签到遮罩 -->
+			<div class="qdmark" v-if="qd == true">
+				<div class="qdCode">
+					<div class="qdTit">实时签到</div>				
+					<div class="close" @click="qd = false">×</div>
+					<div class="codeWrap">
+						<div class="code1">
+							<div class="code1Tit">二维码签到</div>
+							<div class="codeImg" id="qrcode">
+								
+							</div>
+							<div class="code1Tishi">打开新时代党建app扫一扫签到</div>
+						</div>
+						<div class="code2">
+							<div class="code1Tit" style="text-align: left;">{{studyData.title}}</div>
+							<div class="members">
+								<span>活动时间：</span>
+								<span>{{studyData.h_stime}}</span>
+							</div>
+							<div class="members">
+								<span>应到人员：</span>
+								<span>{{attendDy.length}}人</span>
+							</div>
+							<div class="members">
+								<span>实到人员：</span>
+								<span>{{hasAddtend.length}}人</span>
+							</div>
+							<div class="nameList">
+								<div class="nameItem" v-for="item in hasAddtend">{{item.u_name}}</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript">
+			window.onload = function(){
+				var app = new Vue({
+					el:"#app",
+					data:{
+						uid:user.id,
+						flag:user.flag,
+						// 签到弹窗
+						qd:false,
+						// get数据
+						get:{
+							id:"",
+							flag:user.flag,
+							user_id:user.id
+						},
+						status:0,
+						studyData:{},
+						// 发布组织
+						pubUser:user.dw,
+						// 参与人员
+						attendDy:[],
+						// 实到人员
+						timeDy:[],
+						// 活动资料
+						studyFile:[],
+						// 监听签到
+						signing:null,
+						// 已签到
+						hasAddtend:[]
+					},
+					methods:{
+						// 开始活动
+						startActive(){
+							var that = this;
+							window.location.href = 'jzxx_detail.html'
+						},
+						// 学习内容
+						dataList(){
+							var that = this;
+							postData("activityDetail",that.get,function(res){
+								if(res.code == 200){
+									if(res.data != null){
+										if(res.data.img == "" ||res.data.img == null ){
+											res.data.img = "statics/images/zzhd.png"
+										}else{
+											if(res.data.img.search("http") == -1){
+												res.data.img = 'http://'+res.data.ym+'/'+res.data.img;
+											}else{
+												
+											}
+										}
+										res.data.h_stime = toNumber1(res.data.h_stime);
+										if(res.data.dyname != null && res.data.dyname != ""){
+											that.attendDy = res.data.dyname.split(",");
+										}
+										that.studyFile = res.data.file;
+										that.studyData = res.data;
+										for(var i=0;i<that.attendDy.length;i++){
+											if(that.attendDy[i] == ""){
+												that.attendDy.splice(i,1)
+											}
+										}
+										if(res.data.file.length > 0){
+											for(var i=0;i<res.data.file.length;i++){
+												var uuid = res.data.file[i].src.split("/index")[0].split("h5/")[1];
+												res.data.file[i].bs_id1 = changeSourceType(res.data.file[i].bs_id);
+												if(res.data.file[i].bs_id == 1){
+													// 下载文件
+													res.data.file[i].download = 'http://st.topics.gmw.cn/p3/dj/ppt/'+uuid+'.pptx';
+												}else if(res.data.file[i].bs_id == 3){
+													
+												}else if(res.data.file[i].bs_id == 8){
+													res.data.file[i].download = 'http://st.topics.gmw.cn/p3/dj/pdf/'+uuid+'.docx';
+												}
+											}
+										}
+										that.status = res.data.status;
+										that.listenSignin();
+									}
+								}
+							})
+						},
+						// 活动中资源详情
+						showStudyDetail(hyid,rid,index){
+							var that = this;
+							window.location.href = 'detailClass.html?id='+rid+'&type=1'+'&type1=focus'+'&hyid='+hyid+'&hy_flag='+that.studyData.hy_flag+'&index='+index;
+						},
+						// 打开签到
+						openQdBox(){
+							var that = this;
+							that.qd = true;
+							that.$nextTick(() => {
+								document.getElementById('qrcode').innerHTML = '';
+								let link = 'http://dj.gxsentu.net/dj2.0/signin.html&hyid='+that.get.id+'&hyflag='+that.studyData.hy_flag+'&startTime='+that.studyData.h_stime
+								new QRCode('qrcode',{text:link})
+							})
+						},
+						// 监听签到人员
+						listenSignin(){
+							let that = this;
+							var data = {
+								hyid :that.get.id,
+								flag :that.studyData.hy_flag,
+							}
+							postDataThree("signLog",data,function(res){
+								that.hasAddtend = res.log
+							})
+						},
+						// 移除签到
+						removeListen(){
+							let that = this;
+							clearInterval(that.signing);
+							that.signing = null;
+						},
+						downloadLog(){
+							// 下载会议记录
+							var that = this;
+							postData("exportWord",{
+								hyid:that.get.id,
+								flag:user.flag
+							},function(res){
+								
+							})
+						}
+					},
+					created() {
+						var that = this;
+						that.get.id = getUrlParam("id");
+						that.dataList();
+					},
+					watch:{
+						qd(val){
+							var that = this;
+							if(val){
+								that.signing = setInterval(() => {
+									that.listenSignin();
+								},1000)
+							}else{
+								that.removeListen();
+								that.dataList();
+							}
+						}
+					}
+				})
+			}
+		</script>
+	</body>
+</html>

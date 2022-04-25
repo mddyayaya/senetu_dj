@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>精准扶贫</title>
+		<link rel="stylesheet" type="text/css" href="css/jzfp.css"/>
+		<link rel="stylesheet" type="text/css" href="lib/swiper/css/swiper.min.css"/>
+		<link rel="stylesheet" type="text/css" href="lib/font-awesome/css/font-awesome.css"/>
+		<link rel="stylesheet" type="text/css" href="css/selectbox.css"/>
+	</head>
+	<body>
+		<!-- 顶部 -->
+		<div id="app" v-cloak>
+			<div class="top-nav">
+				<div class="control">
+					<a href="javascript:history.back(-1)"><i class="fa fa-mail-reply" aria-hidden="true"></i>返回&nbsp;&nbsp;|&nbsp;</a>
+					<a href="javascript:window.location='app.html';"><i class="fa fa-home" aria-hidden="true"></i>首页</a>
+				</div>
+			</div>
+			<div class="nav">
+				<ul>
+					<li @click="jumpList(1)"><span>扶贫路上</span>|</li>
+					<li @click="jumpList(2)"><span>政策解读</span>|</li>
+					<li @click="jumpList(3)"><span>优秀扶贫案例</span></li>
+				</ul>
+			</div>
+			<div class="main_body clear">
+				<div class="jzfp_top1 swiper-container">
+					<div class="swiper-wrapper">
+						<div class="jzfp_top swiper-slide" v-for="item in dataBagList" @click="jumpDetail(item.array.bs_id,item.array.r_id)">
+							<div class="left_img"><img :src="item.array.sz_img" ></div>
+							<div class="left_word">
+								<div class="jzfp_tit">{{item.array.title}}</div>
+								<div class="jzfp_p">{{item.array.content}}</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="jzfp_dh">
+					<div class="line_wrapper">
+						<div class="line">
+							<div id="line">
+								<div class="bototm_line" v-for="(item,index) in dataBagList">
+									<div class="point" :class="swiperShow == index?'activeSpan':''"></div>
+									<div class="time" :class="swiperShow == index?'red_color':''">{{item.title}}</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="control_btn prev swiper-button-prev"></div>
+				<div class="control_btn next swiper-button-next"></div>
+			</div>
+		</div>
+	</body>
+	<script src="lib/jquery/jquery-3.5.1.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="lib/swiper/js/swiper.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/ajax.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/vue.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		window.onload = function(){
+			var app = new Vue({
+				el:"#app",
+				data:{
+					// 底部轮播
+					bottomSlide:[],
+					// get数据传参
+					getSoucre:{
+						template:3,
+						ft_id:1
+					},
+					// 数据
+					dataBagList:[],
+					// 轮播下标
+					swiperShow:0
+				},
+				methods:{
+					// 中间数据
+					dataBag(){
+						var that = this;
+						that.dataBagList = [];
+						postData("special",that.getSoucre,function(res){
+							if(res.code == 200){
+								if(res.data.type.length != 0){
+									that.dataBagList = res.data.type;
+								}else{
+									
+								}
+							}
+						})
+					},
+					// 顶部导航跳转
+					jumpList(index){
+						var that = this;
+						if(index == 1){
+							that.getSoucre.ft_id = index;
+						}else{
+							window.location.href='jzfpList.html?ftid='+index
+						}
+					},
+					// 详情
+					jumpDetail(bsid,id){
+						showDetail(bsid,id,3,1)
+					}
+				},
+				mounted() {
+					var that = this;
+					setTimeout(function(){
+						// 轮播
+						var swiper = new Swiper('.jzfp_top1',{
+							touchRatio : 0.5,
+							navigation: {
+								nextEl: '.swiper-button-next',
+								prevEl: '.swiper-button-prev',
+							},
+							mousewheel:true
+						});
+						$('#line').css({
+							width:$('.jzfp_top').length * $('.bototm_line').outerWidth()
+						})
+						swiper.on('slideChangeTransitionStart', function(){
+							that.swiperShow = swiper.activeIndex
+							if(swiper.activeIndex*$('.bototm_line').outerWidth() <= ($('.jzfp_top').length -12) * $('.bototm_line').outerWidth()){
+								$('#line').animate({
+									left:-(swiper.activeIndex*$('.bototm_line').outerWidth())
+								},800)
+							}
+						});
+						$('.bototm_line').click(function(){
+							var index = $(this).index();
+							swiper.slideTo(index, 100, false); 
+							that.swiperShow = index
+						});
+					},300)
+				},
+				created() {
+					var that = this;
+					that.dataBag();
+				},
+			})
+		}
+	</script>
+	<script type="text/javascript">
+		$(function(){
+		})
+	</script>
+</html>

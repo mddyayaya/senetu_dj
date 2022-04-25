@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+        <meta http-equiv="page-Enter" content="revealTrans(Duration=3.0,Transition=23)">
+		<link rel="stylesheet" type="text/css" href="css/index.css"/>
+		<link rel="stylesheet" type="text/css" href="lib/font-awesome/css/font-awesome.css"/>
+		<link rel="stylesheet" type="text/css" href="lib/layui/css/layui.css"/>
+		<script src="lib/jquery/jquery-3.5.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="lib/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/setCookie.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/ajax.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/vue.min.js" type="text/javascript" charset="utf-8"></script>
+		<title>重点党课</title>
+		<style type="text/css">
+			.searchBox{
+				display: flex;
+				justify-content: space-between;
+			}
+		</style>
+	</head>
+	<body>
+		<script src="js/nav.js" type="text/javascript" charset="utf-8"></script>
+		<div class="mainBody" id="app" v-cloak>
+			<!-- 标题 -->
+			<div class="flagTit">
+				<div class="flagTitIcon">重点党课</div>
+				<div class="backBtn" onclick="window.history.back(-1)">
+					<img src="statics/images/back_btn.png" >
+					<span>返回</span>
+				</div>
+			</div>
+			<!-- 搜索框 -->
+			<div class="searchBox">
+				<div id="">
+					<div style="font-size: 2vh !important;" class="fenlei" :class="fenleiSelect == 0?'fenleiSelect':''" @click="selectType(0)">全部</div>
+					<div class="fenlei" :class="fenleiSelect == 5?'fenleiSelect':''" @click="selectType(5)">精品党课</div>
+					<div class="fenlei" :class="fenleiSelect == 8?'fenleiSelect':''" @click="selectType(8)">学习热榜</div>
+				</div>
+				<div id="searchclass">
+					<div>内容搜索：</div>
+					<div>
+						<input v-model="searchbox" type="text" name="" id="" value="" />
+						<i @click="search" class="fa fa-search" aria-hidden="true"></i>
+					</div>
+				</div>
+			</div>
+			<!-- 内容列表 -->
+			<div class="contList" id="appWrap">
+				<div>
+					<!-- 此处循环 -->
+					<div class="contListItem1" v-for="(item,index) in dataList">
+						<div class="topImg">
+							<img :src="item.sz_img" >
+							<p class="typeIcon" v-show="index<3">最新</p>
+						</div>
+						<div class="bottomWords1">
+							<div class="bbTit">{{item.title}}</div>
+							<div class="bbTime bbTime1">
+								<div class="bbtime1">时间：{{item.addtime}}</div>
+								<div class="bbtime1">{{item.time}}课时</div>
+							</div>
+							<div class="bbbtn1">
+								<div>
+									<span v-if="item.speed == 1">未开始</span>
+									<span v-if="item.speed == 2">已学{{(item.hour * 45 / item.time).toFixed(2)}}%</span>
+									<span class="finshed" v-if="item.speed == 3">已学完</span>
+								</div>
+								<div v-if="item.speed == 1" @click="startStudy(item.bs_id,item.id)">开始学习</div>
+								<div v-if="item.speed == 2" @click="startStudy(item.bs_id,item.id)">继续学习</div>
+								<div v-if="item.speed == 3" @click="startStudy(item.bs_id,item.id)">继续学习</div>
+							</div>
+						</div>
+					</div>
+					<div class="null" v-show="dataList.length == 0">暂无数据</div>
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript">
+			window.onload = function(){
+				var app = new Vue({
+					el:"#app",
+					data:{
+						step:1,
+						// 个体数据传参
+						get:{
+							page:1,
+							tid:"",
+							title:"",
+							flag:user.flag,
+							user_id:user.id
+						},
+						page:1,
+						total:1,
+						// 数据循环
+						dataList:[],
+						// 导航条分类筛选
+						fenleiSelect:0,
+						// 文字搜索
+						searchbox:"",
+						// 滚动加载
+						onFetching:false,
+					},
+					methods:{
+						// 开始活动
+						startActive(){
+							var that = this;
+							window.location.href = 'jzxx_detail.html'
+						},
+						// 活动中资源详情
+						showStudyDetail(){
+							var that = this;
+							window.location.href = 'detailClass.html'
+						},
+						// 分类筛选
+						selectType(type){
+							var that = this;
+							that.fenleiSelect = type;
+							that.page = 1;
+							that.get.page = 1;
+							that.get.tid = type;
+							that.get.title = "";
+							that.get.searchbox = "";
+							that.dataList = [];
+							that.importClass();
+						},
+						importClass(){
+							var that = this;
+							// 重点党课列表
+							postData("keyParty",that.get,function(res){
+								if(res.code == 200){
+									if(that.get.title == ""){
+										if(res.data.pagedata != null){
+											for(var i=0;i<res.data.pagedata.length;i++){
+												res.data.pagedata[i].time = changeClasstime(res.data.pagedata[i].time);
+												res.data.pagedata[i].addtime = toNumber(res.data.pagedata[i].addtime);
+												that.dataList.push(res.data.pagedata[i]);
+											}
+											that.total = res.data.total;
+										}
+									}else{
+										if(res.data.pagedata != null){
+											that.dataList = res.data.pagedata
+										}else{
+											that.dataList = []
+										}
+									}
+								}
+							})
+						},
+						// 搜索
+						search(){
+							var that = this;
+							that.page = 1;
+							that.total = 1;
+							that.get.title = that.searchbox;
+							that.importClass();
+						},
+						scroll(){
+							var that = this;
+							var scroll = document.getElementById('appWrap');
+							scroll.onscroll = function(){
+							    var t = scroll.scrollTop;  //离上方du的距zhi离
+							    var h =scroll.innerHeight || scroll.clientHeight || scroll.clientHeight; //可见dao宽度
+							    if( t >= scroll.scrollHeight -h ) {
+									that.page++;
+									if(that.page == that.total+1){
+										that.page = that.total
+									}else{
+										if(that.page <= that.total){
+											that.get.page = that.page
+											that.importClass()
+										}
+									}
+							    }
+							}
+						},
+						// 开始学习
+						startStudy(bsid,id,type){
+							showDetail(bsid,id,2,1)
+						},
+					},
+					mounted() {
+						var that = this;
+						that.scroll();
+					},
+					created() {
+						var that = this;
+						that.importClass();
+						// 回车键搜索
+						$(document).keydown(function(event){
+							if(event.keyCode == 13){
+								that.get.title = that.searchbox;
+								that.importClass();
+							}
+						})
+					}
+				})
+			}
+		</script>
+	</body>
+</html>

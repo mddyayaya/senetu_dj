@@ -1,0 +1,160 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>形势政策二级页面</title>
+		<link rel="stylesheet" type="text/css" href="css/xszc.css"/>
+		<link rel="stylesheet" type="text/css" href="lib/font-awesome/css/font-awesome.css"/>
+		<link rel="stylesheet" type="text/css" href="lib/layui/css/layui.css"/>
+	</head>
+	<body>
+		<!-- 头 -->
+		<div class="top-nav">
+			<div class="control">
+				<a href="javascript:history.back(-1)"><i class="fa fa-mail-reply" aria-hidden="true"></i>返回&nbsp;&nbsp;|&nbsp;</a>
+				<a href="javascript:window.location='app.html';"><i class="fa fa-home" aria-hidden="true"></i>首页</a>
+			</div>
+		</div>
+		<div id="app" v-cloak>
+			<div class="search-box">
+				搜索
+				<input type="text" v-model="searchBox" class="searcha" /><i class="fa fa-search" @click="search" aria-hidden="true"></i>
+			</div>
+			<div class="mainBody erjiMainbody">
+				<div class="erjileft">
+					<ul class="layui-nav layui-nav-tree" lay-filter="test">
+					  <li class="layui-nav-item ">
+					    <a href="javascript:;">政策解读({{leftData.length}})</a>
+					    <dl class="layui-nav-child">
+					      <dd><a href="javascript:;"  v-for="item in leftData" :class="selectIndex == item.id?'red_color':''" @click="selectData(1,item.id,item.type)">{{item.type}}</a></dd>
+					    </dl>
+					  </li>
+					  <li class="layui-nav-item">
+					    <a href="javascript:;">形势报告</a>
+					    <dl class="layui-nav-child">
+					      <dd><a href="javascript:;"  v-for="item in leftData2" :class="selectIndex == item.id?'red_color':''" @click="selectData(2,item.id,item.type)">{{item.type}}</a></dd>
+					    </dl>
+					  </li>
+					</ul>
+				</div>
+				<div class="erjiright">
+					<div class="searchRes" v-show="centerGet.kw != ''">关于 "<span>{{centerGet.kw}}</span>" 的搜索共<span class="num">{{infoData.length}}</span>条</div>
+					<div class="searchRes" v-show="centerGet.kw == ''"></div>
+					<div class="erjirightCont">
+						<div class="centerContent" v-for="item in infoData" @click="jumpDetail(item.id,item.bs_id)">
+							<div class="centerContTitle">{{item.title}}</div>
+							<div class="centerContContent">{{item.content}}</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script src="lib/jquery/jquery-3.5.1.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/ajax.js" type="text/javascript" charset="utf-8"></script>
+	<script src="lib/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/vue.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		window.onload = function(){
+			var app = new Vue({
+				el:"#app",
+				data:{
+					leftData:[],
+					leftData2:[],
+					infoData:[],
+					searchBox:"",
+					centerGet:{
+						ft_id:1,
+						cate:"",
+						kw:""
+					},
+					selectIndex:1
+				},
+				methods:{
+					// 左侧数据
+					leftWrap(){
+						var that = this;
+						that.leftData = [];
+						that.leftData2 = [];
+						postData("xszcL",{cate:1},function(res){
+							if(res.code == 200){
+								if(res.data.length>0){
+									that.leftData = res.data
+								}
+							}
+						})
+						postData("xszcL",{cate:2},function(res){
+							if(res.code == 200){
+								if(res.data.length>0){
+									that.leftData2 = res.data
+								}
+							}
+						})
+					},
+					// 搜索结果
+					searchData(){
+						var that = this;
+						that.infoData = [];
+						postData("xszcInfo",that.centerGet,function(res){
+							if(res.code == 200){
+								if(res.data.length>0){
+									that.infoData = res.data
+								}
+							}
+						})
+					},
+					// 输入框搜索
+					search(){
+						var that = this;
+						that.centerGet.kw = that.searchBox;
+						that.centerGet.ft_id = "";
+						that.centerGet.cate = "";
+						that.searchData();
+					},
+					// 左侧列表导航筛选
+					selectData(index,cate,name){
+						var that = this;
+						that.selectName = name;
+						that.selectIndex = cate;
+						that.centerGet.ft_id = cate;
+						that.centerGet.cate = index;
+						that.centerGet.kw = "";
+						that.searchBox = "";
+						that.searchData()
+					},
+					// 详情页跳转
+					jumpDetail(id,bsid){
+						showDetail(bsid,id,3)
+					},
+				},
+				mounted() {
+					layui.use(['element','layer'], function(){
+						var element = layui.element;
+						var layer = layui.layer;
+					});
+				},
+				created() {
+					var that = this;
+					var kw = getUrlParam("kw");
+					that.leftWrap();
+					if(window.location.href.search("kw") != -1){
+						that.centerGet.kw = kw;
+					}else{
+						that.centerGet.kw = that.searchBox;
+					}
+					that.searchData();
+					// 回车键搜索
+					$(document).keydown(function(event){
+						if(event.keyCode == 13){
+							that.centerGet.kw = that.searchBox;
+							that.centerGet.ft_id = "";
+							that.centerGet.cate = "";
+							that.searchData();
+						}
+					})
+				}
+			})
+		}
+	</script>
+</html>

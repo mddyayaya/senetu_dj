@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>两学一做</title>
+		<link rel="stylesheet" type="text/css" href="css/selectbox.css"/>
+		<link rel="stylesheet" type="text/css" href="css/lxyz.css"/>
+		<link rel="stylesheet" type="text/css" href="lib/font-awesome/css/font-awesome.css"/>
+		<script src="lib/jquery/jquery-3.5.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/ajax.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/vue.min.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<!-- 头部 -->
+		<div id="app" v-cloak>
+			<!-- 遮罩 -->
+			<div class="blackMark" onclick="closeBag()"></div>
+			<div class="wrap-top">
+				<div class="control">
+					<a href="javascript:history.back(-1)"><i class="fa fa-mail-reply" aria-hidden="true"></i>返回&nbsp;&nbsp;|&nbsp;</a>
+					<a href="javascript:window.location='app.html';"><i class="fa fa-home" aria-hidden="true"></i>首页</a>
+				</div>
+				<div class="logo-word">
+					<img src="statics/images/word-logo.png" />
+				</div>
+				<div class="searchBox1"><input v-model="searchBox" type="text" placeholder="输入你想搜索的内容" /><a href="javascript:;"><span @click="search">搜索</span></a></div>
+				<div class="select-box">
+					<div class="select-box-item" v-for="(item,index) in topNavList">
+						<div class="title" @click="seletZt('',item.id,'')">{{item.title}}</div>
+						<div class="content-item">
+							<div class="content-item-i" :class="getSoucre.h == items.id &&　getSoucre.ca == item.id?'active':''" v-for="(items,key) in item.ca" @click="seletZt(items.caid,item.id,items.id)">{{items.title}}</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- 书架 -->
+			<div class="book" v-if="getSoucre.ca == 2 || getSoucre.ca == 1">
+				<!-- 第一行 -->
+				<div v-for="(item,index) in dataBagList">
+					<div class="bookrack" @click="showList(index)">
+						<div class="book-paper"><img src="statics/images/dangzhang.png"/></div>
+						<div class="book-show">
+							<p class="p1">{{item.title}}</p>
+							<p class="p2">{{item.content}}</p>
+						</div>
+						<div class="show-list"><i style="display: none;" title="收起" class="fa  fa-angle-down" aria-hidden="true"></i><i class="fa  fa-angle-right" title="展开" aria-hidden="true"></i></div>
+					</div>
+					<!-- 展开窗口 -->
+					<div class="erjiWin" v-if="index == showIndex">
+						<div class="book-show" v-for="items in item.ca" v-if="getSoucre.ca != 3"  @click="jumpDetail(items.bs_id,items.id)">
+							<p class="p1">{{items.title}}</p>
+							<p class="p2">{{items.content}}</p>
+						</div>
+						<div class="null" v-if="item.ca.length == 0">暂无数据</div>
+					</div>
+				</div>
+				<div class="null" v-show="dataBagList == null || dataBagList.length == 0">未找到您要搜索的内容</div>
+			</div>
+			<!-- 楷模 -->
+			<div class="km" v-if="getSoucre.ca == 3">
+				<!-- 此处添加v-for循环遍历 -->
+				<div class="km-item" v-for="item in dataBagList" @click="showDetail(9,item.title,item.id,item.hid)"><a><img :src="item.img"/></a><span>{{item.title}}</span></div>
+			</div>
+			<!-- 展开资源包 -->
+			<div class="resource-packages">
+				<div class="close-icon" onclick="closeBag()">×</div>
+				<div class="select-content">
+				<div class="name1">第一批</div>
+					<div class="select-content-item">
+						<div class="main-body-item body-item1" id="PPT1" @click="jumpDetail(item.bs_id,item.id)"><a><img src="statics/images/index1.jpg"/></a><a class="tips">PPT</a><span>习近平新时代中国特色社会主义理论体系</span></div>
+					</div>
+				</div>
+				<!-- 搜索结果为空 -->
+				<div class="null" v-show="dataBagList == null || dataBagList.length == 0">未找到您要搜索的内容</div>
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript">
+		window.onload = function(){
+			var app = new Vue({
+				el:"#app",
+				data:{
+					topNavList:[],
+					dataBagList:[],
+					// get数据传参
+					getSoucre:{
+						template:9,
+						ca:1,
+						h:"",
+						kw:"",
+					},
+					searchBox:"",
+					showIndex:""
+				},
+				methods:{
+					// 导航
+					nav(){
+						var that = this;
+						that.topNavList = [];
+						postData("special",that.getSoucre,function(res){
+							if(res.code == 200){
+								if(res.data.cate.length > 0){
+									that.topNavList = res.data.cate;
+									that.dataBag();
+								}
+							}else{
+								
+							}
+						});
+					},
+					// 资源包
+					dataBag(){
+						var that = this;
+						that.dataBagList = [];
+						postData("lxyz",that.getSoucre,function(res){
+							if(res.code == 200){
+								if(res.data.cont.length > 0){
+									that.dataBagList = res.data.cont
+								}
+							}else{
+								
+							}
+						});
+					},
+					// 展开书架
+					showList(index){
+						var that = this;
+						that.showIndex = index;
+					},
+					// 搜索
+					search(){
+						var that = this;
+						that.getSoucre.kw = that.searchBox;
+						that.dataBag();
+					},
+					// 选择专题
+					seletZt(id,index,key){
+						var that = this;
+						that.getSoucre.ca = index;
+						that.getSoucre.h = key;
+						that.dataBag();
+					},
+					// 打开资源包
+					showDetail(template,title,ft_id,rid){
+						openBag(template,title,ft_id,rid)
+					},
+					jumpDetail(bsid,id){
+						showDetail(bsid,id,3,1)
+					}
+				},
+				created() {
+					var that = this;
+					that.nav();
+					// 回车键搜索
+					$(document).keydown(function(event){
+						if(event.keyCode == 13){
+							that.getSoucre.kw = that.searchBox;
+							that.dataBag()
+						}
+					})
+				}
+			})
+		}
+	</script>
+</html>

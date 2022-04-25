@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="css/index.css"/>
+		<script src="lib/jquery/jquery-3.5.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<style type="text/css">
+			iframe{
+				position: fixed;
+				z-index: 10;
+				height: 100%;
+				width: 100%;
+				border: none;
+				background: none;
+			}
+			#conto{
+				padding: 0.5vh 2vh;
+				position: fixed;
+				z-index: 100;
+				top: 0;
+				left: 0;
+				color: #fff;
+				font-size: 2vh;
+			}
+			#conto a{
+				color: #fff;
+				font-size: 2vh;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="conto" style="top: 2vh;">
+			<a class="back" href="javascript:window.location='link2.html';"><i class="fa fa-mail-reply" aria-hidden="true"></i>返回&nbsp;&nbsp;|&nbsp;</a>
+			<a class="index" href="javascript:window.location='app.html';"><i class="fa fa-home" aria-hidden="true"></i>首页</a>
+		</div>
+		<iframe src="" width="" height="" target="_self" target='_self'></iframe>
+	</body>
+	<script type="text/javascript">
+		var arr = [
+			{title:"中国人民政治协商会议全国委员会",link:"http://www.cppcc.gov.cn"},
+			{title:"中华全国工商业联合会",link:"http://www.acfic.org.cn"},
+			{title:"人民政协网",link:"http://www.rmzxb.com.cn/index.shtml"},
+			{title:"中国政协传媒网",link:"http://www.zgzx.com.cn"},
+			{title:"中国法院网",link:"https://www.chinacourt.org/index.shtml"},
+			{title:"河北省政协网",link:"http://www.hebzx.gov.cn"},
+			{title:"河北省工商业联合会河北省总工会",link:"http://hebgsl.org.cn/"},
+			{title:"全国政协十三届四次会议--时政--人民网",link:"http://lianghui.people.com.cn/2021cppcc/"},
+			{title:"求是网",link:"http://www.qstheory.cn"},
+		]
+		var id = getUrlParam("id");
+		if(id == 4){
+			$('body').css('background',"#fff !important");
+		}else if(id == 1){
+			$('#conto').css('top',"3vh")
+		}
+		$('#conto a').css({'color':'#bb0000','font-weight':'bold'})
+		$('iframe').attr('src',arr[id-1].link);
+		function getUrlParam(name) {
+		 var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+			var r = window.location.search.substr(1).match(reg);
+			if (r!=null){
+				return decodeURI(r[2]);
+			} else{
+				return null;
+			}    
+		}
+	</script>
+</html>

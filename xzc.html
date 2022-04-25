@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>新征程面对面</title>
+		<link rel="stylesheet" type="text/css" href="css/xzc.css"/>
+		<link rel="stylesheet" type="text/css" href="lib/layui/css/layui.css"/>
+	</head>
+	<body>
+		<div class="control">
+			<div onclick="history.back()">返回</div>
+			<div>|</div>
+			<div onclick="location.href='app.html'">首页</div>
+		</div>
+		<div id="app">
+			<div class="title title2">
+				<img src="statics/images/xzc/title.png" >
+			</div>
+			<div class="title title1">
+				<img src="statics/images/xzc/title1.png" >
+			</div>
+			<div class="centerbook">
+				<div class="booksub">
+					<div class="xdd">
+						<div class="xdditem" @click="selectBooks(1)" :class="{selectBook:select==1}">
+							<img src="statics/images/xzc/xdd.png" >
+						</div>
+						<div class="xdditem" @click="selectBooks(2)" :class="{selectBook:select==2}">
+							<img src="statics/images/xzc/xzc.png" >
+						</div>
+					</div>
+				</div>
+				<div class="bookleft">
+					<div class="mulu">
+						<div class="mulu_title" v-if="select == 2">新征程面对面</div>
+						<div class="mulu_title" v-if="select==1">习近平洽谈治国理政</div>
+						<div class="mulu_item" 
+						@click="changeText(index)"
+						v-for="(item,index) in datas" :class="{selectMulu:current == index}">{{item.title}}</div>
+					</div>
+					<!-- <div class="prev" v-if="current>0" @click="prev">
+						<img src="statics/images/xzc/prev.png" >
+					</div>
+					<div class="backbtn" v-if="current>0"  @click="current = 0">
+						<img src="statics/images/xzc/backindex.png" >
+					</div> -->
+				</div>
+				<div class="bookright">
+					<div class="per_page" @click="jumpDetail()">
+						<div class="book_top">
+							<img :src="showImg" >
+						</div>
+						<div class="booklist">
+							<div class="booktitle">{{showTitle}}</div>
+							<div class="book_content">
+								简介：{{showContent}}
+							</div>
+						</div>
+					</div>
+					<div class="next" @click="next">
+						<div>下一章</div>
+						<img src="statics/images/xzc/next.png" >
+					</div>
+				</div>
+			</div>
+		</div>
+		<script src="lib/jquery/jquery-3.5.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/vue.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/turn.js" type="text/javascript" charset="utf-8"></script>
+		<script src="lib/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/ajax.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			var app = new Vue({
+				el:"#app",
+				data(){
+					return{
+						select:1,
+						current:0,
+						datas:[],
+						showImg:"",
+						showTitle:"",
+						showContent:"",
+						total:0,
+						id:1//1:治国理政2：面对面
+					}
+				},
+				methods:{
+					datalist(){
+						var that = this;
+						postData("special",{
+							template:26,
+							resid:that.id
+						},function(res){
+							if(res.code == 200){
+								that.datas  = res.data;
+								that.total = res.data.length;
+								that.showDetail();
+							}else{
+								
+							}
+						});
+					},
+					showDetail(){
+						var that = this;
+						that.showImg = that.datas[that.current].sz_img;
+						that.showTitle = that.datas[that.current].title;
+						that.showContent = that.datas[that.current].content;
+					},
+					changeText(index){
+						this.current  = index;
+						this.showDetail();
+					},
+					next(){
+						if(this.current<this.total-1){
+							this.current++;
+							$('.per_page_left').hide();
+							this.showDetail()
+							$('.per_page_left').fadeIn(500);
+							$('.per_page').hide();
+							$('.per_page').fadeIn(500);
+						}else{
+							alert("已是最后一页")
+						}
+					},
+					prev(){
+						if(this.current>1){
+							this.current--;
+							$('.per_page_left').hide();
+							$('.per_page_left').fadeIn(500);
+							$('.per_page').hide();
+							$('.per_page').fadeIn(500);
+						}
+					},
+					// 选择书本
+					selectBooks(index){
+						this.select = index;
+						this.current = 0;
+						this.id = index
+						this.datalist();
+						$('.mulu').scrollTop(0)
+						if(this.select == 1){
+							$(".title1").fadeIn(500);
+							$(".title2").hide();
+						}else{
+							$(".title2").fadeIn(500);
+							$(".title1").hide();
+						}
+					},
+					// 详情页跳转
+					jumpDetail(){
+						showDetail(this.datas[this.current].bs_id,this.datas[this.current].id,3,1)
+					}
+				},
+				mounted() {
+					$('.per_page').fadeIn(500)
+					$('.per_page_left').fadeIn(500);
+					if(this.select == 1){
+						$(".title1").fadeIn(500);
+					}else{
+						$(".title2").fadeIn(500);
+					}
+					this.datalist()
+				}
+			})
+		</script>
+	</body>
+</html>

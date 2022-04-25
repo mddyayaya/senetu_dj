@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>一带一路</title>
+		<link rel="stylesheet" type="text/css" href="css/oldHtml.css"/>
+		<link rel="stylesheet" type="text/css" href="lib/font-awesome/css/font-awesome.css"/>
+		<script src="lib/jquery/jquery-3.5.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/ajax.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/vue.min.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class="wrap" id="app" v-cloak>
+			<div class="leftNav">
+				<div onclick="window.history.back(-1)"><i class="fa fa-mail-reply" aria-hidden="true"></i></div>
+				<div  onclick="window.location.href='app.html'"><i class="fa fa-home" aria-hidden="true"></i></div>
+				<div @click="selectType(1)" :class="indexSelect == 1?'activeSelect':''"><i class="fa fa-file-powerpoint-o" aria-hidden="true"></i></div>
+				<div @click="selectType(2)" :class="indexSelect == 2?'activeSelect':''"><i class="fa fa-file-picture-o" aria-hidden="true"></i></div>
+				<div @click="selectType(3)" :class="indexSelect == 3?'activeSelect':''"><i class="fa fa-file-video-o" aria-hidden="true"></i></div>
+				<div @click="selectType(4)" :class="indexSelect == 4?'activeSelect':''"><i class="fa fa-microphone" aria-hidden="true"></i></div>
+			</div>
+			<div class="rightCont">
+				<div class="rightContTitle">{{title}}</div>
+				<div class="rightConts">
+					<div class="rightContss">
+						<!-- 此处循环 -->
+						<div class="contitemWrap"  @click="jumpDetail1(item.r_id,item.bs_id)" v-for="(item,index) in dataBagList" @click="jumpDetial(item.r_id)" @mouseover="jumpDetial(item.r_id)">
+							<div class="contItem">
+								<img :src="item.sz_img" >
+								<p class="tipss">{{item.title}}</p>
+								<p class="tips">{{item.bs_id1}}</p>
+							</div>
+							<div class="contItem2" :class="showIndex == item.r_id?'liulan':''">
+								<div>{{item.title}}</div>
+								<div>简介：{{item.content}}</div>
+								<div>
+									<span style="display: flex:1"></span>
+									<span @click="jumpDetail1(item.r_id,item.bs_id)">立即浏览</span>
+								</div>
+							</div>
+						</div>
+						<div class="null" v-show="dataBagList.length == 0">暂无数据</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	<script type="text/javascript">
+		window.onload = function(){
+			var app = new Vue({
+				el:"#app",
+				data:{
+					// get数据传参
+					getSoucre:{
+						template:14,
+						ft_id:"",
+						bsid:""
+					},
+					title:"",
+					showIndex:0,
+					indexSelect:0,
+					dataBagList:[]
+				},
+				methods:{
+					// 数据渲染
+					dataBag(){
+						var that = this;
+						that.topNavList = [];
+						postData("special",that.getSoucre,function(res){
+							if(res.code == 200){
+								if(res.data.info.length > 0){
+									for(var i=0;i<res.data.info.length;i++){
+										res.data.info[i].bs_id1 = changeSourceType(res.data.info[i].bs_id)
+									}
+									that.dataBagList = res.data.info
+								}
+							}else{
+								
+							}
+						});
+					},
+					// 查看
+					jumpDetial(id){
+						var that = this;
+						that.showIndex = id
+					},
+					// 资源类型筛选
+					selectType(bsid){
+						var that = this;
+						that.getSoucre.bsid = bsid;
+						that.dataBag();
+					},
+					jumpDetail1(id,bsid){
+						showDetail(bsid,id,3,1)
+					}
+				},
+				created() {
+					var that = this;
+					var template = getUrlParam("template")
+					if(template == 13){
+						that.title = "十九大精神"
+					}else if(template == 14){
+						that.title = "一带一路"
+					}
+					that.getSoucre.template = template;
+					that.dataBag();
+				}
+			})
+		}
+	</script>
+	</body>
+</html>

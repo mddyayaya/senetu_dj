@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+        <meta http-equiv="page-Enter" content="revealTrans(Duration=3.0,Transition=23)">
+		<link rel="stylesheet" type="text/css" href="lib/layui/css/layui.css"/>
+		<link rel="stylesheet" type="text/css" href="css/index.css"/>
+		<link rel="stylesheet" type="text/css" href="lib/font-awesome/css/font-awesome.css"/>
+		<script src="lib/jquery/jquery-3.5.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/setCookie.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/ajax.js" type="text/javascript" charset="utf-8"></script>
+		<title>在线考试</title>
+	</head>
+	<body>
+		<script src="js/nav.js" type="text/javascript" charset="utf-8"></script>
+		<div class="mainBody" id="app" v-cloak>
+			<div class="startTest" v-if="testBox == true">
+				<div class="startTestBox">
+					<div class="closeCode">
+						<span @click="cancelTest">×</span>
+					</div>
+					<div class="kstime" v-if="complete == 0">
+						<i class="fa fa-clock-o" aria-hidden="true"></i>
+						<span>{{minutes}}:{{seconds}}</span>
+					</div>
+					<div class="testTitle">{{testTitle}}</div>
+					<div class="testBox">
+						<!-- 单选题 -->
+						<div class="testSub" v-if="testObject.single.length > 0">
+							<div class="testType">一、单选题</div>
+							<!-- 此处循环 -->
+							<div class="testSubItem" v-for="(item,index) in testObject.single">
+								<div class="selectPro">
+									{{index+1}}.{{item.title}}
+								</div>
+								<div class="selection layui-form">
+									<div class="layui-form-item">
+									    <div class="layui-input-block">
+									      <input :disabled="complete == 1" :checked="items.title.split('选项')[1] == item.answer && complete == 1" type="radio" v-for="(items,index1) in item.option" :name="index" :qid="item.qid" :value="items.title.split('选项')[1]" :title="items.title+': '+items.content">
+									    </div>
+									  </div>
+								</div>
+								<div class="answer"  v-show="complete == 1">
+									<div class="answerWrap">
+										<div class="yourAnwer">你的选项：{{item.com_answer}}</div>
+										<div class="trueAnwer">正确答案：{{item.answer}}</div>
+									</div>
+									<div class="anlys">题目解析：{{item.analysis}}。所以这题选 {{item.answer}}</div>
+								</div>
+							</div>
+							<!-- 多选题 -->
+							<div class="" v-if="testObject.more.length > 0">
+								<div class="testType">二、多选题</div>
+								<div class="testSubItem" v-for="(item,index) in testObject.more">
+									<div class="selectPro">
+										{{index+1}}.{{item.title}}
+									</div>
+									<div class="selection layui-form" >
+										<div class="layui-form-item">
+											<div class="layui-input-block">
+											   <input :disabled="complete == 1"  type="checkbox" lay-skin="primary" v-for="(items,index1) in item.option" :name="index1" :qid="item.qid" :value="items.title.split('选项')[1]" :title="items.title+': '+items.content">
+											</div>
+										  </div>
+									</div>
+									<div class="answer"  v-show="complete == 1">
+										<div class="answerWrap">
+											<div class="yourAnwer">你的选项：{{item.com_answer}}</div>
+											<div class="trueAnwer">正确答案：{{item.answer}}</div>
+										</div>
+										<div class="anlys">题目解析：{{item.analysis}}。所以这题选 {{item.answer}}</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="submitTest" v-show="complete == 0">
+						<div @click="cancelTest">取消</div>
+						<div @click="submitTest">提交</div>
+					</div>
+					<div class="finishTest" v-show="complete == 1">
+						<div>
+							<div><span>题目数</span>：{{bottom.count}}</div>
+							<div><span>考试时长</span>：{{bottom.time}}分钟</div>
+							<div><span>总分</span>：{{bottom.total}}</div>
+							<div><span>及格分</span>：{{bottom.pass}}</div>
+						</div>
+						<div>
+							<span>最终得分：</span>{{bottom.finily}}
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- 标题 -->
+			<div class="flagTit">
+				<div class="flagTitIcon">在线考试</div>
+				<div class="backBtn" onclick="window.history.back()">
+					<img src="statics/images/back_btn.png" >
+					<span onclick="window.history.back()">返回</span>
+				</div>
+			</div>
+			<!-- 搜索框 -->
+			<div class="searchBox">
+				<div>
+					<div>考试名称：</div>
+					<div class="search">
+						<input type="text" v-model="searchbox" name="" id="search" value=""  placeholder="输入查询"/>
+						<i @click="search" class="fa fa-search" aria-hidden="true"></i>
+					</div>
+				</div>
+				<div class="layui-form">
+					<div>年份：</div>
+					<div class="search">
+						<div class="layui-form-item">
+						    <div class="layui-input-block">
+						      <select name="city" lay-verify="required" lay-filter="year">
+						        <option value=""></option>
+						        <option value="2020">2020</option>
+						        <option value="2019">2019</option>
+						        <option value="2018">2018</option>
+						        <option value="2017">2017</option>
+						      </select>
+						    </div>
+						  </div>
+					</div>
+				</div>
+				<div class="layui-form">
+					<div>月份：</div>
+					<div class="search">
+						<div class="layui-form-item">
+						    <div class="layui-input-block">
+						      <select name="city" lay-verify="required" lay-filter="month">
+						        <option value=""></option>
+						        <option value="1">1月</option>
+						        <option value="2">2月</option>
+						        <option value="3">3月</option>
+						        <option value="4">4月</option>
+						        <option value="5">5月</option>
+						        <option value="6">6月</option>
+						        <option value="7">7月</option>
+						        <option value="8">8月</option>
+						        <option value="9">9月</option>
+						        <option value="10">10月</option>
+						        <option value="11">11月</option>
+						        <option value="12">12月</option>
+						      </select>
+						    </div>
+						  </div>
+					</div>
+				</div>
+			</div>
+			<!-- 内容列表 -->
+			<div class="contList11" id="appWrap">
+				<!-- 此处循环 -->
+				<div>
+					<div class="ksItem" v-for="item in dataList">
+						<div class="ksItemTitle">{{item.title}}</div>
+						<div class="ksItemTime">
+							<div>题目数：{{item.count}}</div>
+							<div>考试时长：{{item.duration}}分钟</div>
+						</div>
+						<div class="ksItemTime">考试时间：{{item.s_time+' ~ '+item.e_time}}</div>
+						<div class="startRace">
+							<span></span>
+							<span class="startKs" v-if="item.complete == 0" @click="startTest(item.tid,item.id,item.duration,item.title,item.complete,item.count)">开始</span>
+							<span class="detialKs" v-if="item.complete == 1" @click="startTest(item.tid,item.id,item.duration,item.title,item.complete,item.count)">详情</span>
+						</div>
+					</div>
+					<div class="null" v-show="dataList.length == 0">暂无数据</div>
+				</div>
+			</div>
+		</div>
+		<script src="js/ajax.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/vue.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="lib/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			window.onload = function(){
+				var app = new Vue({
+					el:"#app",
+					data:{
+						page:1,
+						// 个体数据传参
+						get:{
+							page:1,
+							user_id: user.id,
+							title:"", 
+							year:"",
+							month:"",
+						},
+						// 试卷题目
+						testObject:{
+							more:[],
+							single:[]
+						},
+						// 数据循环
+						dataList:[],
+						// 导航条分类筛选
+						fenleiSelect:0,
+						// 文字搜索
+						searchbox:"",
+						// 滚动加载
+						onFetching:false,
+						testBox:false,
+						// 完成
+						finish:false,
+						// 试卷名称
+						testTitle:"",
+						// 考试倒计时
+						// 分钟
+						minutes:0,
+						// 秒
+						seconds:60,
+						time:null,
+						//试卷id
+						tid:"",
+						aid:"",
+						// 试题结束查看详情
+						complete:0,
+						// 底部结果
+						bottom:{
+							count:0,
+							time:0,
+							total:0,
+							pass:0,
+							finily:0
+						}
+					},
+					methods:{
+						importClass(){
+							var that = this;
+							that.dataList = [];
+							// 试题列表
+							postData("onlineTest",that.get,function(res){
+								if(res.code == 200){
+									if(res.data.pagedata != null){
+										for(var i=0;i<res.data.pagedata.length;i++){
+											res.data.pagedata[i].s_time = toNumber(res.data.pagedata[i].s_time)
+											res.data.pagedata[i].e_time = toNumber(res.data.pagedata[i].e_time)
+										}
+										that.dataList = res.data.pagedata;
+									}
+								}
+							})
+						},
+						// 滚动加载
+						scroll(){
+							var that = this;
+							var scroll = document.getElementById('appWrap');
+							scroll.onscroll = function(){
+							    var t = scroll.scrollTop;  //离上方du的距zhi离
+							    var h =scroll.innerHeight || scroll.clientHeight || scroll.clientHeight; //可见dao宽度
+							    if( t >= scroll.scrollHeight -h ) {
+									that.page++;
+									if(that.page == that.total+1){
+										that.page = that.total
+									}else{
+										if(that.page <= that.total){
+											that.get.page = that.page
+											that.importClass()
+										}
+									}
+							    }
+							}
+						},
+						// 搜索
+						search(){
+							var that = this;
+							that.get.title = that.searchbox;
+							that.importClass();
+						},
+						// 开始答题
+						startTest(tid,id,duration,title,complete,count){
+							var that = this;
+							that.complete = complete;
+							// 考试名称
+							that.testTitle = title;
+							// 单选多选列表
+							that.testObject = {
+								more:[],
+								single:[]
+							};
+							that.tid = tid
+							that.aid = id
+							// 显示考试框
+							that.testBox = true;
+							if(complete == 1){
+								
+							}else{
+								// 考试时间
+								var duration = parseInt(duration);
+								// 考试时间倒计时分钟赋值
+								that.minutes = duration -1;
+								// 考试倒计时
+								that.time = setInterval(function(){
+									that.seconds--;
+									if(that.seconds == 0){
+										that.minutes--;
+										that.minutes = that.minutes;
+										that.seconds = 60;
+										if(that.minutes == 0){
+											// 到时间自动交卷
+											that.testAnwser();
+										}
+									}
+								},1000)
+							}
+							postData("questionList",{tid:tid,user_id:user.id,aid:id},function(res){
+								if(res.code == 200){
+									if(complete == 1){
+										that.bottom.count = count;
+										that.bottom.time = res.data.duration;
+										that.bottom.total = res.data.total;
+										that.bottom.pass = res.data.pass;
+										that.bottom.finily = res.data.com_number;
+										// 多选渲染
+										if(res.data.more != null || 　res.data.more.length > 0){
+											for(var i=0;i<res.data.more.length;i++){
+												var anwser = res.data.more[i].answer.split(",");
+												for(var j=0;j<anwser.length;j++){
+													console.log($('input:checkBox[name="'+i+'"]').val())
+												}
+											}
+										}
+									}else{
+									}
+									that.testObject = res.data;
+								}
+							})
+							setTimeout(function(){
+								layui.use(['layer','form'],function(){
+									var layer = layui.layer;
+									var form = layui.form;
+									form.render();
+								})
+							},300)
+						},
+						// 提交试卷
+						submitTest(){
+							var that = this;
+							that.testAnwser();
+						},
+						// 试卷试题值
+						testAnwser(){
+							var that = this;
+							var single = [],more1 = [],more = [];
+							// 提交试卷单选
+							if(that.testObject.single.length>0){
+								for(var i=0;i<that.testObject.single.length;i++){
+									if($('input:radio[name="'+i+'"]:checked').val()){
+										single.push({
+											qid:$('input:radio[name="'+i+'"]:checked').attr("qid"),
+											answer:[$('input:radio[name="'+i+'"]:checked').val()]
+										})
+									}else{
+										layer.msg("选项不能为空",{anim:6,time:600});
+										return false
+									}
+								}
+							}
+							// 提交试卷多选
+							if(that.testObject.more.length>0){
+								for(var i=0;i<that.testObject.more.length;i++){
+									var qid = $('input:checkBox[name="'+i+'"]:checked').attr("qid")
+									for(var j=0;j<that.testObject.more[i].option.length;j++){
+										$('input:checkBox[name="'+j+'"]:checked').each(function(index, element) {
+											more1.push($(this).val());
+										});
+									}
+									if(more1.length == 0){
+										layer.msg("选项不能为空",{anim:6,time:600});
+										return false
+									}else{
+										more.push({
+											qid:qid,
+											answer:more1
+										})
+									}
+								}
+							}
+							var data = {
+								user_id:user.id,
+								aid:that.aid,
+								tid:that.tid,
+								uid:user.id,
+								answer:single.concat(more)
+							}
+							postData("makeTest",data,function(res){
+								if(res.code == 200){
+									that.testBox = false;
+									// 清楚定时
+									window.clearInterval(that.time);
+									that.importClass();
+								}
+							})
+						},
+						// 取消答题
+						cancelTest(){
+							var that = this;
+							// 清楚定时
+							window.clearInterval(that.time);
+							that.seconds = 60
+							that.testBox = false;
+						}
+					},
+					mounted() {
+						var that = this;
+						that.scroll();
+						// 初始化layui框架
+						setTimeout(function(){
+							layui.use(['layer','form'],function(){
+								var layer = layui.layer;
+								var form = layui.form;
+								form.render();
+								// 年份筛选
+								form.on('select(year)', function (data) {
+									that.get.year = data.value;
+									that.importClass();
+								});
+								// 月份筛选
+								form.on('select(month)', function (data) {
+									that.get.month = data.value;
+									that.importClass();
+								});
+							})
+						},300)
+					},
+					created() {
+						var that = this;
+						that.importClass();
+						// 回车键搜索
+						$(document).keydown(function(event){
+							if(event.keyCode == 13){
+								that.get.title = that.searchbox;
+								that.importClass();
+							}
+						})
+					}
+				})
+			}
+		</script>
+	</body>
+</html>

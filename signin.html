@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>活动签到</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<meta charset="UTF-8"/>
+		<script src="lib/jquery/jquery-3.5.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/ajax.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class="success" id="signed"></div>
+		<script type="text/javascript">
+			let type,
+			hyid = getUrlParam("hyid"),
+			hyflag = getUrlParam("hyflag"),
+			startTime = getUrlParam("startTime"),
+			endTime = new Date().getTime();
+			if(endTime-startTime>=1800){
+				type = 2 // 迟到签到
+			}else{
+				type = 1 //正常签到
+			}
+			 
+			resourceQd(hyid,hyflag,'','',4,0,type)
+		</script>
+	</body>
+</html>

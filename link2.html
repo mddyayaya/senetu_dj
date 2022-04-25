@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="css/index.css"/>
+		<link rel="stylesheet" type="text/css" href="lib/layui/css/layui.css"/>
+		<script src="lib/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+		<script src="lib/jquery/jquery-3.5.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/setCookie.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/ajax.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/nav.js" type="text/javascript" charset="utf-8"></script>
+		<style type="text/css">
+			.wrap{
+				display: flex;
+				justify-content: space-between;
+				flex-wrap: wrap;
+				width: 95%;
+				overflow-y: scroll;
+				height: 71vh;
+				margin:10vh auto;
+			}
+			.wrapItem{
+				cursor: pointer;
+				width: 32%;
+				height: 33vh;
+				background: #fff;
+				margin-bottom: 4vh;
+				box-shadow: 0px 6px 10px 0px rgba(0,0,0,.26);
+			}
+			.wrapItem>img{
+				height: 100%;
+				width: 100%;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="wrap">
+			<!-- <div class="wrapItem" onclick="window.location.href='linkDetail2.html?id=1'">
+				<img src="statics/images/21.png" >
+			</div> -->
+			<div class="wrapItem" onclick="window.location.href='linkDetail2.html?id=2'">
+				<img src="statics/images/22.png" >
+			</div>
+			<div class="wrapItem" onclick="window.location.href='linkDetail2.html?id=3'">
+				<img src="statics/images/23.png" >
+			</div>
+			<div class="wrapItem" onclick="window.location.href='linkDetail2.html?id=4'">
+				<img src="statics/images/24.png" >
+			</div>
+			<div class="wrapItem" onclick="window.location.href='linkDetail2.html?id=5'">
+				<img src="statics/images/25.png" >
+			</div>
+			<!-- <div class="wrapItem" onclick="window.location.href='linkDetail2.html?id=6'">
+				<img src="statics/images/26.png" >
+			</div> -->
+			<div class="wrapItem" onclick="window.location.href='linkDetail2.html?id=7'">
+				<img src="statics/images/27.png" >
+			</div>
+			<div class="wrapItem" onclick="window.location.href='linkDetail2.html?id=8'">
+				<img src="statics/images/28.png" >
+			</div>
+			<!-- <div class="wrapItem" onclick="window.location.href='linkDetail2.html?id=9'">
+				<img src="statics/images/29.png" >
+			</div> -->
+		</div>
+	</body>
+	<script type="text/javascript">
+		$(function(){
+			$('.topNavBar3 .topNavItem').eq(7).addClass("topNavselect").siblings().removeClass('topNavselect');
+		})
+	</script>
+</html>

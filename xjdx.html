@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>先进典型</title>
+		<link rel="stylesheet" type="text/css" href="css/xjdx.css"/>
+		<link rel="stylesheet" type="text/css" href="lib/swiper/css/swiper.min.css"/>
+		<script src="lib/swiper/js/swiper.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="lib/jquery/jquery-3.5.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/ajax.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/vue.min.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<!-- 顶部 -->
+		<div class="control">
+			<a href="javascript:history.back(-1)"><i class="fa fa-mail-reply" aria-hidden="true"></i>返回&nbsp;&nbsp;|&nbsp;</a>
+			<a href="javascript:window.location='app.html';"><i class="fa fa-home" aria-hidden="true"></i>首页</a>
+		</div>
+		<div class="xjdx_logo"></div>
+		<div class="xjdj_wrap" id="app">
+			<div class="xjxj_change">
+				<div>
+					<div class="xjxj_item" :class="getdata.resid == 1?'selectbar':''" @click="changeselect(1)">人民英雄</div>
+					<div class="xjxj_item" :class="getdata.resid == 2?'selectbar':''" @click="changeselect(2)">时代楷模</div>
+				</div>
+			</div>
+			<!-- 人民英雄 -->
+			<div class="xjxj_swiper" v-show="getdata.resid == 1" style="display: none;width: 28%;">
+				<div class="swiper-container xjxj_swiper1" style="width: 75%;">
+					<div class="swiper-wrapper">
+						<div class="swiper-slide sdkm"  :title="item.title" v-for="item in datawrap" :class="select_item == item.r_id?'selected':''" @click="changeDetail(item.r_id)">
+							<img :src="item.img2">
+							<p class="tips">{{item.title}}</p>
+						</div>
+					</div>
+					<div class="swiper-pagination"></div>
+				</div>
+				<div class="swiper-button-prev"></div>
+				<div class="swiper-button-next"></div>
+			</div>
+			<!-- 时代楷模 -->
+			<div class="xjxj_swiper" v-show="getdata.resid == 2" style="display: none;width: 28%;">
+				<div class="swiper-container xjxj_swiper2" style="width: 75%;">
+					<div class="swiper-wrapper">
+						<div class="swiper-slide sdkm"  :title="item.title" v-for="item in datawrap" :class="select_item == item.r_id?'selected':''" @click="changeDetail(item.r_id)">
+							<img :src="item.img2">
+							<p class="tips">{{item.title}}</p>
+						</div>
+					</div>
+					<div class="swiper-pagination"></div>
+				</div>
+				<div class="swiper-button-prev"></div>
+				<div class="swiper-button-next"></div>
+			</div>
+			<div class="xjxj_show">
+				<div class="xianlie" v-if="!detail">
+					<div class="jnbword"></div>
+					<div class="jnb"></div>
+				</div>
+				<div class="xianlie" v-if="detail">
+					<div class="dxtop">
+						<div class="dxpic">
+							<img :src="userinfo.pic" >
+						</div>
+						<div class="dxword">
+							<div class="xlname">{{userinfo.name}}</div>
+							<div class="xldes">{{userinfo.content}}</div>
+						</div>
+					</div>
+					<div class="dxbottom">
+						<img :src="userinfo.img" @click="showDetail(userinfo.r_id,userinfo.bs_id)">
+						<!-- <video src=""></video> -->
+					</div>
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript">
+			var app = new Vue({
+				el:"#app",
+				data(){
+					return {
+						select:1,
+						detail:false,
+						getdata:{
+							template:24,
+							resid:1,
+							page:1
+						},
+						select_item:0,
+						totalPage:0,
+						datawrap:[],
+						userinfo:{
+							name:"",
+							pic:"",
+							content:"",
+							img:"",
+							r_id:"",
+							bs_id:""
+						}
+					}
+				},
+				methods:{
+					// 左侧切换
+					changeselect(select){
+						var that = this;
+						that.getdata.resid = select;
+						that.detail = false;
+						that.select_item = 0; 
+						that.getdata.page = 1;
+						that.datawrap = [];
+						that.datalist();
+						that.lunbo();
+					},
+					// 数据列表
+					datalist(){
+						var that = this;
+						postData("special",that.getdata,function(res){
+							if(res.code == 200){
+								if(res.data.length > 0){
+									that.datawrap = res.data;
+									that.totalPage = res.data.total;
+								}
+							}
+						})
+					},
+					// 轮播
+					lunbo(){
+						var that = this;
+						setTimeout(function(){
+							if(that.getdata.resid == 1){
+								$('.xjxj_swiper1').fadeIn(200)
+								$('.xjxj_swiper2').fadeOut(200)
+								var swiper = new Swiper('.xjxj_swiper1',{
+									slidesPerView: 2,//一行显示2个
+									slidesPerColumn: 3,//显示3行
+									spaceBetween : 20,
+									slidesPerGroup : 2,
+									slidesPerColumnFill : 'column',
+									pagination: {
+										clickable:true,
+										el: '.swiper-pagination',
+									},
+									navigation: {
+										nextEl: '.swiper-button-next',
+										prevEl: '.swiper-button-prev',
+									},
+								})
+							}else{
+								$('.xjxj_swiper2').fadeIn(200)
+								$('.xjxj_swiper1').fadeOut(200)
+								var swiper2 = new Swiper('.xjxj_swiper2',{
+									slidesPerView: 2,//一行显示2个
+									slidesPerColumn: 3,//显示3行
+									spaceBetween : 20,
+									slidesPerColumnFill : 'column',
+									slidesPerGroup : 2,
+									pagination: {
+										clickable:true,
+										el: '.swiper-pagination',
+									},
+									navigation: {
+										nextEl: '.swiper-button-next',
+										prevEl: '.swiper-button-prev',
+									},
+								})
+							}
+						},300)
+					},
+					changeDetail(id){
+						var that = this;
+						that.select_item = id; 
+						var data = {
+							id:id
+						}
+						postData("xjmfDetail ",data,function(res){
+							if(res.code == 200){
+								that.userinfo = {
+									name:res.data.title,
+									pic:res.data.img2,
+									content:res.data.content,
+									img:res.data.sz_img,
+									r_id:res.data.id,
+									bs_id:res.data.bs_id
+								}
+								that.detail = true;
+							}
+						})
+					},
+					// 资源详情
+					showDetail(id,bsid){
+						showDetail(bsid,id,3,1)
+					}
+				},
+				mounted() {
+					var that = this;
+					that.datalist();
+					that.lunbo();
+				}
+			})
+		</script>
+	</body>
+</html>

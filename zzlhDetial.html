@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>政治立魂详情</title>		
+		<link rel="stylesheet" type="text/css" href="css/xszc.css"/>
+		<link rel="stylesheet" type="text/css" href="lib/font-awesome/css/font-awesome.css"/>
+	</head>
+	<body>
+		<div id="app" v-cloak>
+			<div class="top">
+				<div class="control1">
+					<a href="javascript:history.back(-1)"><i class="fa fa-mail-reply" aria-hidden="true"></i>返回&nbsp;&nbsp;|&nbsp;</a>
+					<a href="javascript:window.location='app.html';"><i class="fa fa-home" aria-hidden="true"></i>首页</a>
+				</div>
+				<div class="showtitle">习近平论坚持全面从严治党{{title}}</div>
+			</div>
+			<div class="contentImg">
+				<div class="img" style="overflow: hidden;">
+					<div class="showList">
+						<object :data="dataUrl" type="application/pdf" width="100%" height="100%">
+							<iframe :src="dataUrl" width="100%" height="100%" style="border: none;">
+							</iframe>
+						</object>
+					</div>
+				</div>
+				<div class="siblings">
+					<div class="sbilingsTit">同系列文档</div>
+					<ul class="wengdang">
+						<li v-for="item in sameList" @click="changeData(item.img,item.title)"><i class="fa fa-file-pdf-o" aria-hidden="true"></i>习近平论坚持全面从严治党{{item.title}}</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<script src="lib/jquery/jquery-3.5.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/setCookie.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/ajax.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/vue.min.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			window.onload = function(){
+				var app = new Vue({
+					el:"#app",
+					data:{
+						id:"",
+						title:"",
+						dataUrl:"statics/images/loading.gif",
+						sameList:[],
+					},
+					methods:{
+						// 资源详情
+						detail(){
+							var that = this;
+							that.dataUrl = "";
+							postData("cyzd_pdf",{fid:that.id},function(res){
+								if(res.code == 200){
+									for(var i=0;i<res.data.length;i++){
+										if(res.data[i].id == that.id){
+											that.dataUrl = res.data[i].img
+											that.title = res.data[i].title
+										}
+									}
+									that.sameList = res.data;
+								}
+							})
+						},
+						// 改变资源
+						changeData(data,title){
+							var that = this;
+							that.dataUrl = "";
+							that.title = "";
+							that.dataUrl = data;
+							that.title = title;
+						},
+					},
+					created() {
+						var that = this;
+						that.id = getUrlParam('id');
+						that.detail();
+					}
+				})
+			}
+		</script>
+	</body>
+</html>

@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+        <meta http-equiv="page-Enter" content="revealTrans(Duration=3.0,Transition=23)">
+		<link rel="stylesheet" type="text/css" href="css/index.css"/>
+		<link rel="stylesheet" type="text/css" href="css/swiper-bundle.min.css"/>
+		<link rel="stylesheet" type="text/css" href="lib/font-awesome/css/font-awesome.css"/>
+		<title>视频播放详情</title>
+	</head>
+	<style type="text/css">
+		body{
+			background: #fff;
+		}
+		.videoSrc img{
+			width: 100% !important;
+		}
+	</style>
+	<body>
+		<div class="mainBody" id="app" v-cloak>
+			<!-- 进入页面 -->
+			<div class="topNavBar" style="color: #FFFAED !important;height: 5vh;line-height: 5vh;">
+				<span onclick="window.history.back(-1)">返回</span>
+				 &nbsp;| &nbsp;
+				<a style="color: #FFFAED !important;" href="app.html">首页</a>
+				<div class="detialTit"></div>
+			</div>
+			<!-- 二维码弹窗 -->
+			<div class="codeMark" v-show="codeShow == true">
+				<div class="codeImgWrap">
+					<div class="closeCode">
+						<span @click="closeCode">×</span>
+					</div>
+					<div class="littlePro">小程序扫码带走</div>
+					<div class="scanCode">
+						<img :src="codeImg" >
+					</div>
+				</div>
+			</div>
+			<div class="videoWrap2">
+				<div class="videoTit">{{playTitle}}</div>
+				<div class="videoSubtit">
+					<!-- <div class="videoParam">课时：12</div> -->
+					<div class="videoParam">发布时间：{{resourceList.addtime}}</div>
+					<div class="videoParam" style="display: flex;flex: 1;"></div>
+					<div class="videoParam" style="cursor: pointer;">
+						<div style="display: flex;align-items: center;">
+							<img style="height: 2.5vh;width: 2.5vh;margin-right: 0.2vw;" src="statics/images/downloadIcon.png" >
+						</div>
+						<div>
+							<form action="http://dj.gxsentu.net/?c=d_two_api&m=downResouce" method="post">
+								<input hidden="hidden" type="text" name="type" value="1"/>
+								<input hidden="hidden" type="text" name="upload_flag" value=""/>
+								<input hidden="hidden" type="text" name="upload_id" :value="id"/>
+								<input hidden="hidden" type="text" name="vid" :value="playJishu"/>
+								<input hidden="hidden" type="text" name="classs" value="3"/>
+								<input hidden="hidden" type="text" name="uid" :value="uid"/>
+								<input hidden="hidden" type="text" name="flag" :value="flag"/>
+								<input hidden="hidden" type="text" name="ment_url" :value="playUrl"/>
+								<input hidden="hidden" type="text" name="title" :value="playTitle"/>
+								<input class="downSubmit" type="submit" value="资料下载"/>
+							</form>
+						</div>
+					</div>
+				</div>
+				<!-- 视频详情 -->
+				<div class="videDetial">
+					<div class="videoSrc">
+						<video 
+							v-if="playBsid == 3" 
+							:src="playUrl" 
+							poster="" 
+							preload  controls autoplay 
+							controlsList="nodownload" class=""
+							disablePictureInPicture></video>
+						<iframe allowfullscreen="true" v-if="playBsid == 1" :src="playUrl+'#toolbar=0'"></iframe>
+					</div>
+					<div class="videoList">
+						<div class="classList">
+							<div class="videoDownload videoDownloading">
+								<span style="display: none;"></span>
+								<span></span>
+								<span>视频</span>
+							</div>
+						</div>
+						<div class="codeWrap1" @click="openCode">
+							<div class="codeImg1"></div>
+							<div>扫码带走</div>
+						</div>
+					</div>
+				</div>
+				<!-- 视频集数列表 -->
+				<div class="videoListJishu swiper-container">
+					<div class="swiper-wrapper">
+						<div class="jishuItem  swiper-slide" :class="index == playing?'playing':''" v-for="(item,index) in resourceList.resouce" @click="changeVideo(index,item.video_url,item.video_title,item.dru,item.rid)">
+							<div class="jishuTitle" style="margin-top: 1vh;height: 6vh;line-height: 3vh;overflow: hidden">
+								{{item.video_title}}
+							</div>
+							<div class="jishuIcon">
+								<i class="fa fa-play-circle" aria-hidden="true"></i>
+								{{changsecond(item.dru)}}
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script src="js/swiper-bundle.js" type="text/javascript" charset="utf-8"></script>
+		<script src="lib/jquery/jquery-3.5.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/setCookie.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/ajax.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/vue.min.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			window.onload = function(){
+				var app = new Vue({
+					el:"#app",
+					data:{
+						codeShow:false,
+						// 资源id
+						id:"",
+						resourceList:[],
+						playUrl:"",
+						playTitle:"",
+						playBsid:"",
+						// 二维码
+						codeImg:"statics/images/loading.gif",
+						playing:0,
+						playJishu:1,
+						uid:user.id,
+						flag:user.flag,
+						//进入页面时间
+						startTime:0,
+						// 离开页面时间
+						leaveTime:0,
+						data:{
+							id:"",
+							flag:""
+						},
+						total_minute:0
+					},
+					methods:{
+						// 打开二维码
+						openCode(){
+							var that = this;
+							console.log(that.data.id,that.playBsid)
+							var data = {
+								sid:that.data.id,
+								bsid:that.playBsid
+							}
+							postData('getWxcode',data,function(res){
+								that.codeImg = res.responseText
+							})
+							that.codeShow = true;
+						},
+						// 关闭二维码弹窗
+						closeCode(){
+							var that = this;
+							that.codeShow = false;
+						},
+						// 秒转分
+						changsecond(number){
+							var that = this;
+							var min,seond;
+							if(number > 0 || number != "" || number != null ){
+								min = parseInt(number / 60);
+								seond = number % 60;
+							}
+							return that.add0(min)+':'+that.add0(seond)
+						},
+						add0(time){
+							if(time > 0){
+								time = parseInt(time);
+								if(time < 10){
+									time = '0'+time
+								}else{
+									time = time
+								}
+							}else{
+								time = '00'
+							}
+							return time;
+						},
+						// 资源详情
+						detail(){
+							var that = this;
+							postData("resouceDetail",that.data,function(res){
+								if(res.code == 200){
+									res.data.addtime = toNumber(res.data.addtime)
+									that.playUrl = res.data.resouce[0].video_url;
+									that.playTitle = res.data.resouce[0].video_title;
+									that.playBsid = 3;
+									that.resourceList = res.data
+									that.startTime = new Date().getTime();
+									that.total_minute = res.data.resouce[0].dru;
+								}
+							})
+						},
+						// 切换集数
+						changeVideo(index,url,title,dru,rid){
+							var that = this;
+							that.playing = index;
+							that.playUrl = url;
+							that.playJishu = index +1;
+							that.playTitle = title;
+							that.total_minute = dru;
+							that.leaveTime = new Date().getTime();
+							var minute = parseInt((that.leaveTime-that.startTime) / 1000);
+							// 黔江烟草
+							resourceQd('','',rid,3,3,minute,1)
+							that.startTime=that.leaveTime;
+						},
+						// 监听离开页面
+						leavePage(){
+							var that = this;
+							window.onbeforeunload=function(e){
+							　　var e = window.event||e;  
+								that.leaveTime = new Date().getTime();
+								var minute = parseInt((that.leaveTime-that.startTime) / 1000);
+								browHistory(0,0,getUrlParam("type"),that.data.id,minute,that.total_minute,that.uid,that.flag);
+								// 黔江
+								resourceQd('','',that.data.id,3,3,minute,1)
+							}
+						}
+					},
+					created() {
+						var that = this;
+						that.data.id = getUrlParam('id');
+						that.data.flag = getUrlParam('flag');
+						that.detail();
+						setTimeout(function(){
+							that.leavePage();
+						},500)
+						
+					},
+					mounted() {
+						var swiper = new Swiper('.swiper-container', {
+							slidesPerView:5,
+							spaceBetween: 10,
+						});
+					}
+				})
+			}
+		</script>
+	</body>
+</html>

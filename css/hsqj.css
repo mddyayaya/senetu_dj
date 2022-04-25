@@ -1,0 +1,561 @@
+*{
+	padding: 0;
+	margin-right: 0;
+}
+html,body{
+	height: 100%;
+	width: 100%;
+	overflow: hidden;
+	background: url(../statics/images//redViewBg.jpg) no-repeat;
+	background-size: 100% 100%;
+	user-select: none;
+}
+.nav-top{
+	position: absolute;
+	left: 1vw;
+	top: 1vh;
+	z-index: 20000;
+	height: 2vh;
+	width: 100%;
+	color: #fff;
+}
+.nav-top a{
+	font-size: 2.5vh;
+	color: #fff;
+	text-decoration: none;
+	cursor: pointer;
+}
+.nav-top a:hover{
+	opacity: 0.8;
+}
+.topNavBar{
+	color: #fff;
+	font-size: 1.8vh;
+	line-height: 3.5vh;
+	padding-left: 1%;
+	z-index: 11;
+	position: fixed;
+	top: 0;
+	left: 0;
+	height: 3.5vh;
+	width: 99%;
+	background: linear-gradient(135deg, #BB0000 0%, #F33344 51%, #BB0000 100%);
+	box-shadow: 3px 0px 10px 0px rgba(0, 0, 0, 0.2);
+}
+.topNavBar>a{
+	color: #fff;
+	text-decoration: none;
+}
+.topNavBar>span{
+	cursor: pointer;
+}
+.clearfix:after {
+  content: ".";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+/* 进入页面 */
+.index{
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+}
+.anim{
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	top: 0;
+	left: 0;
+	background: url(../statics/images//redViewBgindex.png) no-repeat ;
+	background-size: 100% 100%;
+	animation: anim 1s infinite ease-in-out forwards;
+}
+.map{
+	position: absolute;
+	z-index: 10;
+	height: 38vw;
+	width: 48vw;
+	top: 50%;
+	margin-top: -19vw;
+	left: 50%;
+	margin-left: -24vw;
+	background: url(../statics/images//map.png) no-repeat;
+	background-size: 100% 100%;
+	animation: map 3s linear forwards;
+}
+.start{
+	z-index: 10000000;
+	position: absolute;
+	cursor: pointer;
+	bottom: 6%;
+	right: 4%;
+	height: 8vw;
+	width: 7vw;
+	background: url(../statics/images//start.png) no-repeat;
+	background-size: 100% 100%;
+	opacity: 0;
+	animation: map 1s linear forwards;
+	animation-delay: 3.4s; 
+}
+.redText{
+	position: absolute;
+	z-index: 1000;
+	top: 5%;
+	height: 4vw;
+	width: 20vw;
+	left: 5%;
+	background: url(../statics/images//redText.png) no-repeat;
+	background-size:100% 100%;
+}
+.logo{
+	position: fixed;
+	top: 5%;
+	right: 3.5%;
+	width: 5vw;
+}
+.logo>img{
+	width: 100%;
+}
+.text1{
+	opacity: 0;
+	animation: map 0.1s linear forwards;
+	animation-delay: 0.2s; 
+}
+.text2{
+	opacity: 0;
+	animation: map 0.1s linear forwards;
+	animation-delay: 0.2s; 
+}
+.text3{
+	opacity: 0;
+	animation: map 0.1s linear forwards;
+	animation-delay: 0.8s; 
+}
+.text4{
+	opacity: 0;
+	animation: map 0.1s linear forwards;
+	animation-delay: 1.3s; 
+}
+.text5{
+	opacity: 0;
+	animation: map 0.1s linear forwards;
+	animation-delay: 2s; 
+}
+.text6{
+	opacity: 0;
+	animation: map 0.1s linear forwards;
+	animation-delay: 2.1s; 
+}
+.text8{
+	opacity: 0;
+	animation: map 0.1s linear forwards;
+	animation-delay: 3s; 
+}
+.text9{
+	opacity: 0;
+	animation: map 0.1s linear forwards;
+	animation-delay: 3.2s; 
+}
+.text10{
+	opacity: 0;
+	animation: map 0.1s linear forwards;
+	animation-delay: 3.4s; 
+}
+	
+svg{
+	position: absolute;
+	z-index: 10;
+	height: 100%;
+	width: 100%;
+}
+@-webkit-keyframes fadeIn {
+	0% {
+	opacity: 0; /*初始状态 透明度为0*/
+
+	}
+	50% {
+		opacity: 0; /*中间状态 透明度为0*/
+	}
+	100% {
+		opacity: 1; /*结尾状态 透明度为1*/
+	}
+}
+path {
+	stroke-dasharray: 3000;
+	opacity: 0.5;
+	stroke-dashoffset: 3000;
+	animation: dash 4s linear forwards;
+	polygon(30% 0%, 70% 0%, 100% 50%, 30% 100%, 0% 70%, 0% 30%);
+}
+
+
+@keyframes dash {
+	 to {
+		stroke-dashoffset: 0;
+	}
+}
+@-ms-keyframes map{
+	from{
+		opacity: 0;
+	}
+	to{
+		opacity: 1;
+	}
+}
+@keyframes map{
+	from{
+		opacity: 0;
+	}
+	to{
+		opacity: 1;
+	}
+}
+@-webkit-keyframes map{
+	from{
+		opacity: 0;
+	}
+	to{
+		opacity: 1;
+	}
+}
+@-moz-keyframes map{
+	from{
+		opacity: 0;
+	}
+	to{
+		opacity: 1;
+	}
+}
+
+@-ms-keyframes anim{
+	from{
+		opacity: 0.5;
+	}
+	to{
+		opacity: 1;
+	}
+}
+@keyframes anim{
+	from{
+		opacity: 0.5;
+	}
+	to{
+		opacity: 1;
+	}
+}
+@-webkit-keyframes anim{
+	from{
+		opacity: 0.5;
+	}
+	to{
+		opacity: 1;
+	}
+}
+@-moz-keyframes anim{
+	from{
+		opacity: 0.5;
+	}
+	to{
+		opacity: 1;
+	}
+}
+/* 列表页面 */
+.list{
+	overflow: hidden;
+	left: 0%;
+	position: fixed;
+	height: 100%;
+	width: 100%;
+	top: 0;
+}
+.animate{
+	position: absolute;
+	left: 0;
+	top:65%;
+	width: 56vw;
+	height: 4vw;
+	background: url(../statics/images//jgL.png) no-repeat;
+	background-size: 100% 100%;
+	animation: left 3s infinite ease-in-out;
+}
+.animate1{
+	position: absolute;
+	right: 0;
+	top: 30%;
+	width: 56vw;
+	height: 4vw;
+	background: url(../statics/images//jgL.png) no-repeat;
+	background-size: 100% 100%;
+	animation: right 3s infinite ease-in-out;
+}
+.title{
+	position: absolute;
+	line-height: 6vw;
+	font-size: 1.8vw;
+	font-weight: bold;
+	color: #fff;
+	text-align: center;
+	width: 100%;
+}
+.lunbo{
+	position: absolute;
+	top: 15%;
+	height: 80%;
+	width: 89.5%;
+	margin: auto;
+	left: 5.75%;
+	overflow: hidden;
+}
+.lunbo .swiper-slide{
+	height: 40% !important;
+	width: 3.2% !important;
+}
+.lunbo .swiper-slide>img{
+	width: 100%;
+	height: 100%;
+}
+.lunbo1{
+	position: absolute;
+	width: 73.229%;
+	height: 46%;
+	top: 19%;
+	left: 13.3855%;
+}
+.textCont{
+	position: absolute;
+	width: 73.229%;
+	top: 67%;
+	margin-top: 2.37%;
+	font-size: 1.2vw;
+	left: 13.3855%;
+	text-align: center;
+}
+.lunbo1 .swiper-slide {
+	width: 60%;
+	height: 100%;
+	margin: auto;
+}
+.lunbo1 .swiper-slide>img{
+	height: 100%;
+	width: 100%;
+}
+
+.textContent{
+	margin-top: 2%;
+	color: #fff;
+	font-size: 0.9vw;
+	line-height: 3vh;
+	opacity: 0.8;
+}
+.textTitle{
+	width: 100%;
+	color: #fff;
+	text-align: center;
+	font-weight: bold;
+}
+.item{
+	float: left;
+	height: 100%;
+	width: 19%;
+	background: #fff;
+	margin-left: 4.5%;
+}
+.item img{
+	height: 100%;
+	width: 100%;
+}
+.swiper-button-prev3,.swiper-button-next3{
+    height: 4em;
+    width: 4em;
+}
+.listHidden{
+	animation: listHidden 2s linear forwards;
+}
+.indexHidden{
+	animation: indexHidden 2s linear forwards;
+}
+.listShow{
+	animation: listShow 2s linear forwards;
+}
+.indexShow{
+	animation: indexShow 2s linear forwards;
+}
+.back{
+	z-index: 10000;
+	cursor: pointer;
+	position: absolute;
+	top: 2%;
+	left: 2%;
+	color: #fff;
+	font-size: 1.4vw;
+	font-weight: 600;
+}
+.back i{
+	margin-right: 0.3vw;
+}
+.logo{
+	position: fixed;
+	right: 2%;
+	top: 3%;
+	width: 7vw;
+}
+.logo img{
+	width: 100%;
+}
+.swiper-button-next, .swiper-button-prev {
+    position: absolute;
+	top: 43% !important;
+    width: 3vw !important;
+    height: 3vw !important;
+    margin-top: calc(-1 * var(--swiper-navigation-size)/ 2);
+    z-index: 10;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--swiper-navigation-color,var(--swiper-theme-color));
+}
+.swiper-button-next{
+	background: url(../statics/images//next0.png) no-repeat !important;
+	background-size: 100% 100% !important;
+}
+.swiper-button-prev{
+	background: url(../statics/images//prev0.png) no-repeat !important;
+	background-size: 100% 100% !important;
+}
+.swiper-button-prev:after, .swiper-container-rtl .swiper-button-next:after {
+    content: '' !important;
+}
+.swiper-button-next:after, .swiper-container-rtl .swiper-button-prev:after {
+    content: '' !important;
+}
+.bgM{
+	cursor: pointer;
+	position: fixed;
+	bottom: 5%;
+	right: 1%;
+	height: 5vh;
+	width: 5vh;
+	background: url(../statics/images//gbmIcon.png) no-repeat;
+	background-size: 100% 100%;
+}
+.anim22{
+	animation: rotote 2s linear infinite;
+}
+.listMode{
+	cursor: pointer;
+	position: absolute;
+	color: #fff;
+	right: 10%;
+	top: 10%;
+	font-size: 1.8vh;
+	vertical-align: middle;
+}
+.listMode>span{
+	display: inline-block;
+	vertical-align: middle;
+}
+.listMode>span:nth-child(1){
+	height: 1vw;
+	width: 1vw;
+}
+.listMode>span:nth-child(1)>img{
+	height: 100%;
+	width: 100%;
+}
+@keyframes bling{
+	0%{
+		box-shadow: 0.1vh 0.1vh 1vh 2vh rgba(255,255,255,.3);
+	}
+	50%{
+		box-shadow: 0.1vh 0.1vh 1.5vh 2vh rgba(255,255,255,.8);
+	}
+	to{
+		box-shadow: 0.1vh 0.1vh 1vh 2vh rgba(255,255,255,.3);
+	}
+}
+@-webkit-keyframes bling{
+	0%{
+		box-shadow: 0.1vh 0.1vh 1vh 2vh rgba(255,255,255,.3);
+	}
+	50%{
+		box-shadow: 0.1vh 0.1vh 1.5vh 2vh rgba(255,255,255,.8);
+	}
+	to{
+		box-shadow: 0.1vh 0.1vh 1vh 2vh rgba(255,255,255,.3);
+	}
+}
+@keyframes rotote{
+	0%{
+		transform: rotate(0deg);
+	}
+	100%{
+		transform: rotate(360deg);
+	}
+}
+@-webkit-keyframes rotote{
+	0%{
+		transform: rotate(0deg);
+	}
+	100%{
+		transform: rotate(360deg);
+	}
+}
+@-webkit-keyframes right{
+	0%{
+		right: 0;
+	}
+	50%{
+		right: 40%;
+	}
+	100%{
+		right: 0;
+	}
+}
+@-webkit-keyframes left{
+	0%{
+		left: 0;
+	}
+	50%{
+		left: 40%;
+	}
+	100%{
+		left: 0;
+	}
+}
+@-webkit-keyframes indexHidden{
+	0%{
+		left: 0;
+	}
+	100%{
+		left: -100%;
+	}
+}
+@-webkit-keyframes listHidden{
+	0%{
+		left: 200%;
+	}
+	100%{
+		left: 0;
+	}
+}
+@-webkit-keyframes indexShow{
+	0%{
+		left: -100%;
+	}
+	100%{
+		left: 0%;
+	}
+}
+@-webkit-keyframes listShow{
+	0%{
+		left: 0;
+	}
+	100%{
+		left: 200%;
+	}
+}

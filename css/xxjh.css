@@ -1,0 +1,324 @@
+*{
+	margin: 0;
+	padding: 0;
+}
+html,body{
+	height: 100%;
+	width: 100%;
+	background: url(../statics/images/xxjh_bg.png) no-repeat;
+	background-size: 100% 100%;
+	overflow: hidden;
+	user-select: none;
+}
+::-webkit-scrollbar  
+{  
+    width: 0vw;    
+    background-color: none;  
+	display: none;
+}
+::-webkit-scrollbar-track  
+{  
+    border-radius: 0.2vw;  
+    background-color: none;
+}
+::-webkit-scrollbar-thumb  
+{  
+    border-radius: 0.2vw;  
+    background-color: rgba(0,0,0,0.2);
+}
+[v-clock]{
+	display: none !important;
+}
+input,button,template{
+	outline: none;
+}
+.control{
+	z-index: 2;
+	position: fixed;
+	top: 6vh;
+	left: 1vw;
+}
+a{
+	cursor: pointer;
+	text-decoration: none;
+	font-size: 1.8vh;
+	color: #fff;
+}
+a:hover{
+	opacity: 0.8;
+}
+a i{
+	margin-right: 0.1vw;
+}
+.topNavBar {
+    color: #fff;
+    font-size: 1.8vh;
+    line-height: 3.5vh;
+    padding-left: 1%;
+    z-index: 15;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3.5vh;
+    width: 99%;
+   background: linear-gradient(135deg, #404153 0%, #646580 51%, #3F4052 100%);
+   box-shadow: 3px 0px 10px 0px rgba(0, 0, 0, 0.2);
+}
+.xxjh_wrap{
+	position: relative;
+	display: flex;
+	justify-content: space-between;
+	width: 99%;
+	margin-top: 6vh;
+	height: 94%;
+}
+.xxjh_left{
+	width: 33%;
+	height: 92%;
+	background: url(../statics/images/xxjh_left_img.png) no-repeat;
+	background-size: 100% 100%;
+	position: absolute;
+	bottom: 0
+}
+.xxjh_right{
+	position: absolute;
+	width: 66%;
+	height: 98%;
+	right: 0;
+}
+.right_search{
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+}
+.right_searchleft{
+	width: 63%;
+	display: flex;
+	overflow-y: hidden;
+	overflow-x: scroll;
+}
+.xxjh_year{
+	cursor: pointer;
+	cursor: pointer;
+	margin-right: 0.8vw;
+	padding: 0.5vh 1.6vw;
+	font-size: 20px;
+	color: #3F4052;
+	font-weight: bold;
+	border: 0.1vh solid rgba(0,0,0,0);
+}
+.xxjh_year:last-child{
+	margin-right: 0;
+}
+.xxjh_year:hover{
+	border: 0.1vh solid #3F4052;
+}
+.xxjh_yearselect{
+	color: #fff !important;
+	border: 0.1vh solid rgba(0,0,0,0) !important;
+	background: linear-gradient(135deg, #3F4052 0%, #656682 100%);
+}
+.right_searchright{
+	height: 4vh;
+	line-height: 4vh;
+	display: flex;
+	align-items: center;
+}
+.right_searchright label{
+	font-size: 1.9vh;
+	color: #3F4052;
+	font-weight: bold;
+}
+.right_searchright div{
+	position: relative;
+	height: 4vh;
+	width: 15vw;
+	background: #FFFAED;
+	border: 1px solid #3F4052;
+}
+.right_searchright div input{
+	width: 12.5vw;
+	height: 3vh;
+	margin-left: 0.5vw;
+	border: none;
+	background: #FFFAED;
+	color: #A6AAB8;
+	font-size: 1.7vh;
+}
+.right_searchright i{
+	cursor: pointer;
+	position: absolute;
+	font-size: 1.7vh;
+	top: 1vh;
+	right: 0.5vw;
+	color: #A6AAB8;
+}
+.rightCont{
+	position: relative;
+	width: 100%;
+	height: 86vh;
+	margin-top: 2vh;
+	display: flex;
+	justify-content: space-between;
+}
+.rightContleft{
+	overflow-y: scroll;
+	height: 100%;
+	width: 33%;
+	background: linear-gradient(135deg, #8E9CB5 0%, #D5DBE3 100%);
+	box-shadow: 0px 3px 8px 0px rgba(0, 0, 0, 0.15);
+	border: 1px solid #3F4052;
+}
+.rightContright{
+	position: relative;
+	width: 67%;
+}
+.rightContitem{	
+	z-index: 2;
+	position: absolute;
+	height: 100%;
+	width: 97%;
+	right: 0;
+	background: rgba(255,255,255,.6);
+	border: 1px solid #3F4052;
+}
+.trangle{
+	z-index: 0;
+	position: absolute;
+	height: 2vh;
+	width: 2vh;
+	left: -2.2%;
+	top: 2vh;
+	font-size: 5vh;
+	color: #D0D6E1;
+}
+.rightContleftitem{
+	position: relative;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	width: 90%;
+	height: 7vh;
+	box-shadow: 0px 3px 8px 0px rgba(0, 0, 0, 0.13);
+	margin:1.2vh auto;
+	padding: 0.8vh 0.5vw;
+	margin-bottom: 2vh;
+}
+.rightContleftitem:hover{
+	background: #FBFBFB;
+}
+.rightContleftitem:hover .line{
+	background: #3F4052 !important;
+}
+.selectLine{
+	background: #3F4052 !important;
+}
+.selectBag{
+	background: #FBFBFB;
+}
+.rightContleftitemtime{
+	/* width: 23%; */
+	font-size: 2vh;
+	font-weight: bold;
+	color: #3F4052;
+}
+.line{
+	width: 0.3vh;
+	height: 100%;
+	background: #FBFBFB;
+}
+.rightContleftitemcont{
+	width: 66%;
+	font-size: 1.9vh;
+	line-height: 2.8vh;
+	color: #3F4052;
+	overflow: hidden;
+	display: -webkit-box;
+	word-break: break-all;
+	text-overflow: ellipsis; 
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 2;
+}
+.rightResourcetitle{
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	height: 8vh;
+	width: 95%;
+	margin: auto;
+	color: #3F4052;
+	font-size: 2.1vh;
+	font-weight: bold;
+	border-bottom: 1px solid #3F4052;
+}
+.rightResourcetitle>span:nth-child(1){
+	overflow: hidden;
+	display: -webkit-box;
+	word-break: break-all;
+	text-overflow: ellipsis; 
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 1;
+}
+.rightResourcetitle>span:nth-child(2){
+	width: 20%;
+	text-align: right;
+}
+.rightResourceWrap{
+	display: flex;
+	flex-wrap: wrap;
+	width: 100%;
+	height: 74vh;
+	overflow-y: scroll;
+	overflow-x: hidden;
+	margin-top: 2vh;
+	align-content: flex-start;
+}
+.rightResourceItem{
+	position: relative;
+	cursor: pointer;
+	width: 47%;
+	margin-bottom: 2vh;
+	height: 22vh;
+	margin-left: 2.2%;
+	background: #ccc;
+	box-shadow: 0px 0.5vh 1vh 0px rgba(0,0,0,.26);
+}
+.rightResourceItem:hover{
+	opacity: 0.8;
+}
+.rightResourceItem>img{
+	position: absolute;
+	width: 100%;
+	height: 100%;
+}
+.tips{
+    z-index: 2;
+    display: inline-block;
+    position: absolute;
+    left: 0;
+    color: #fff;
+    padding: 0.4vh 1vw;
+    top: 2vh;
+    font-size: 1.7vh;
+    background: linear-gradient(135deg, rgba(187,0,0,.39) 0%, rgba(243,51,68,.8) 51%, rgba(187,0,0,.39) 100%);
+    border-radius: 0 0.5vh 0.5vh 0;
+}
+.subtite{
+    bottom: 0;
+    z-index: 2;
+    width: 96%;
+    position: absolute;
+    padding: 0 2%;
+    color: #fff;
+    height: 4.5vh;
+    line-height: 4.5vh;
+    background: rgba(0,0,0,.59);
+    font-size: 1.7vh;
+    overflow: hidden;
+    display: -webkit-box;
+    word-break: break-all;
+    text-overflow: ellipsis;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+}

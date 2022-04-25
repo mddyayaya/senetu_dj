@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>pdf详情</title>		
+		<link rel="stylesheet" type="text/css" href="css/xszc.css"/>
+		<link rel="stylesheet" type="text/css" href="lib/font-awesome/css/font-awesome.css"/>
+	</head>
+	<body>
+		<div id="app" v-cloak>
+			<div class="top">
+				<div class="control1">
+					<a href="javascript:;" @click="goback"><i class="fa fa-mail-reply" aria-hidden="true"></i>返回&nbsp;&nbsp;|&nbsp;</a>
+					<a href="javascript:window.location='app.html';"><i class="fa fa-home" aria-hidden="true"></i>首页</a>
+				</div>
+				<div class="showtitle">{{title}}</div>
+				<!-- <div>下载</div> -->
+			</div>
+			<div class="contentImg">
+				<div class="img" style="overflow: hidden;">
+					<div class="showList">
+						<iframe style="height: 100%;width: 100%;" allowfullscreen="true"  :src="dataUrl"></iframe>
+					</div>
+				</div>
+				<div class="siblings">
+					<div class="sbilingsTit">同系列文档</div>
+					<ul class="wengdang">
+						<li v-for="item in sameList" @click="changeData(item.id)"><i class="fa fa-file-pdf-o" aria-hidden="true"></i>{{item.title}}</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<script src="lib/jquery/jquery-3.5.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/setCookie.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/ajax.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/vue.min.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			window.onload = function(){
+				var app = new Vue({
+					el:"#app",
+					data:{
+						id:"",
+						title:"",
+						dataUrl:"statics/images/loading.gif",
+						sameList:[],
+						data:{
+							id:"",
+							flag:1
+						}
+					},
+					methods:{
+						// 资源详情
+						detail(){
+							var that = this;
+							postData("resouceDetail",that.data,function(res){
+								if(res.code == 200){
+									that.title = res.data.title;
+									that.dataUrl = res.data.ment_url;
+									that.sameList = res.xl;
+								}
+							})
+						},
+						// 切换资料
+						changeData(id){
+							var that = this;
+							that.data.id = id;
+							that.data.flag = 1;
+							that.detail();
+						},
+						goback(){
+							window.location.href = window.document.referrer;
+						},
+						// 监听离开页面
+						leavePage(){
+							var that = this;
+							window.onbeforeunload=function(e){
+							　　var e = window.event||e;  
+								that.leaveTime = new Date().getTime();
+								var minute = parseInt((that.leaveTime-that.startTime) / 1000);
+								browHistory(0,0,getUrlParam("type"),that.data.id,minute,that.total_minute,that.uid,that.flag);
+								// 黔江
+								resourceQd('','',that.data.id,8,3,minute,1)
+							}
+						}
+					},
+					created() {
+						var that = this;
+						that.data.id = getUrlParam('id');
+						that.data.flag = getUrlParam('flag');
+						that.detail();
+						that.leavePage();
+					}
+				})
+			}
+		</script>
+	</body>
+</html>

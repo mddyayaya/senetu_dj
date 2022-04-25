@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>图文详情</title>		
+		<link rel="stylesheet" type="text/css" href="css/xszc.css"/>
+		<link rel="stylesheet" type="text/css" href="lib/font-awesome/css/font-awesome.css"/>
+	</head>
+	<body>
+		<div id="app" v-cloak>
+			<div class="top">
+				<div class="control1">
+					<a href="javascript:history.back(-1)"><i class="fa fa-mail-reply" aria-hidden="true"></i>返回&nbsp;&nbsp;|&nbsp;</a>
+					<a href="javascript:window.location='app.html';"><i class="fa fa-home" aria-hidden="true"></i>首页</a>
+				</div>
+				<div class="showtitle">{{title}}</div>
+			</div>
+			<div class="contentImg">
+				<div class="img">
+					<img :src="dataImg" alt="">
+				</div>
+				<div class="siblings">
+					<div class="sbilingsTit">同系列图片</div>
+					<ul class="wengdang">
+						<li v-for="item in sameList" @click="changeImg(item.id)"><i class="fa fa-file-image-o" aria-hidden="true"></i>{{item.title}}</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<script src="lib/jquery/jquery-3.5.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/setCookie.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/ajax.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/vue.min.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			window.onload = function(){
+				var app = new Vue({
+					el:"#app",
+					data:{
+						id:"",
+						title:"",
+						dataImg:"statics/images/loading.gif",
+						//进入页面时间
+						startTime:0,
+						sameList:[]
+					},
+					methods:{
+						// 资源详情
+						detail(){
+							var that = this;
+							postData("zctj",{rid:that.id},function(res){
+								if(res.code == 200){
+									that.title = res.data.con[0].title;
+									that.dataImg = res.data.con[0].video_url;
+									that.sameList = res.data.con_r;
+									that.startTime = new Date().getTime();
+								}
+							})
+						},
+						// 切换左侧数据
+						changeImg(id){
+							var that = this;
+							for(var i=0;i<that.sameList.length;i++){
+								if(id == that.sameList[i].id){
+									that.title = that.sameList[i].title;
+									that.dataImg = that.sameList[i].video_url;
+								}
+							}
+						},
+						// 监听离开页面
+						leavePage(){
+							var that = this;
+							window.onbeforeunload=function(e){
+							　　var e = window.event||e;  
+								that.leaveTime = new Date().getTime();
+								var minute = parseInt((that.leaveTime-that.startTime) / 1000);
+								browHistory(0,0,getUrlParam("type"),that.data.id,minute,that.total_minute,that.uid,that.flag);
+								// 黔江
+								resourceQd('','',that.id,2,3,minute,1)
+							}
+						}
+					},
+					created() {
+						var that = this;
+						that.id = getUrlParam('id');
+						that.detail();
+						that..leavePage()
+					}
+				})
+			}
+		</script>
+	</body>
+</html>

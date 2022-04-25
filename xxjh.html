@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>学习讲话</title>
+		<link rel="stylesheet" type="text/css" href="css/xxjh.css"/>
+		<link rel="stylesheet" type="text/css" href="lib/font-awesome/css/font-awesome.css"/>
+		<script src="lib/jquery/jquery-3.5.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/vue.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/ajax.js" type="text/javascript" charset="utf-8"></script>
+		<style type="text/css">
+			.nodata{
+				width: 100%;
+				text-align: center;
+				line-height: 8vh;
+				color: #fff;
+				font-weight: bold;
+				font-size: 2vh;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="topNavBar">
+			
+		</div>
+		<div class="control">
+			<a href="javascript:history.back(-1)"><i class="fa fa-mail-reply" aria-hidden="true"></i>返回&nbsp;&nbsp;|&nbsp;</a>
+			<a href="javascript:window.location='app.html';"><i class="fa fa-home" aria-hidden="true"></i>首页</a>
+		</div>
+		<div class="xxjh_wrap" id="app">
+			<div class="xxjh_left"></div>
+			<div class="xxjh_right">
+				<div class="right_search">
+					<div class="right_searchleft">
+						<div class="xxjh_year" v-if="index<4" @click="selectYear(item.id,index)" :class="yearSelect == index?'xxjh_yearselect':''" v-for="(item,index) in yearList">{{item.title}}</div>
+					</div>
+					<div class="right_searchright">
+						<label>搜索：</label>
+						<div>
+							<input placeholder="输入查询" type="text" id="" v-model="getSoucre.kw" value="" />
+							<i class="fa fa-search" aria-hidden="true" @click="clickSearch"></i>
+						</div>
+					</div>
+				</div>
+				<div class="rightCont">
+					<div class="rightContleft">
+						<!-- 此处循环 -->
+						<div class="rightContleftitem" @click="changeCate(item.id,index)" :class="selectCate == index?'selectBag':''" v-for="(item,index) in leftNav">
+							<div class="rightContleftitemtime">{{item.date_cate}}</div>
+							<div class="line selectLine"></div>
+							<div class="rightContleftitemcont">{{item.title}}</div>
+						</div>
+						<div class="nodata" v-if="leftNav.length<=0">暂无数据</div>
+					</div>
+					<div class="rightContright">
+						<div class="rightContitem">
+							<div class="rightResourcetitle">
+								<span>{{rightTitle}}</span>
+								<span>{{rightTime}}</span>
+							</div>
+							<div class="rightResourceWrap">
+								<!-- 此处循环 -->
+								<div class="rightResourceItem" v-for="item in array" @click="startStudy(item.bs_id,item.r_id,1)">
+									<img :src="item.sz_img" >
+									<span class="tips">{{changeBsid(item.bs_id)}}</span>
+									<p class="subtite">{{item.title}}</p>
+								</div>
+								<div class="trangle"><i class="fa fa-caret-left" aria-hidden="true"></i></div>
+								<div class="nodata" v-if="array.length<=0">暂无数据</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript">
+			var app = new Vue({
+				el:"#app",
+				data:{
+					// 年份列表
+					yearSelect:0,
+					// get数据传参
+					getSoucre:{
+						id:'',
+						kw:""
+					},
+					getNav:{
+						template:18,
+						hid:""
+					},
+					datalist:[],
+					yearList:[],
+					navWrap:[],
+					selectCate:0,
+					leftNav:[],
+					array:[],
+					rightTitle:"",
+					rightTime:"",
+					top:0
+				},
+				methods:{
+					// 年份筛选
+					selectYear(id,index){
+						var that = this;
+						that.yearSelect = index;
+						that.getNav.hid = id;
+						that.selectCate = 0;
+						that.getSoucre.kw = "";
+						$('.trangle').animate({
+							'top':20
+						},300)
+						that.navlist();
+					},
+					//年份列表
+					yearWrap(){
+						var that = this;
+						postData("xxjh_type",{},function(res){
+							if(res.code == 200){
+								if(res.data.length > 0 || res.data!=""){
+									that.yearList = res.data;
+									that.getNav.hid = res.data[0].id;
+								}
+							}
+						})
+					},
+					// 资源包
+					navlist(){
+						var that = this;
+						that.leftNav = [];
+						postData("special",that.getNav,function(res){
+							if(res.code == 200){
+								if(res.data!=null&&res.data.length > 0){
+									that.leftNav = res.data;
+									that.rightTitle = res.data[0].title;
+									that.rightTime = res.data[0].date_cate;
+									that.getSoucre.id = res.data[0].id;
+									that.dataBag();
+								}
+							}
+						})
+					},
+					// 资源
+					dataBag(){
+						var that = this;
+						that.array = [];
+						postData("xxjhData",that.getSoucre,function(res){
+							if(res.code == 200){
+								if(res.data.length > 0){
+									that.array = res.data;
+								}else{
+									that.array = [];
+								}
+							}
+						})
+							
+					},
+					// 时间戳转化
+					changeTime(time){
+						var that = this;
+						var date = new Date(parseInt(time) * 1000);
+						var month = date.getMonth() + 1;
+						var day = date.getDate();
+						return time = that.add0(month)+'月'+that.add0(day)+'日';
+					},
+					// 不足加0；
+					add0(num){
+						var that = this;
+						if(num < 10){
+							num = '0'+num
+						}
+						return num;
+					},
+					// 资源类型转化
+					changeBsid(bsid){
+						if(bsid == 1){
+							bsid = 'PPT'
+						}else if(bsid == 2){
+							bsid = '图文'
+						}else if(bsid == 3){
+							bsid = '视频'
+						}else if(bsid == 4){
+							bsid = '音频'
+						}else if(bsid == 8){
+							bsid = 'PDF'
+						}
+						return bsid;
+					},
+					// 左侧导航筛选资源
+					changeCate(id,index){
+						var that = this;
+						that.getSoucre.id = id;
+						that.selectCate = index;
+						that.rightTime = that.leftNav[index].date_cate;
+						that.rightTitle = that.leftNav[index].title;
+						that.dataBag();
+						$('.trangle').animate({
+							'top':$(".rightContleftitem").eq(index).offset().top-120
+						},300);
+						
+					},
+					// 开始学习
+					startStudy(bsid,id,type){
+						showDetail(bsid,id,2,1)
+					},
+					// 点击查询
+					clickSearch(){
+						var that = this;
+						that.dataBag();
+					}
+				},
+				created() {
+					var that = this;
+					that.yearWrap();
+					setTimeout(function(){					
+						that.navlist();
+					},300);
+					setTimeout(function(){
+						// that.dataBag();
+					},300);
+					$(document).keydown(function(event){
+						if(event.keyCode == 13){
+							that.clickSearch();
+						}
+					})
+				}
+			})
+		</script>
+	</body>
+</html>

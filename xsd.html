@@ -1,0 +1,240 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>中国特色社会主义思想理论体系</title>
+		<link rel="stylesheet" type="text/css" href="css/lltx.css"/>
+		<link rel="stylesheet" type="text/css" href="lib/font-awesome/css/font-awesome.css"/>
+		<link rel="stylesheet" type="text/css" href="css/selectbox.css"/>
+	</head>
+	<body>
+		<!-- 遮罩 -->
+		<div class="blackMark" onclick="closeBag()"></div>
+		<div class="top-nav">
+			<div class="control">
+				<a href="javascript:history.back(-1)"><i class="fa fa-mail-reply" aria-hidden="true"></i>返回&nbsp;&nbsp;|&nbsp;</a>
+				<a href="javascript:window.location='app.html';"><i class="fa fa-home" aria-hidden="true"></i>首页</a>
+			</div>
+		</div>
+		<div class="tssh clear" id="app" v-cloak>
+			<div class="leftNav">
+				<ul class="daohang">					
+					<a :href="'#'+index" v-for="(item,index) in leftNav">
+						<li @click="scroll(index)" :class="selectNum == index?'yellowWords':''"><span v-show="selectNum == index">0{{index+1}}<i></i></span><p><span class="point"></span>{{item.type}}</p><div v-show="selectNum == index" class="line"></div></li>
+					</a>
+				</ul>
+			</div>
+			<div class="rightCont">
+				<div class="search-box">
+					<a class="search">搜索</a>
+					<input type="text" v-model="searchBox"/><i @click="search" class="fa fa-search" aria-hidden="true"></i>
+				</div>
+				<div class="logo log1">
+					<div class="title1" style="display: none;">
+						<div class="border"></div>
+						<div class="word1">讲话</div>
+					</div>
+					<div class="title1">
+						<div class="border"></div>
+						<div class="word1">纲要</div>
+					</div>
+				</div>
+				<div class="logo log2" style="display: none;"><img src="statics/images/tcsj.png" alt=""></div>
+				<div class="main">
+					<div class="content" v-if="search1 == 2">
+						<ul class="time clear" :id="index" val="" v-for="(item,index) in dataBagList">
+							<li v-if="search1 == 2">{{dataBagList[index][0].addtime}}</li>
+							<li v-if="search1 == 1"></li>
+							<li>
+								<div class="top">
+									<a class="point"></a>
+									<p v-if="search1 == 2">{{item[0].type}}</p>
+									<p v-if="search1 == 1"></p>
+								</div>
+								<div class="cont clear">
+									<div class="item1" va="1" valu="1" v-for="items in item"  @click="showDetail1(4,items.title,items.bid,items.id,items.img,items.bs_id)">
+										<img :src="items.img == null?items.sz_img:items.img" alt="">
+										<div class="tipss">{{items.title}}</div>
+										<span class="tips" v-if="items.img == null" alt="">{{items.bsid1}}</span>
+									</div>
+								</div>
+							</li>
+						</ul>
+						<div class="null" v-show="dataBagList.length == 0" style="top: -7vh;">暂无数据</div>
+					</div>
+					<div class="content" v-if="search1 == 1">
+						<ul class="time clear"  val="">
+							<li v-if="search1 == 2">{{dataBagList[index][0].addtime}}</li>
+							<li v-if="search1 == 1"></li>
+							<li>
+								<div class="top">
+									<a class="point"></a>
+									<p v-if="search1 == 2">{{item[0].type}}</p>
+									<p v-if="search1 == 1"></p>
+								</div>
+								<div class="cont clear">
+									<div class="item1" va="1" valu="1" v-for="items in dataBagList"  @click="showDetail1(4,items.title,items.bid,items.id,items.img,items.bs_id)">
+										<img :src="items.sz_img" alt="">
+										<div class="tipss">{{items.title}}</div>
+										<span class="tips" v-if="items.img == null" alt="">{{items.bsid1}}</span>
+									</div>
+								</div>
+							</li>
+						</ul>
+						<div class="null" v-show="dataBagList.length == 0" style="top: -7vh;">暂无数据</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- 展开资源包 -->
+		<div class="resource-packages">
+			<div class="close-icon">×</div>
+			<div class="select-content">
+			<div class="name1">第一批</div>
+				<div class="select-content-item">
+					<div class="main-body-item body-item1" id="PPT1"><a><img src="statics/images/jzxx_icon.png"/></a><a class="tips">PPT</a><span>习近平新时代中国特色社会主义理论体系</span></div>
+				</div>
+			</div>
+		</div>
+		<canvas id="stars"></canvas>
+	</body>
+	<script src="lib/jquery/jquery-3.5.1.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/ajax.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/vue.min.js" type="text/javascript" charset="utf-8"></script>
+	<script>
+		var app = new Vue({
+			el:"#app",
+			data:{
+				// 资源筛选框
+				selectBox:false,
+				// 顶部导航
+				topData:[],
+				// get数据传参
+				getSoucre:{
+					template:4,
+					ft_id:"",
+					kw:""
+				},
+				//顶部导航选中
+				topbarSelect:0,
+				// 顶部导航选中左侧变化
+				topbarSelectWords:"十九届五中全会",
+				// 左侧导航选中
+				selectNum:0,
+				// 空数据
+				isNull:false,
+				// 搜索框搜索
+				searchBox:'',
+				// 数据包
+				dataBagList:[],
+				// 左侧导航
+				leftNav:[],
+				search1:2
+			},
+			methods:{
+				// 打开筛选框
+				openSelect(){
+					var that = this;
+					if(that.selectBox == true){
+						that.selectBox = false;
+					}else{
+						that.selectBox = true
+					}
+				},
+				// /点击滚动到相对位置
+				scroll(index){
+					var that = this;
+					that.selectNum = index;
+				},
+				// 聚焦搜索
+				search(){
+					var that = this;
+					that.getSoucre.kw = that.searchBox;
+					if(that.getSoucre.kw == ""){
+						that.search1 = 2;
+						that.dataBag();
+					}else{
+						that.search1 = 1;
+						postData("xsd_kw",that.getSoucre,function(res){
+							if(res.code == 200){
+								if(res.data.info.length != 0){
+									for(var i=0;i<res.data.info.length;i++){
+										res.data.info[i].bsid1 = changeSourceType(res.data.info[i].bs_id);
+									}
+									that.dataBagList = res.data.info;
+									that.getSoucre.kw = "";
+								}else{
+									that.dataBagList = [];
+									that.getSoucre.kw = "";
+								}
+							}
+						})
+					}
+				},
+				// 资源包
+				dataBag(){
+					var that = this;
+					that.dataBagList = [];
+					postData("special",that.getSoucre,function(res){
+						if(res.code == 200){
+							if(res.data.res.length != 0){
+								that.leftNav = res.data.cou;
+								for(var i=0;i<res.data.res.length;i++){
+									for(var j=0;j<res.data.res[i].length;j++){
+										res.data.res[i][j].bsid1 = changeSourceType(res.data.res[i][j].bs_id)
+									}
+								}
+								that.dataBagList = res.data.res;
+							}else{
+								
+							}
+						}
+					})
+				},
+				// 打开资源包
+				showDetail1(template,title,ft_id,rid,img,bsid){
+					if(img == null){
+						showDetail(bsid,rid,3,1)
+					}else{
+						openBag(template,title,ft_id,"")
+					}
+				}
+			},
+			mounted() {
+				var that = this;
+			},
+			created() {
+				var that = this;
+				that.dataBag();
+				// 回车键搜索
+				$(document).keydown(function(event){
+					if(event.keyCode == 13){
+						that.getSoucre.kw = that.searchBox;
+						that.dataBagList = [];
+						if(that.getSoucre.kw == ""){
+							that.search1 = 2;
+							that.dataBag();
+						}else{
+							that.search1 = 1;
+							postData("xsd_kw",that.getSoucre,function(res){
+								if(res.code == 200){
+									if(res.data.info.length != 0){
+										for(var i=0;i<res.data.info.length;i++){
+											res.data.info[i].bsid1 = changeSourceType(res.data.info[i].bs_id);
+										}
+										that.dataBagList = res.data.info;
+										that.getSoucre.kw = "";
+									}else{
+										that.dataBagList = [];
+										that.getSoucre.kw = "";
+									}
+								}
+							})
+						}
+					}
+				})
+			}
+		})
+	</script>
+</html>
