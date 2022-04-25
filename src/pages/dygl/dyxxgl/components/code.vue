@@ -67,7 +67,7 @@
 					console.log(that.uid);
 					document.getElementById('qrcode').innerHTML = '';
 					that.qrcode = new QRCode('qrcode',{
-						text:"http://dj.gxsentu.net/dj2.5admin/codeApply/#/pages/index/index?zzName="+that.zzName+'&uid='+that.uid,
+						text:"http://qj.gxsentu.net/dj2.5admin/codeApply/#/pages/index/index?zzName="+that.zzName+'&uid='+that.uid,
 						width:240,
 						height:240
 					})

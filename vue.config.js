@@ -10,7 +10,7 @@ module.exports = {
 		// 配置多个代理
 		proxy: {
 			"/api": {
-				target: "http://10.164.143.28",
+				target: "http://qj.gxsentu.net",
 				changeOrigin: true,
 				// 重写路径
 				pathRewrite: {

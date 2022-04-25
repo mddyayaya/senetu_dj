@@ -149,7 +149,7 @@
 			// 下载批量表格
 			downExcel(){
 				var that = this;
-				window.open('http://10.164.143.28/uploads/dj2_file/dy.xls') 
+				window.open('http://qj.gxsentu.net/uploads/dj2_file/dy.xls') 
 			},
 			// 批量上传数据提交
 			pushData(value){

@@ -9,7 +9,7 @@ Vue.use(VueQuillEditor)
 
 /*富文本编辑图片上传配置*/
 const uploadConfig = {
-	action:"http://10.164.143.28/people/?c=d_three_api&m=uploadImg",// 必填参数 图片上传地址
+	action:"http://qj.gxsentu.net/people/?c=d_three_api&m=uploadImg",// 必填参数 图片上传地址
 	methods: 'POST',  // 必填参数 图片上传方式
 	name:"file",
 	size: 2048 ,  // 可选参数   图片大小，单位为Kb, 1M = 1024Kb

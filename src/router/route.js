@@ -113,7 +113,16 @@ export const slideBar = [
 					index:'/djxc_dyfc'
 				},
 				component: () => import('@/pages/djxc/djxc_dyfc/dyfc_detail.vue')
-			}
+			},
+			{
+				path:"/ppbz",
+				name:"djxc_ppbz",
+				meta: {
+					title: '品牌保障',
+					index:'/ppbz'
+				},
+				component: () => import('@/pages/djxc/djxc_ppbz')
+			},
 		]
 	},
 	{
@@ -219,10 +228,46 @@ export const slideBar = [
 				path:"/mbkh",
 				name:"mbkh",
 				meta: {
-					title: '党建目标考核',
+					title: '党员考核',
 					index:"/mbkh",
 				},
 				component: () => import('@/pages/dwgl/mbkh')
+			},
+			{
+				path:"/mbkh_set_score",
+				name:"mbkh_set_score",
+				meta: {
+					title: '党员考核',
+					index:"/mbkh_set_score",
+				},
+				component: () => import('@/pages/dwgl/mbkh/setScore')
+			},
+			{
+				path:"/zbkh",
+				name:"zbkh",
+				meta: {
+					title: '支部考核',
+					index:"/zbkh",
+				},
+				component: () => import('@/pages/dwgl/zbkh')
+			},
+			{
+				path:"/zbkh_gzsz",
+				name:"zbkh_gzsz",
+				meta: {
+					title: '规则设置',
+					index:"/zbkh_gzsz",
+				},
+				component: () => import('@/pages/dwgl/zbkh/zbkh_gzsz')
+			},
+			{
+				path:"/zbkh_set_score",
+				name:"zbkh_set_score",
+				meta: {
+					title: '打分',
+					index:"/zbkh_set_score",
+				},
+				component: () => import('@/pages/dwgl/zbkh/setScore')
 			},
 			{
 				path:"/mbkh_gzsz",

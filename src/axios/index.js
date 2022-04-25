@@ -50,6 +50,13 @@ export const djxc = {
 	dyfcUpdate:(data) => post('?c=d_two_api&m=updateDyfc',data),
 	// 删除党员风采
 	dyfcDel:(data) => post('?c=d_two_api&m=delDyfc',data),
+
+
+	// 新增品牌保障
+	// 品牌保障详情
+	updateBrand:(data) => get('?c=d_two_api&m=updateBrand&id='+data.id),
+	// 新增品牌保障
+	updateBrands:(data) => post('?c=d_two_api&m=updateBrand',data),
 }
 
 /* 党务管理 */
@@ -153,6 +160,20 @@ export const dwgl = {
 	updateMemberScore:(data) => post('?c=d_two_api&m=updateMemberScore',data),
 	//黔江烟草重新打分绑定
 	updateMemberScoreGet:(data) => get('?c=d_two_api&m=updateMemberScore&uid='+data.uid),
+	starSelectApproval:(data) => post('?c=d_two_api&m=starSelectApproval',data),
+
+	// 活动应参与人员
+	memberAttendMeet:(data) => post('?c=d_two_api&m=memberAttendMeet',data),
+	// 查看请假人员
+	updateAttentMeetGet:(data) => get('?c=d_two_api&m=updateAttentMeet&hyid='+data.hyid+'&hyflag='+data.hyflag),
+	// 请假
+	updateAttentMeet:(data) => post('?c=d_two_api&m=updateAttentMeet',data),
+	// 党员得分列表
+	memberStarList:(data) => post('?c=d_two_api&m=memberStarList',data),
+	// 党员打分分类列表
+	memberSelectStar:(data) => post('?c=d_two_api&m=memberSelectStar',data),
+	// 党员打分
+	memberDoStar:(data) => post('?c=d_two_api&m=memberDoStar',data),
 }
 
 // 树形结构

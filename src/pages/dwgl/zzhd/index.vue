@@ -1,6 +1,7 @@
 <template>
 	<div class="wrap">
 		<DelData ref="delDatas"></DelData>
+		<Qingjia ref="qingjia" @dataList="dataList"></Qingjia>
 		<div class="navbar">
 			<el-breadcrumb separator="/">
 				<el-breadcrumb-item>党务管理</el-breadcrumb-item>
@@ -91,8 +92,11 @@
 								<el-table-column
 									label="操作"
 									fixed="right"
-									width="120">
+									width="160">
 									<template slot-scope="scope">
+										<el-button 
+										v-if="$store.state.userinfo.flag==3"
+										@click="levea(scope.row)" type="text" size="small">请假</el-button>
 										<el-button @click="showDetail(scope.row)" type="text" size="small">详情</el-button>
 										<el-button @click="edit(scope.row)"
 										 v-if="$store.state.userinfo.id==scope.row.pub_id||$store.state.userinfo.flag==1"
@@ -118,6 +122,7 @@
 	import Page from '@/components/page.vue'
 	import DelData from '@/components/delToast.vue'
 	import { Message } from 'element-ui'
+	import Qingjia from './ask_levea.vue'
 	export default{
 		data(){
 			return{
@@ -137,7 +142,7 @@
 				totalPage:0
 			}
 		},
-		components:{tree,Page,DelData},
+		components:{tree,Page,DelData,Qingjia},
 		methods:{
 			// 数据
 			dataList(){
@@ -180,6 +185,10 @@
 						pub_flag:data.pub_flag
 					}
 				})
+			},
+			levea(data){
+				// 请假
+				this.$refs.qingjia.open(data)
 			},
 			// 新增活动
 			goAdd(){

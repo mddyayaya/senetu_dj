@@ -1,32 +1,65 @@
 export const biaozhun = [
 	{
-		title:"党员学习",
-		content:"集中学习：（按照活动发布时的课时设置）<strong>5分/课时</strong><br/>个人学习：（按照个人学习任务发布时的课时设置）<strong>3分/课时</strong><br/>在线学习：有效观看（3分钟以上）学习资源<strong>1分/个</strong>",
-		score:0
+		types:[
+			{title:'政治素养',score:8,id:1},
+			{title:'业务能力',score:0,id:2},
+			{title:'克难攻坚',score:0,id:3},
+			{title:'带头上党课',score:15,id:4},
+			{title:'通报批评',score:-8,id:5},
+		]
 	},
 	{
-		title:"岗位履职",
-		content:"优秀积<strong>5分</strong>；良好积<strong>3分</strong>；合格积<strong>1分</strong>；较差积<strong>0分</strong>",
-		score:0
+		types:[
+			{title:'理论学习',score:0,id:6},
+			{title:'履职尽责',score:0,id:7},
+			{title:'示范引领',score:0,id:8},
+			{title:'发表文章',score:0,id:9},
+			{title:'提醒谈话',score:-10,id:10},
+		]
 	},
 	{
-		title:"支部活动",
-		content:"活动当日首次签到积<strong>5分/次</strong>；迟到积<strong>2分/次</strong>；请假/旷会不积分",
-		score:0
+		types:[
+			{title:'组织生活',score:0,id:11},
+			{title:'创新创效',score:0,id:12},
+			{title:'志愿者服务',score:0,id:13},
+			{title:'荣誉表彰',score:0,id:14},
+			{title:'其他扣分',score:-8,id:15},
+		]
 	},
 	{
-		title:"党费缴纳",
-		content:"每月按时缴纳党费积<strong>10分</strong>；逾期补缴积<strong>3分/次</strong>",
-		score:0
+		types:[
+			{title:'纪律作风',score:0,id:16},
+			{title:'团结协作',score:0,id:17},
+			{title:'服务群众',score:0,id:18},
+			{title:'其他加分',score:0,id:19},
+			{title:'',score:0,id:20},
+		]
 	},
 	{
-		title:"作用发挥",
-		content:"志愿服务：<strong>3分/次</strong><br/>技术攻关：<strong>5分/次</strong><br/>创新创效：<strong>5分/次</strong><br/>帮扶济贫：<strong>3分/次</strong>",
-		score:0
+		types:[
+			{title:'道德操守',score:0,id:21},
+			{title:'遵章守纪',score:0,id:22},
+			{title:'承诺践诺',score:0,id:23},
+			{title:'',score:0,id:24},
+			{title:'',score:0,id:25},
+		]
 	},
 	{
-		title:"先进典型",
-		content:"荣誉表彰：每个积<strong>5分</strong><br/>示范岗位：每个积<strong>10分</strong>",
-		score:0
+		types:[
+			{title:'意识形态',score:0,id:26},
+			{title:'',score:0,id:27},
+			{title:'',score:0,id:28},
+			{title:'',score:0,id:29},
+			{title:'',score:0,id:30},
+		]
+	},
+	{
+		types:[
+			{title:'党费缴纳',score:0,id:31},
+			{title:'',score:0,id:32},
+			{title:'',score:0,id:33},
+			{title:'',score:0,id:34},
+			{title:'',score:0,id:35},
+		]
 	},
 ]

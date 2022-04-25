@@ -53,7 +53,7 @@
 						</div>
 						<el-menu-item
 							index="/mbkh" 
-							v-if="topIndex == 3&&$store.state.userinfo.dwid==716">
+							v-if="topIndex == 3">
 							<span slot="title">党员考核</span>
 						</el-menu-item>
 					</el-menu>

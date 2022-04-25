@@ -12,22 +12,17 @@
 			</el-breadcrumb>
 		</div>
 		<div class="datawrap">
-			<tree @treeSelect="treeSelect"></tree>
 			<div class="datatable">
 				<div class="datas">
-					<div class="switchBar">
-						<div>
-							<span :class="{selectSwitch:selectSwitch == 1}" 
-							@click="selectSwitch=1;
-							getdata.month = (new Date().getMonth()+1).toString();
-							getdata.page=1;
-							dataList()">月度排名</span>
-							<span :class="{selectSwitch:selectSwitch == 2}" @click="selectSwitch=2;getdata.year = new Date().getFullYear();getdata.month='';getdata.page=1;dataList();">年度排名</span>
+					<div class="selectbar">
+						<div class="leftBar">
+							<div>分数排名</div>
 						</div>
-						<div>
+						<div class="rightBar">
 							<el-select
 							 	style="margin-right: 10px;width: 120px !important;" 
 								clearable
+								size="small"
 								v-model="getdata.year" placeholder="请选择年份"
 								@change="getdata.page = 1;totalPage = 0;dataList();">
 								<el-option
@@ -38,11 +33,11 @@
 								</el-option>
 							</el-select>
 							<el-select
-							v-if="selectSwitch==1"
+								size="small"
 								style="width: 120px !important;margin-right: 10px;" 
 								v-model="getdata.quarter" placeholder="选择季度"
-								@change="getdata.page = 1;totalPage = 0;dataList();"
-								clearable>
+								clearable
+								@change="getdata.page = 1;totalPage = 0;dataList();">
 								<el-option
 									label="第一季度"
 									:value="1">
@@ -60,7 +55,7 @@
 									:value="4">
 								</el-option>
 							</el-select>
-							<el-button type="primary" @click="$router.push('/mbkh_gzsz')">评分标准</el-button>
+							<el-button size="small" type="primary" @click="$router.push('/zbkh_gzsz')">评分标准</el-button>
 						</div>
 					</div>
 					<div class="selectdata">
@@ -77,46 +72,46 @@
 									label="排名">
 								</el-table-column>
 								<el-table-column
-									prop="u_name"
-									label="党员">
+									prop="dw"
+									label="支部名称">
 								</el-table-column>
 								<el-table-column
-									prop="score[0]"
-									label="党性修养">
+									prop="score[0].score"
+									label="第一季度">
 								</el-table-column>
 								<el-table-column
-									prop="score[1]"
-									label="岗位履职">
+									prop="score[1].score"
+									label="第二季度">
 								</el-table-column>
 								<el-table-column
-									prop="score[2]"
-									label="作用发挥">
+									prop="score[2].score"
+									label="第三季度">
 								</el-table-column>
 								<el-table-column
-									prop="score[3]"
-									label="加分项">
+									prop="score[3].score"
+									label="第四季度">
 								</el-table-column>
 								<el-table-column
-									prop="score[4]"
-									label="扣分项">
+									prop="total"
+									label="分数">
 								</el-table-column>
 								<el-table-column
-									prop="total_score"
-									label="总积分">
-									<template slot-scope="scope">
-										<span style="color:#bb0000">{{scope.row.total}}</span>
-									</template>
-								</el-table-column>
-								<el-table-column
-									v-if="$store.state.userinfo.flag==3"
+									v-if="$store.state.userinfo.flag==1"
 									label="操作"
 									fixed="right"
 									width="120">
 									<template slot-scope="scope">
-										<el-button type="text" size="small" 
-											@click="goDafen(scope.row)">详情</el-button>
-										<el-button  type="text" size="small"
-											@click="goDafen(scope.row)">打分</el-button>
+										<el-button v-if="scope.row.complete == 1" type="text" size="small" 
+											@click="$router.push('/zbkh_set_score')">重新打分</el-button>
+										<el-button v-else type="text" size="small"
+											@click="$router.push({
+												path:'/zbkh_set_score',
+												query:{
+													uid:scope.row.id,
+													year:getdata.year,
+													quarter:getdata.quarter
+												}
+											})">去打分</el-button>
 									</template>
 								</el-table-column>
 							</el-table>
@@ -134,8 +129,7 @@
 	import { dwgl } from '@/axios'
 	import Page from '@/components/page.vue'
 	import { Message } from 'element-ui'
-	import Df from '../zbkh/components/jfzc.vue'
-	let that;
+	import Df from '../mbkh/components/jfzc.vue'
 	export default{
 		data(){
 			let quarter = ""
@@ -150,10 +144,10 @@
 				quarter = 3;
 			}else{
 				quarter = 4;
-			} 
+			}  
 			return{
 				getdata:{
-					user_id:this.$store.state.userinfo.id,
+					dwid:this.$store.state.userinfo.id,
 					flag:this.$store.state.userinfo.flag,
 					year:new Date().getFullYear(),
 					quarter:quarter,
@@ -172,22 +166,10 @@
 		},
 		components:{Page,Df,tree},
 		methods:{
-			// 去打分
-			goDafen(data){
-				that.$router.push({
-					path:'/mbkh_set_score',
-					query:{
-						u_id:data.id,
-						uid:that.getdata.user_id,
-						u_name:data.u_name,
-						year:that.getdata.year,
-						quarter:that.getdata.quarter
-					}
-				})
-			},
 			// 打分列表
 			dataList(){
-				dwgl.memberStarList(that.getdata).then(res => {
+				var that = this;
+				dwgl.starApproval(that.getdata).then(res => {
 					if(res.data.pagedata!=null){
 						that.tableData = res.data.pagedata;
 						that.totalPage = res.data.count;
@@ -198,16 +180,19 @@
 			},
 			// 关闭弹窗
 			closeWin(){
+				var that = this;
 				that.dialogVisible = false;
 				that.dataList();
 			},
 			// 分页筛选
 			changedata(val) {
+				var that = this;
 				that.getdata.page = val;
 				that.dataList();
 			},
 			// 树形结构筛选
 			treeSelect(data){
+				var that = this;
 				that.getdata.user_id = data.id;
 				that.getdata.flag = data.flag;
 				that.getdata.page = 1;
@@ -215,10 +200,11 @@
 			}
 		},
 		mounted() {
+			var that = this;
 			that.dataList();
 		},
 		created() {
-			that = this;
+			var that = this;
 			that.$emit('selectTop',3)
 		}
 	}
@@ -237,13 +223,11 @@
 	}
 	
 	.switchBar{
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
 		width: 100%;
 		height: 40px;
 		line-height: 40px;
 		margin-bottom: 20px;
+		border-bottom: 1px solid #DDDDDD;
 		span{
 			cursor: pointer;
 			display: inline-block;
