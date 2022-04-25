@@ -1,0 +1,506 @@
+{
+	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+			"path": "pages/index/index",
+			"style": {
+				"navigationBarTitleText": "首页",
+                "enablePullDownRefresh": false
+			}
+		}
+        ,{
+            "path" : "pages/zt/zt",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "学习专题",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/mine/mine",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "我的",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/richeng/richeng",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "日程",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/addindex/addindex",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "添加到首页",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/zxks/zxks",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "在线考试",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/activity/activity",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "三会一课",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/activitydetail/activitydetail",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "活动详情",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/zxks/zxksdetail/zxksdetail",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "在线考试详情",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/zxks/startks/startks",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "开始考试",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/ztMore/ztMore",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "专题更多",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/activity/editactivity/editactivity",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "填写心得体会",
+                "enablePullDownRefresh": false
+            }
+            
+        },
+		{
+		"path": "components/my-update",
+			"style": {
+				"navigationStyle": "custom",  // 取消本页面的导航栏
+				"app-plus": {
+					"animationType": "fade-in", // 设置fade-in淡入动画，为最合理的动画类型
+					"background": "transparent", // 背景透明
+					"backgroundColor": "rgba(0,0,0,0)", // 背景透明
+					"popGesture": "none" // 关闭IOS屏幕左边滑动关闭当前页面的功能
+				}
+			}
+		}
+        ,{
+            "path" : "pages/myorange/myorange",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "我的组织",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/xwjl/xwjl",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "行为记录",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/phb/phb",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "排行榜",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/myinfo/myinfo",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "个人资料",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/shouquan/shouquan",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "人民视讯新时代党建",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/mysave/mysave",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "我的收藏",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/videoDetail/videoDetail",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "资源详情",
+                "enablePullDownRefresh": false,
+				"app-plus":{
+					"subNVues":[{
+						"id":"videoplays",
+						"path":"pages/videoplay/videoplay",
+						"style":{
+							"width":"750rpx",
+							"height":"400rpx",
+							"mask":"transparent",
+							"position":"static"
+						}
+					}]
+				}
+            }
+        }
+        ,{
+            "path" : "pages/addmembers/addmembers",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "添加成员",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/addmembers/handleAdd/handleAdd",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "手动添加成员",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/search/search",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "专题搜索",
+                "enablePullDownRefresh": false
+            }
+            
+        },{
+            "path" : "pages/bushu/bushu",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "步数",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/bushu/guize/guize",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "步数规则",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/bushu/mingxi/mingxi",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "步数明细",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/indexDetail/indexDetail",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "品质资源详情",
+                "enablePullDownRefresh": false,
+				"app-plus":{
+					"subNVues":[{
+						"id":"videoplayss",
+						"path":"pages/videoplay/videoplay",
+						"style":{
+							"width":"750rpx",
+							"height":"400rpx",
+							"mask":"transparent",
+							"position":"static"
+						}
+					}]
+				}
+            }
+            
+        }
+        ,{
+            "path" : "pages/zxks/finishks/finishks",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "已完成考试",
+                "enablePullDownRefresh": false
+            }
+            
+        },
+        {
+            "path" : "pages/activityPlay/activityPlay",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "活动详情",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/pptDetail/pptDetail",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "ppt详情",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/qjdetail/qjdetail",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "红色全景",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/persondetail/persondetail",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "活动资料",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/audioDetail/audioDetail",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "资源详情",
+                "enablePullDownRefresh": false
+            }
+            
+        },{
+            "path" : "pages/djxc/djxc",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "党建宣传",
+                "enablePullDownRefresh": false
+            }
+            
+        },{
+            "path" : "pages/searchxc/searchxc",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "党建宣传搜索",
+                "enablePullDownRefresh": false
+            }
+            
+        }, {
+			"path": "pages/login/login",
+			"style": {
+				"navigationBarTitleText": "新时代党建",
+				"app-plus": {
+					"animationType": "fade-in",
+					"animationDuration": 200
+				}
+			}
+		},
+		{
+			"path": "uview-ui/components/u-avatar-cropper/u-avatar-cropper",
+			"style": {
+				"navigationBarTitleText": "头像裁剪",
+				"navigationBarBackgroundColor": "#000000"
+			}
+		}
+        ,{
+            "path" : "pages/videoplay/videoplay",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "视频播放",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/djxcdetail/djxcdetail",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "党建宣传",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/message/message",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "消息中心",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/sjxx/sjxx",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "书记信箱",
+                "enablePullDownRefresh": false
+            }
+        }
+        ,{
+            "path" : "pages/sjxxdetail/sjxxdetail",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "书记信箱",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/sjxx_edit/sjxx_edit",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "书记信箱",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/mzpy/mzpy",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "民主评议",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/mzpydetail/mzpydetail",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "民主评议",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/mztp/mztp",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "民主投票",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/yinsi/yinsi",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "隐私政策",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/memberlists/memberlists",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "成员列表",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/dfjn/dfjn",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "党费缴纳",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+    ],
+	"tabBar":{
+		"backgroundColor":"#fff",
+		"selectedColor":"#BC2233",
+		"list":[
+			{
+				"pagePath":"pages/index/index",
+				"iconPath":"/static/home.png",
+				"text":"首页",
+				"selectedIconPath":"/static/homed.png"
+			},
+			{
+				"pagePath":"pages/zt/zt",
+				"iconPath":"/static/zt.png",
+				"text":"学习专题",
+				"selectedIconPath":"/static/zted.png"
+			},
+			{
+				"pagePath":"pages/richeng/richeng",
+				"iconPath":"/static/mess.png",
+				"text":"日程",
+				"selectedIconPath":"/static/messed.png"
+			},
+			{
+				"pagePath":"pages/mine/mine",
+				"iconPath":"/static/mine.png",
+				"text":"我的",
+				"selectedIconPath":"/static/mineed.png"
+			}
+		]
+	},
+	"globalStyle": {
+		"navigationBarTitleText": "新时代党建",
+		"navigationBarBackgroundColor": "#BC2233",
+		"navigationBarTextStyle":"white",
+		"app-plus": {
+			"animationDuration": 200,
+			"bounce":"none"
+		}
+	},
+	"easycom": {
+		"^u-(.*)": "@/uview-ui/components/u-$1/u-$1.vue",
+		"^my-(.*)":"@/components/my-$1.vue"
+	}
+}

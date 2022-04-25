@@ -1,0 +1,83 @@
+{
+  "id": "chailry-upgrade",
+  "displayName": "云端一体app升级，支持热更新，整包更新，强制更新，快速为app添加版本升级功能",
+  "version": "1.0.1",
+  "description": "云端一体app升级，（暂停维护，请勿付费下载）",
+  "keywords": [
+    "chailry-upgrade"
+],
+  "repository": "",
+  "engines": {
+    "HBuilderX": "^3.1.0"
+  },
+  "dcloudext": {
+    "category": [
+        "uniCloud",
+        "云端一体页面模板"
+    ],
+    "sale": {
+      "regular": {
+        "price": 5
+      },
+      "sourcecode": {
+        "price": 10
+      }
+    },
+    "contact": {
+      "qq": ""
+    },
+    "declaration": {
+      "ads": "无",
+      "data": "插件不采集任何数据",
+      "permissions": "无"
+    },
+    "npmurl": ""
+  },
+  "uni_modules": {
+    "dependencies": [],
+    "encrypt": [
+		"uniCloud/cloudfunctions/business-api/controller/public.js",
+		"uniCloud/cloudfunctions/business-api/service/public.js"
+		
+	],
+    "platforms": {
+      "cloud": {
+        "tcb": "y",
+        "aliyun": "y"
+      },
+      "client": {
+        "App": {
+          "app-vue": "y",
+          "app-nvue": "y"
+        },
+        "H5-mobile": {
+          "Safari": "u",
+          "Android Browser": "u",
+          "微信浏览器(Android)": "u",
+          "QQ浏览器(Android)": "u"
+        },
+        "H5-pc": {
+          "Chrome": "u",
+          "IE": "u",
+          "Edge": "u",
+          "Firefox": "u",
+          "Safari": "u"
+        },
+        "小程序": {
+          "微信": "u",
+          "阿里": "u",
+          "百度": "u",
+          "字节跳动": "u",
+          "QQ": "u"
+        },
+        "快应用": {
+          "华为": "u",
+          "联盟": "u"
+        }
+      }
+    },
+    "extends": {
+        "sn": "wG54OjyIdUx1KQEWcYqOom6jx8DdWLq0689IZwjLCXBiOiFGlf2Y9S2YOGK9kBEzHHBb7v/H0xgTOWyUYL6IsLRsehCVUcyDg8bcKrgrNrLdRGZ44ehVthWRY2LKpXqqDkXF1NxPSmfIidpIGy2mjsRS+O/HfegkDdam0pugv6tNXBAqGyVTqY+0tjTnQZxixKrv+8QSoEn08K3sjeK39I9Q7a9BF0gCkUFcHi5XCj4CVL3t47qq/cenBGFwBYdeGpLdP0bjG+7T5B1SFT1eDkOsdZ5tJFf4EvSViOf18Sc3ov4PXooB4AIx2ELEGf+N"
+    }
+  }
+}

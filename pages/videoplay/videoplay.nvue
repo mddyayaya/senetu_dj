@@ -1,0 +1,54 @@
+<template>
+	<view class="myvideo">
+		<video
+			id="myvv"
+			ref="myvv"
+			class="myvv"
+			autoplay
+			controls
+			:title="playTitle"
+			:src="play_src" >
+		</video>
+	</view>
+</template>
+
+<script>
+	export default {
+		data() {
+			return {
+				play_src:"",
+				playTitle:"",
+				videoContext:""
+			}
+		},
+		methods: {
+			
+		},
+		mounted() {
+			var that = this;
+			var video = uni.createVideoContext("myvv");
+			console.log(video)
+		},
+		onReady() {
+			var that = this;
+			uni.$on('subPlayData', (data) => {
+				setTimeout(() => {
+					that.playTitle = data.title;
+					that.play_src = data.url;
+				},1000)
+			})
+		},
+		watch:{
+			play_src(value){
+				console.log(value)
+			}
+		}
+	}
+</script>
+
+<style>
+	.myvv{
+		flex: 1;
+		height: 400rpx;
+	}
+</style>

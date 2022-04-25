@@ -1,0 +1,72 @@
+// 文档教程: https://uniapp.dcloud.net.cn/uniCloud/schema
+{
+	"bsonType": "object",
+	"required": ["device","version"],
+	"permission": {
+		"read": true,
+		"create": false,
+		"update": false,
+		"delete": false
+	},
+	"properties": {
+		"_id": {
+			"description": "ID，系统自动生成"
+		},
+		"device": {
+			"bsonType": "string",
+			"description": "设备",
+			"title": "设备",
+			"trim": "both"
+		},
+		"version": {
+			"bsonType": "string",
+			"description": "版本号",
+			"title": "版本号",
+			"trim": "both"
+		},
+		"versionDesc": {
+			"bsonType": "string",
+			"description": "版本描述",
+			"title": "版本描述",
+			"trim": "both"
+		},
+		"updateContent": {
+			"bsonType": "string",
+			"description": "更新内容描述",
+			"title": "更新内容描述"
+		},
+		"type": {
+			"bsonType": "array",
+			"description": "更新方式",
+			"title": "更新方式",
+			"enum": [{"value": 0,"text": "热更新"}, {"value":1,"text":"整包更新"}],
+			"defaultValue": 0
+		},
+		"force": {
+			"bsonType": "bool",
+			"description": "是否强制更新",
+			"title": "是否强制更新"
+		},
+		"wgtUrl": {
+			"bsonType": "string",
+			"description": "热更新包地址",
+			"title": "热更新包地址",
+			"trim": "both"
+		},
+		"url": {
+			"bsonType": "string",
+			"description": "整包更新地址",
+			"title": "整包更新地址",
+			"trim": "both"
+		},
+		"create_date": {
+			"bsonType": "timestamp",
+			"description": "创建时间",
+			"title": "创建时间",
+			"forceDefaultValue": {
+				"$env": "now"
+			}
+		}
+	}
+}
+

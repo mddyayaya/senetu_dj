@@ -1,0 +1,305 @@
+<template>
+	<view class="mask">
+		<view class="main">
+			<view>
+				<image class="bg-top" src="../../static/public-images/upgrade-pink.png" ></image>
+				<view class="head">
+					<text class="head-title">发现新版本</text>
+					<text class="head-version">V{{data.version}}</text>
+				</view>
+			</view>
+			<scroll-view scroll-y class="update-content" enable-back-to-top :show-scrollbar="false">
+				<view v-if="!status">
+					<text class="update-content-text">{{data.updateContent}}</text>
+				</view>
+				<view v-if="status" class="progress">
+					<view style="width: 450rpx;" >
+						<progress :percent="percent"  :border-radius="5"  activeColor="#FC6066"  stroke-width="3" backgroundColor="#f2f2f2"/>
+					</view>
+					<text  class="percent" >{{percent===100?'下载完成':percent+'%'}}</text>
+				</view>
+			</scroll-view>
+			<view class="btn-main" >
+				<view class="primary-btn" @click="download()">
+					<text class="primary-btn-text">{{confirmText}}</text>
+				</view>
+				<view @click="abort()" v-if="!data.force" class="cancel-btn">
+					<text class="cancel-btn-text">{{cancelText}}</text>
+				</view>
+			</view>
+			<!-- <view class="btn-main" v-if="">
+				<view @click="backgroudDownload()"  class="cancel-btn">
+					<text class="cancel-btn-text">后台下载</text>
+				</view>
+			</view> -->
+		</view>
+	</view>
+</template>
+
+<script>
+	export default {
+		data() {
+			return {
+				data:{},
+				status:'',
+				percent:0,
+				downloadTask:null,
+				downloadResult:{}
+			};
+		},
+		computed:{
+			confirmText(){
+				if(this.status==='downLoading'&&!this.data.force){
+					return '后台下载'
+				}else if(this.status==='downLoaded'){
+					return '重启生效'
+				}
+				return '确认升级'
+			},
+			cancelText(){
+				return '取消升级'
+			}
+		},
+		onLoad(options) {
+			this.data = JSON.parse(options.data)
+		},
+		methods:{
+			//安装app
+			install(downloadResult){
+				plus.runtime.install(downloadResult.tempFilePath, {
+				    force: false  
+				}, function(e) {
+					if(this.status==='backgroudDownload'){
+						uni.showModal({
+							title: '提示',
+							content:'更新成功，是否重启以生效？',
+							confirmText:'重启',
+							complete(res) {
+								if(res.confirm){
+									plus.runtime.restart();
+								}
+							}
+						})
+					}
+					else{
+						plus.runtime.restart();
+					}
+				}, function(e) {  
+				}); 
+			},
+			
+			//下载app
+			download(){
+				if(this.confirmText==='后台下载'){
+					uni.navigateBack({
+					})
+					return;
+				}
+				else if(this.confirmText==='重启生效'){
+					this.install(this.downloadResult);
+					return;
+				}
+				//判断是否是整包更新
+				if(this.data.type===1){
+					plus.runtime.openURL(this.data.url, (res) =>{
+					});
+					// this.$refs.updatePopup.close()
+					return;
+				}
+				//检查安卓手机是否有文件读取权限
+				if( !this.requestAndroidPermission('android.permission.READ_EXTERNAL_STORAGE')||!this.requestAndroidPermission('android.permission.WRITE_EXTERNAL_STORAGE')){
+					uni.showModal({
+						content:'此功能需使用到存储功能，请在设置中打开存储权限后再操作！',
+						showCancel:false,
+						confirmText:'打开设置',
+						complete:res=> {
+							if(res.confirm){
+								permision.gotoAppPermissionSetting()
+							}
+						}
+					})
+					return;
+				}
+				//下载安装
+				this.status = 'downLoading'
+				this.downloadTask = uni.downloadFile({
+				    url: this.data.wgtUrl,  
+				    success: (downloadResult) => {
+						this.downloadResult = downloadResult;
+				        if (downloadResult.statusCode === 200) {  
+						  this.status = 'downLoaded' 
+						  this.install(downloadResult);
+				        }  
+				    } ,
+					fail(e) {
+						this.status = ''
+					}
+				});
+				//监听下载进度
+				this.downloadTask.onProgressUpdate((res) => {
+					this.percent = res.progress;
+				    // 测试条件，取消下载任务。
+				    // if (res.progress > 50) {
+				    //     this.downloadTask.abort();
+				    // }
+				});
+			},
+			
+			//取消下载
+			abort(){
+				this.status = ''
+				if(this.downloadTask){
+					this.downloadTask.abort();
+				}
+				uni.navigateBack({
+					
+				})
+			},
+			async requestAndroidPermission(permisionID) {
+				var result = await permision.requestAndroidPermission(permisionID)
+				if (result == 1) {
+					return true;
+				} else if (result == 0) {
+					return false;
+				} else {
+					return false;
+				}
+			},
+		}
+	}
+</script>
+
+<style lang="scss">
+/* #ifdef APP-VUE || H5 */
+	page {
+		background: transparent;
+	}
+	/* #endif */
+
+//主题颜色
+$theme-color:#FC6066;
+
+	.mask {
+		position: fixed;
+		left: 0;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		/* #ifndef APP-NVUE */
+		display: flex;
+		/* #endif */
+		justify-content: center;
+		align-items: center;
+		background-color: rgba(0, 0, 0, 0.4);
+	}
+	
+	.main{
+		width: 640rpx;
+	}
+	.bg-top{
+		width: 640rpx;
+		height: 280rpx;
+	}
+	
+	.head{
+		position: absolute;
+		left: 0;
+		right: 0;
+		/* #ifndef APP-NVUE */
+		display: flex;
+		/* #endif */
+		flex-direction: column;
+		align-items: center;
+	}
+	.head-title{
+		margin-top: 22rpx;
+		color: #FFFFFF;
+		font-size: 36rpx;
+		letter-spacing:2px;
+	}
+	
+	.head-version{
+		color: #FFFFFF;
+		margin-top: 10rpx;
+		font-size: 24rpx;
+	}
+	
+	.update-content{
+		height: 200rpx;
+		padding: 30rpx;
+		background-color: #FFFFFF;
+	}
+	
+	.update-content-text{
+		font-size: 24rpx;
+		color: #999999;
+	}
+	
+	.progress{
+		/* #ifndef APP-NVUE */
+		display: flex;
+		/* #endif */
+		flex-direction: row;
+		margin-top: 50rpx;
+		margin-bottom: 50rpx;
+	}
+	.btn-main{
+		/* #ifndef APP-NVUE */
+		display: flex;
+		/* #endif */
+		flex-direction: row;
+		justify-content: flex-end;
+		background-color: #FFFFFF;
+		border-bottom-left-radius: 8px;
+		border-bottom-right-radius: 8px;
+		padding: 22rpx;
+	}
+	
+	.primary-btn{
+		border-radius: 5px;
+		// border-color: $theme-color;
+		// border-width: 1rpx;
+		background-color: $theme-color;
+		width: 150rpx;
+		padding: 6rpx 0rpx;
+		text-align: center;
+		/* #ifndef APP-NVUE */
+		display: flex;
+		/* #endif */
+		flex-direction: row;
+		justify-content: center;
+		margin-right: 30rpx;
+	}
+	
+	.primary-btn-text{
+		font-size: 28rpx;
+		color: #FFFFFF;
+	}
+	
+	
+	.cancel-btn{
+		border-radius: 5px;
+		border-color: $theme-color;
+		border-width: 1rpx;
+		width: 150rpx;
+		padding: 6rpx 0rpx;
+		text-align: center;
+		/* #ifndef APP-NVUE */
+		display: flex;
+		/* #endif */
+		flex-direction: row;
+		justify-content: center;
+		
+	}
+	
+	.cancel-btn-text{
+		font-size: 28rpx;
+		color: $theme-color;
+	}
+	
+	.percent{
+		font-size: 28rpx;
+		color: $theme-color;
+		margin-left: 12rpx;
+	}
+</style>
